@@ -83,7 +83,7 @@ G.I18N = {
     cloud:"Nuvem (sincronizar entre aparelhos)", cloudOffInfo:"A nuvem ainda não foi configurada neste Grimório. Quem publica o site precisa preencher js/config.js (veja docs/SUPABASE.md).",
     cloudAdvanced:"Avançado: usar meu próprio servidor Supabase", cloudUrl:"Project URL", cloudKey:"anon public key", cloudSaveCfg:"Salvar servidor", cloudBadCfg:"Isso não parece um servidor Supabase. A URL é tipo https://xxxx.supabase.co e a chave começa com sb_publishable_ (ou eyJ…). Deixe em branco pra usar a nuvem padrão do Grimório.",
     cloudEmail:"Seu e-mail", cloudSend:"✉️ Enviar código", cloudSent:"Enviado! Digite o código do e-mail, ou toque no link dele neste mesmo navegador ✨", cloudCode:"Código do e-mail", cloudEnter:"🔑 Entrar", cloudCodeHelp:"No app instalado no celular, use o código: o link do e-mail abre no navegador, não dentro do app. Não chegou? Olhe o spam e espere 1 minutinho.", cloudBadCode:"Código errado ou vencido. Peça um novo.",
-    cloudSignedAs:"Conectada(o) como {e}", cloudSyncNow:"🔄 Sincronizar agora", cloudSignOut:"Sair", cloudPulled:"Baixei a versão mais nova da nuvem ☁️",
+    cloudSignedAs:"Conectada(o) como {e}", cloudSyncNow:"🔄 Sincronizar agora", cloudSignOut:"Sair", cloudPulled:"Baixei a versão mais nova da nuvem ☁️", cloudChoose:"Encontrei um grimório na nuvem e outro neste aparelho.\n\nOK = usar o da NUVEM (recomendado)\nCancelar = substituir a nuvem pelo DESTE aparelho",
     cloudLast:"Última sincronização: {d}", cloudErr:"⚠️ Não consegui falar com a nuvem: {e}", cloudOffline:"📴 Sem internet: suas mudanças ficam guardadas e sobem quando voltar.",
     badgeCloud:"☁️ na nuvem", badgeFile:"💾 backup automático", badgeLocal:"📦 só neste navegador",
   },
@@ -167,7 +167,7 @@ G.I18N = {
     cloud:"Cloud (sync across devices)", cloudOffInfo:"Cloud isn't set up in this Grimoire yet. Whoever hosts the site must fill js/config.js (see docs/SUPABASE.md).",
     cloudAdvanced:"Advanced: use my own Supabase server", cloudUrl:"Project URL", cloudKey:"anon public key", cloudSaveCfg:"Save server", cloudBadCfg:"That doesn\u0027t look like a Supabase server. The URL looks like https://xxxx.supabase.co and the key starts with sb_publishable_ (or eyJ…). Leave blank to use the Grimoire default cloud.",
     cloudEmail:"Your email", cloudSend:"✉️ Send code", cloudSent:"Sent! Type the code from your email, or tap its link in this same browser ✨", cloudCode:"Code from email", cloudEnter:"🔑 Sign in", cloudCodeHelp:"On phones, use the code: the email link opens in the browser, not inside the installed app. Not there? Check spam and wait a minute.", cloudBadCode:"Wrong or expired code. Request a new one.",
-    cloudSignedAs:"Signed in as {e}", cloudSyncNow:"🔄 Sync now", cloudSignOut:"Sign out", cloudPulled:"Downloaded the newest version from the cloud ☁️",
+    cloudSignedAs:"Signed in as {e}", cloudSyncNow:"🔄 Sync now", cloudSignOut:"Sign out", cloudPulled:"Downloaded the newest version from the cloud ☁️", cloudChoose:"There is a grimoire in the cloud and another on this device.\n\nOK = use the CLOUD one (recommended)\nCancel = replace the cloud with THIS device\u0027s",
     cloudLast:"Last sync: {d}", cloudErr:"⚠️ Couldn't reach the cloud: {e}", cloudOffline:"📴 Offline: your changes are kept and will upload when you're back.",
     badgeCloud:"☁️ in the cloud", badgeFile:"💾 auto-backup", badgeLocal:"📦 this browser only",
   }

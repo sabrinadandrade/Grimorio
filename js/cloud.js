@@ -74,25 +74,38 @@ window.G = window.G || {};
       const { data, error } = await C.client.from("grimoires").select("data, updated_at").eq("user_id", C.user.id).maybeSingle();
       if (error) throw error;
       const remote = data && data.data, rT = remote ? (remote.updatedAt || Date.parse(data.updated_at) || 0) : 0, lT = G.state.updatedAt || 0;
-      const localHasData = G.state.subjects.length || G.state.cards.length || Object.keys(G.state.plan).length;
-      if (remote && rT > lT) {
+      const has = s => !!(s && ((s.subjects || []).length || (s.cards || []).length || Object.keys(s.plan || {}).length));
+      const localHasData = has(G.state), remoteHasData = has(remote);
+      const firstTimeHere = G.state.cloudUser !== C.user.id; // primeira sincronização deste aparelho com esta conta
+      let pull = remote && rT > lT;
+      if (remote && firstTimeHere) {
+        // aparelho novo: nunca deixa um grimório vazio apagar o da nuvem
+        // new device: never let an empty local grimoire overwrite the cloud one
+        if (remoteHasData && !localHasData) pull = true;
+        else if (remoteHasData && localHasData) pull = rT === lT ? false : confirm(G.t("cloudChoose"));
+        else if (!remoteHasData) pull = false;
+      }
+      if (pull) {
         if (localHasData && G.safety) await G.safety.snapshot("before-cloud-pull");
-        G.state = Object.assign(G.defaultState(), remote); G.lang = G.state.lang;
+        G.state = Object.assign(G.defaultState(), remote, { cloudUser: C.user.id }); G.lang = G.state.lang;
         G.save({ keepTime: true, noCloud: true });
         if (G.applyTheme) G.applyTheme(G.state.theme);
         if (G.tamaRender) G.tamaRender();
         if (G.UI && G.UI.refresh) G.UI.refresh();
         G.toast && G.toast(G.t("cloudPulled"));
-      } else if (!remote || lT > rT) {
-        await C.push();
+      } else if (!remote || lT > rT || firstTimeHere) {
+        G.state.cloudUser = C.user.id;
+        await C.push(true);
       }
+      if (G.state.cloudUser !== C.user.id) { G.state.cloudUser = C.user.id; try { localStorage.setItem(G.STORE_KEY, JSON.stringify(G.state)); } catch (e) { } }
       C.lastSync = Date.now(); C.status = "idle"; C.error = "";
     } catch (e) { C.status = navigator.onLine ? "error" : "offline"; C.error = e.message || String(e); }
     notify();
   };
 
-  C.push = async function () {
+  C.push = async function (force) {
     if (!C.client || !C.user) return;
+    if (!force && G.state.cloudUser !== C.user.id) return C.sync(); // ainda não sincronizou neste aparelho
     if (pushing) { pending = true; return; }
     pushing = true;
     try {
