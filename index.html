@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>☾ Grimório ☽</title>
+<meta name="description" content="Grimório: planner de estudos kawaii anos 90 com pets, timer de foco e flashcards. Open source, offline, sem conta.">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#3a1d5c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Nunito:wght@600;800;900&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="wrap">
+  <div class="marq"><span id="marq"></span></div>
+  <div class="top">
+    <div>
+      <h1 id="title">☾ Grimório ☽</h1>
+      <div class="hello" id="hello"></div>
+      <div class="gang" id="gang"></div>
+    </div>
+    <div class="xpbox" id="xpbox"></div>
+  </div>
+  <div class="countdowns" id="countdowns"></div>
+  <nav class="tabs" id="tabs"></nav>
+  <section id="panel" class="panel on"></section>
+  <div class="foot"><span id="footTxt">✦ feito com 🧡 e muitos ronrons ✦</span> <a href="https://github.com/sabrinadandrade/grimorio" id="repoLink" target="_blank" rel="noopener">open source</a> ✦</div>
+</div>
+<div id="tama"></div>
+<noscript>Ative o JavaScript para usar o Grimório. / Please enable JavaScript.</noscript>
+
+<script src="js/i18n.js"></script>
+<script src="js/themes.js"></script>
+<script src="js/pets.js"></script>
+<script src="js/config.js"></script>
+<script src="js/store.js"></script>
+<script src="js/safety.js"></script>
+<script src="js/planner.js"></script>
+<script src="js/connectors/registry.js"></script>
+<script src="js/connectors/generic.js"></script>
+<script src="js/connectors/estacio.js"></script>
+<script src="js/importers.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/tama.js"></script>
+<script src="js/cloud.js"></script>
+<script src="examples/exemplo-estacio-ads.js"></script>
+<script src="js/app.js"></script>
+<script>G.start(); if (location.protocol.startsWith("http") && "serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>
