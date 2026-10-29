@@ -7,7 +7,7 @@ window.G = window.G || {};
   /* janela com botão de minimizar (lembra o estado) / window with a remembered minimize button */
   const minKey = (title, id) => id || String(title).replace(/<[^>]*>/g, "").replace(/[^\p{L}\p{N}._]+/gu, "_").replace(/^_+|_+$/g, "").slice(0, 40);
   const isMin = k => !!(((G.state.ui || {}).min || {})[k]);
-  const win = (title, body, id) => { const k = minKey(title, id); return `<div class="win${isMin(k) ? " min" : ""}"${id ? ` id="${id}"` : ""} data-mk="${esc(k)}"><div class="bar">${title}<span class="dots"><button class="minbtn" type="button" aria-label="${t("minimize")}" title="${t("minimize")}" aria-expanded="${!isMin(k)}"><svg viewBox="0 0 12 12" aria-hidden="true"><path class="h" d="M2 6h8"/><path class="v" d="M6 2v8"/></svg></button><i></i><i></i></span></div><div class="wbody">${body}</div></div>`; };
+  const win = (title, body, id) => { const k = minKey(title, id); return `<div class="win${isMin(k) ? " min" : ""}"${id ? ` id="${id}"` : ""} data-mk="${esc(k)}"><div class="bar"><span class="bt">${title}</span><span class="dots"><button class="minbtn" type="button" aria-label="${t("minimize")}" title="${t("minimize")}" aria-expanded="${!isMin(k)}"><svg viewBox="0 0 12 12" aria-hidden="true"><path class="h" d="M2 6h8"/><path class="v" d="M6 2v8"/></svg></button><i></i><i></i></span></div><div class="wbody">${body}</div></div>`; };
   const DOW = { pt: ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"], en: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] };
   const fmt = s => { const d = new Date(s + "T12:00"); return DOW[G.lang][d.getDay()] + " " + (G.lang === "en" ? G.pad2(d.getMonth() + 1) + "/" + G.pad2(d.getDate()) : G.pad2(d.getDate()) + "/" + G.pad2(d.getMonth() + 1)); };
   const MOON = ["🌑", "🌒", "🌓", "🌔", "🌕"];
@@ -121,7 +121,7 @@ window.G = window.G || {};
     if (!G.state.subjects.length && !keys.length && !G.state.activities.length) {
       $("#panel").innerHTML = win("✦ " + (G.lang === "en" ? "today.exe" : "hoje.exe"), `<p>${t("emptyPlan")}</p><div class="nav">
         <a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/docs/TUTORIAL.md" target="_blank" rel="noopener">${t("tutorialBtn")}</a>
-        <button class="cute" onclick="G.UI.newAct()">${t("newAct")}</button>
+        <button class="cute" onclick="G.UI.newAct()">${t("newAct")}</button><button class="cute alt" onclick="G.UI.talk()">🎙️ ${t("talkBtn")}</button>
         <button class="cute" onclick="G.UI.show('subjects')">📚 ${t("goSubjects")}</button><button class="cute alt" onclick="G.UI.show('data')">🎓 ${t("goImport")}</button></div>`);
       return;
     }
@@ -136,7 +136,7 @@ window.G = window.G || {};
       <div class="daytitle"><span class="pill">${viewDay === td ? t("todayTag") : fmt(viewDay).toUpperCase()}</span><h2 style="margin:0">${esc(title)}</h2><span style="font-size:1.6rem">${isExam ? "📝" : moonOf(total ? doneAll / total : 0)}</span></div>
       <h3>${t("actsToday")}</h3>
       ${acts.length ? acts.map(a => actHTML(a, viewDay)).join("") : `<p class="small">${t("noActsDay")}</p>`}
-      <div class="nav"><button class="cute" onclick="G.UI.newAct('${viewDay}')">${t("newAct")}</button></div>
+      <div class="nav"><button class="cute" onclick="G.UI.newAct('${viewDay}')">${t("newAct")}</button><button class="cute alt" onclick="G.UI.talk()">🎙️ ${t("talkBtn")}</button></div>
       ${(tasks.length || G.state.subjects.length) ? `<h3>${t("studyToday")}</h3>
       <p class="small">${isExam ? t("examHelp") : tasks.length ? t("spellHelp") : t("noPlan")}</p>
       ${tasks.map(x => taskHTML(x)).join("")}
@@ -189,6 +189,81 @@ window.G = window.G || {};
     if (tab === "today") pToday(); else if (tab === "acts") pActs(); else if (tab === "week") pWeek(); renderHeader();
     if (v) setTimeout(() => { const c = document.querySelector(`[onclick*="${id}','${iso}"]`); c && G.bubble(c, G.phrase()); }, 120);
   };
+  UI.actToggleSilent = (id, iso, v) => {
+    const a = G.state.activities.find(x => x.id === id); if (!a || G.actDone(a, iso) === v) return;
+    G.setActDone(a, iso, v); if (v) { (a.subtasks || []).forEach(s => G.setSubDone(a, iso, s.id, true)); G.addXP(15); } G.save();
+  };
+  /* ===== 🎙️ falar com o Grimório / talk to the Grimoire ===== */
+  const remLabel = m => m < 0 ? t("remNone") : m === 0 ? t("remAtTime") : m >= 1440 ? t("remDayBefore") : m >= 60 ? t("remHourBefore", { h: m / 60 }) : t("remBefore", { m });
+  const dayLabel = d => { const td = G.todayIso(); return d === td ? t("cmdToday") : d === G.addDays(td, 1) ? t("cmdTomorrow") : fmt(d); };
+  UI.talk = (prefill) => {
+    if ($("#talkModal")) return;
+    const pet = G.state.pets[Math.floor(Math.random() * G.state.pets.length)] || G.state.pets[0];
+    const ex = t("talkExamples");
+    const m = document.createElement("div"); m.className = "modal"; m.id = "talkModal";
+    m.innerHTML = win("🎙️ " + (G.lang === "en" ? "talk.exe" : "falar_com_grimorio.exe"), `
+      <div class="talkhead">${pet ? G.petSVG(pet, 64, "happy") : ""}<div class="talkbub" id="talkBub">${t("talkHi")}</div></div>
+      <div class="talkrow"><input type="text" id="cmdIn" autocomplete="off" autocapitalize="sentences" enterkeyhint="done" placeholder="${esc(ex[0])}" value="${esc(prefill || "")}" aria-label="${t("talkBtn")}">
+        ${G.cmd.speechOK() ? `<button class="cute alt micbtn" id="cmdMic" type="button" aria-label="${t("talkListen")}" title="${t("talkListen")}">🎙️</button>` : ""}</div>
+      <div id="cmdOut" class="cmdout" aria-live="polite"></div>
+      <div id="talkHelp"><p class="small">${t("talkHint")}</p>
+      <div class="talkex">${ex.map(s => `<button class="chip" type="button" data-ex="${esc(s)}">${esc(s)}</button>`).join("")}</div></div>
+      <div class="nav actions"><button class="cute big-cta" id="cmdOk" disabled>${t("talkOk")}</button><button class="cute" id="cmdEdit" style="display:none">✎ ${t("talkEdit")}</button><button class="cute ghost" id="cmdNo">${t("close")}</button></div>`);
+    document.body.appendChild(m);
+    const q = s => m.querySelector(s), inp = q("#cmdIn"), out = q("#cmdOut"), ok = q("#cmdOk"), ed = q("#cmdEdit");
+    let r = { intent: "none" }, rec = null, tmr;
+    const close = () => { if (rec) try { rec.stop(); } catch (e) { } m.remove(); };
+    const chips = arr => `<div class="cmdchips">${arr.filter(Boolean).map(x => `<span class="chip">${x}</span>`).join("")}</div>`;
+    const render = () => {
+      r = G.cmd.parse(inp.value); ok.disabled = true; ed.style.display = "none"; ok.style.display = r.intent === "query" ? "none" : "";
+      q("#talkHelp").style.display = inp.value.trim() && r.intent !== "none" ? "none" : "";
+      if (r.intent === "none") { out.innerHTML = inp.value.trim() ? `<p class="small">${t("talkNone")}</p>` : ""; return; }
+      if (r.intent === "create") {
+        const ar = G.AREAS[r.area] || G.AREAS.daily, pr = G.PRIORITIES[r.priority] || G.PRIORITIES.mid;
+        const when = r.repeat === "daily" ? "🔁 " + t("everyDay") : r.repeat === "weekly" ? "🔁 " + G.repeatLabel(r) : "📅 " + dayLabel(r.date);
+        out.innerHTML = `<p><b>🗓️ ${t("cmdNewAct")}:</b> ${esc(r.title)}</p>` + chips([when, r.time ? "🕒 " + r.time : "", "🔔 " + (r.time ? remLabel(r.remind) : t("remNone")), ar.emoji + " " + esc(G.areaName(r.area)), pr.emoji + " " + esc(G.prioName(r.priority))]);
+        ok.disabled = false; ed.style.display = "";
+      } else if (r.intent === "exam") {
+        const s = r.subjectId && G.subj(r.subjectId);
+        out.innerHTML = `<p><b>📝 ${t("cmdExam")}:</b> ${esc(s ? s.name : r.subjectName || "?")}${s ? "" : ` <span class="small">(${t("cmdNewSubject")})</span>`}</p>` +
+          chips([r.date ? "📅 " + dayLabel(r.date) : "", r.time ? "🕒 " + r.time : "", r.place ? "📍 " + esc(r.place) : ""]) + (r.date ? "" : `<p class="small">⚠️ ${t("cmdNeedDate")}</p>`);
+        ok.disabled = !r.date || !(s || r.subjectName);
+      } else if (r.intent === "complete") {
+        if (r.match) { out.innerHTML = `<p><b>✅ ${t("cmdComplete")}:</b> ${esc(r.match.label || r.match.title)} <span class="small">· ${dayLabel(r.date)}</span></p>` + (r.match.done ? `<p class="small">${t("cmdAlready")}</p>` : ""); ok.disabled = !!r.match.done; }
+        else out.innerHTML = `<p class="small">${t("cmdNotFound", { d: dayLabel(r.date) })}</p>`;
+      } else if (r.intent === "focus") {
+        out.innerHTML = `<p><b>🕯️ ${t("cmdFocus")}</b>${r.label ? ": " + esc(r.label) : ""}</p>`; ok.disabled = false;
+      } else if (r.intent === "query") {
+        const acts = G.actsOn(r.date), plan = (G.state.plan || {})[r.date] || [], exams = G.state.exams.filter(e => e.date === r.date);
+        const li = [...exams.map(e => { const s = G.subj(e.subjectId); return `📝 ${esc(e.time || "")} ${esc(s ? s.name : "")}`; }),
+          ...acts.map(a => `${G.actDone(a, r.date) ? "✅" : (G.AREAS[a.area] || G.AREAS.daily).emoji} ${a.time ? esc(a.time) + " · " : ""}${esc(a.title)}`),
+          ...plan.map(x => `${x.done ? "✅" : "🔮"} ${esc(x.title)}`)];
+        q("#talkBub").textContent = li.length ? t("cmdQueryHas", { n: li.length, d: dayLabel(r.date).toLowerCase() }) : t("cmdQueryFree", { d: dayLabel(r.date).toLowerCase() });
+        out.innerHTML = li.length ? `<ul class="cmdlist">${li.map(x => `<li>${x}</li>`).join("")}</ul>` : "";
+      }
+    };
+    inp.oninput = () => { clearTimeout(tmr); tmr = setTimeout(render, 200); };
+    inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); render(); if (!ok.disabled) ok.click(); } };
+    m.querySelectorAll("[data-ex]").forEach(b => b.onclick = () => { inp.value = b.dataset.ex; render(); inp.focus(); });
+    q("#cmdNo").onclick = close;
+    ed.onclick = () => { const p = { title: r.title, area: r.area, priority: r.priority, date: r.date, time: r.time, repeat: r.repeat, days: r.days, remind: r.time ? r.remind : -1 }; close(); UI.editAct(null, r.date, p); };
+    ok.onclick = () => {
+      if (ok.disabled) return;
+      const msg = G.cmd.run(r); close();
+      if (msg) { G.toast(msg); G.burst(null, 50); }
+      if (r.intent === "exam") renderCountdowns();
+      UI.refresh();
+    };
+    const mic = q("#cmdMic");
+    if (mic) mic.onclick = () => {
+      if (rec) { try { rec.stop(); } catch (e) { } return; }
+      mic.classList.add("on"); q("#talkBub").textContent = t("talkListening");
+      rec = G.cmd.listen((s, fin) => { inp.value = s; render(); if (fin) q("#talkBub").textContent = t("talkHi"); }, () => { rec = null; mic.classList.remove("on"); });
+      if (!rec) { mic.classList.remove("on"); q("#talkBub").textContent = t("talkHi"); }
+    };
+    if (prefill) render();
+    setTimeout(() => inp.focus(), 60);
+  };
   UI.goto = d => { viewDay = d; if (tab !== "today") UI.show("today"); else pToday(); };
   UI.toggle = (id, el) => {
     const [d, x] = findTask(id); if (!x) return;
@@ -231,17 +306,19 @@ window.G = window.G || {};
     const nInfo = perm === "native" ? t("notifInfoNative") : /iPhone|iPad|iPod/.test(navigator.userAgent) ? t("notifInfoIos") : t("notifInfoWeb");
     const nBody = `<p class="small">${nInfo}</p>` + (perm === "default" ? `<button class="cute" onclick="G.UI.askNotif()">${t("notifAsk")}</button>` : perm === "granted" ? `<p>${t("notifOn")}</p>` : perm === "denied" ? `<p class="small">${t("notifDenied")}</p>` : perm === "native" ? `<button class="cute" onclick="G.UI.askNotif()">${t("notifAsk")}</button>` : `<p class="small">${t("notifUnsupported")}</p>`);
     $("#panel").innerHTML = win("🗓️ " + (G.lang === "en" ? "activities.exe" : "atividades.exe"),
-      `<div class="nav"><button class="cute big-cta" onclick="G.UI.newAct()">${t("newAct")}</button></div>${chips}${rows || `<p>${t("noActs")}</p>`}`) +
-      win(t("notifTitle") + " · " + (G.lang === "en" ? "reminders.exe" : "lembretes.exe"), nBody);
+      `<div class="nav"><button class="cute big-cta" onclick="G.UI.newAct()">${t("newAct")}</button><button class="cute alt" onclick="G.UI.talk()">🎙️ ${t("talkBtn")}</button></div>${chips}${rows || `<p>${t("noActs")}</p>`}`) +
+      win(t("notifTitle") + " · " + (G.lang === "en" ? "reminders.exe" : "lembretes.exe"), nBody +
+        `<h3>📅 ${t("calTitle")}</h3><p class="small">${t("calInfo")}</p><div class="nav"><button class="cute big-cta" onclick="G.UI.calExport()">📅 ${t("calBtn")}</button></div>`);
   }
+  UI.calExport = () => { const n = G.exportCalendar(); if (n) G.toast(t("calDone", { n })); };
   UI.actFilter = k => { actFilter = k; pActs(); };
   UI.askNotif = async () => { const r = await G.reminders.ask(); if (r === "granted") { G.toast(t("notifOn")); try { if (!G.isNative()) new Notification("☾ Grimório ☽", { body: t("notifOn"), icon: "assets/icon-192.png" }); } catch (e) { } } pActs(); };
 
   /* formulário de atividade (janela) / activity form (modal) */
   UI.newAct = date => UI.editAct(null, date);
-  UI.editAct = (id, date) => {
+  UI.editAct = (id, date, preset) => {
     G.actsInit();
-    const a = id ? JSON.parse(JSON.stringify(G.state.activities.find(x => x.id === id))) : { id: "", title: "", area: actFilter || "daily", priority: "mid", date: date || viewDay || G.todayIso(), time: "", repeat: "none", days: [], remind: 15, petId: "", notes: "" };
+    const a = id ? JSON.parse(JSON.stringify(G.state.activities.find(x => x.id === id))) : Object.assign({ id: "", title: "", area: actFilter || "daily", priority: "mid", date: date || viewDay || G.todayIso(), time: "", repeat: "none", days: [], remind: 15, petId: "", notes: "" }, preset || {});
     const D = G.lang === "en" ? ["S", "M", "T", "W", "T", "F", "S"] : ["D", "S", "T", "Q", "Q", "S", "S"];
     const remLbl = m => m < 0 ? t("remNone") : m === 0 ? t("remAtTime") : m >= 1440 ? t("remDayBefore") : m >= 60 ? t("remHourBefore", { h: m / 60 }) : t("remBefore", { m });
     const m = document.createElement("div"); m.className = "modal"; m.id = "actModal";
@@ -591,7 +668,10 @@ window.G = window.G || {};
   }
 
   /* ================= DICAS / TIPS ================= */
-  function pTips() { $("#panel").innerHTML = win("🕯️ " + (G.lang === "en" ? "focus_tips.doc" : "dicas_de_foco.doc"), `<ul class="tip">${t("tipList").map(x => `<li>${x}</li>`).join("")}</ul>`) +
+  G.VERSION = "2.1";
+  const newsWin = () => win("✨ " + (G.lang === "en" ? "whats_new.txt" : "novidades.txt") + " · v" + G.VERSION, `<ul class="tip">${t("newsList").map(x => `<li>${x}</li>`).join("")}</ul>
+    <div class="nav"><a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/CHANGELOG.md" target="_blank" rel="noopener">📜 ${t("newsAll")}</a></div>`, "newsWin");
+  function pTips() { $("#panel").innerHTML = newsWin() + win("🕯️ " + (G.lang === "en" ? "focus_tips.doc" : "dicas_de_foco.doc"), `<ul class="tip">${t("tipList").map(x => `<li>${x}</li>`).join("")}</ul>`) +
     win("📖 " + (G.lang === "en" ? "how_to_use.doc" : "como_usar.doc"), `<p>${t("tutorialText")}</p><div class="nav"><a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/docs/TUTORIAL.md" target="_blank" rel="noopener">${t("tutorialBtn")}</a></div>`); }
 
   /* ================= BOAS-VINDAS / ONBOARDING ================= */
@@ -664,5 +744,8 @@ window.G = window.G || {};
     await G.safety.requestPersist(); await G.safety.initFile(); renderXP();
     G.reminders.start();
     cleanupCloud();
+    // avisa uma vez sobre as novidades / one-time "what's new" notice
+    if (G.state.onboarded && G.state.seenVersion !== G.VERSION) { if (G.state.seenVersion || G.state.subjects.length || (G.state.activities || []).length) setTimeout(() => G.toast(t("newsToast", { v: G.VERSION })), 1500); G.state.seenVersion = G.VERSION; G.save({ keepTime: true }); }
+    $("#talkFab").setAttribute("aria-label", t("talkBtn")); $("#talkFab").title = t("talkBtn");
   };
 })();

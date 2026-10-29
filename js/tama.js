@@ -25,6 +25,8 @@ window.G = window.G || {};
     const pct = (v, t) => (v / t * 100) + "%";
     const craters = sh.craters ? `<g fill="var(--primary2)" opacity=".55"><circle cx="150" cy="70" r="12"/><circle cx="166" cy="120" r="7"/><circle cx="40" cy="170" r="9"/><circle cx="150" cy="178" r="6"/></g>` : "";
     const band = G.state.tamaShape === "hat" ? `<path d="M40 196 Q100 182 166 196 L170 212 Q100 198 34 212 Z" fill="var(--accent2)" stroke="var(--ink)" stroke-width="3"/>` : "";
+    // no celular, começa minimizado para não cobrir as tarefas (a pessoa pode abrir quando quiser)
+    if (G.state.tamaMin === undefined && matchMedia("(max-width:600px)").matches) G.state.tamaMin = true;
     el.classList.toggle("mini", !!G.state.tamaMin);
     if (G.state.tamaMin) { // minimizado: só uma bolinha com o pet (e o tempo, se estiver contando)
       el.style.aspectRatio = ""; el.style.width = "";

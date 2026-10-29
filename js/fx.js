@@ -2,6 +2,7 @@
 window.G = window.G || {};
 (function () {
   G.toast = function (t) {
+    document.querySelectorAll(".toast").forEach(x => x.remove()); // um aviso por vez / one toast at a time
     const el = document.createElement("div"); el.className = "toast"; el.textContent = t;
     document.body.appendChild(el); setTimeout(() => el.remove(), 2300);
   };

@@ -8,7 +8,8 @@ Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Nã
 - 🔒 **Seus dados ficam só no seu aparelho.** O Grimório não tem servidor, banco de dados nem login: nada é enviado para a internet.
 - 📱 **Cada aparelho tem o seu grimório** e eles não se atualizam sozinhos. Para levar seus dados de um para outro, use o **backup trancado com senha** ([passo 15](#15-passar-para-outro-aparelho)).
 - 💾 **Faça backup de vez em quando.** Se você limpar os dados do navegador ou desinstalar o app, os dados vão junto ([passo 14](#14-seus-dados-onde-ficam-e-backup)).
-- 🔔 **Lembretes com o app fechado** só no **app Android**. No iPhone e no computador, o pet avisa quando o Grimório está aberto.
+- 🔔 **Lembretes com o app fechado:** no **app Android** chegam sozinhos. No **iPhone**, use o **📅 Adicionar ao calendário do celular** ([passo 7.2](#72-lembretes-com-seu-pet-e-notificações)).
+- 🎙️ **Fale com ele:** toque no 🎙️ e peça, por exemplo, *"me lembra de pagar a conta sexta às 10"* ([passo 7.3](#73-falar-com-o-grimório)).
 
 ### Sumário
 1. [O que é o Grimório](#1-o-que-é-o-grimório)
@@ -19,7 +20,8 @@ Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Nã
 6. [Gerar o plano de estudos](#6-gerar-o-plano-de-estudos)
 7. [Usar no dia a dia: aba Hoje](#7-usar-no-dia-a-dia-aba-hoje)
 7.1 [Atividades da vida toda: prioridade, repetição e lembrete](#71-atividades-da-vida-toda) 🆕
-7.2 [Lembretes com seu pet e notificações](#72-lembretes-com-seu-pet-e-notificações) 🆕
+7.2 [Lembretes com seu pet e notificações](#72-lembretes-com-seu-pet-e-notificações)
+7.3 [🎙️ Falar com o Grimório (voz)](#73-falar-com-o-grimório) 🆕
 8. [O bichinho virtual (timer de foco)](#8-o-bichinho-virtual-timer-de-foco)
 9. [Calendário lunar](#9-calendário-lunar)
 10. [Tarot de estudos (flashcards)](#10-tarot-de-estudos-flashcards)
@@ -283,13 +285,48 @@ Na hora do lembrete, **seu pet aparece na tela** com um somzinho:
 |---|---|
 | 🤖 **App Android (APK)** | Notificação de verdade no celular, **mesmo com o app fechado**. |
 | 💻 **Computador** (Chrome, Edge, Opera…) | O pet aparece e o navegador mostra uma notificação, **com o Grimório aberto** (pode estar em outra aba). |
-| 🍎 **iPhone** | O pet aparece quando o Grimório está aberto. Abra o app algumas vezes por dia 💜 |
+| 🍎 **iPhone** | O pet aparece quando o Grimório está aberto. Para receber aviso **com o app fechado**, use o calendário do celular (abaixo). |
 
 > 💡 Se você abrir o Grimório **depois** do horário (até 2 horas), o pet ainda te avisa do que passou.
+
+### 📅 Avisos pelo calendário do celular (funciona com o app fechado)
+1. Aba **Atividades** → janela **lembretes.exe** → **📅 Adicionar ao calendário do celular**.
+2. O Grimório gera um arquivo com suas atividades **que têm horário** e suas **provas**, já com os alarmes (as provas avisam 1 dia antes e 1 hora antes).
+3. **No iPhone:** toque em **Baixar**, depois abra o arquivo (na setinha ⬇️ de downloads do Safari, ou no app **Arquivos**) e toque em **Adicionar todos**.
+4. **No Android:** abra o arquivo baixado e escolha o **Google Agenda**.
+
+> Mudou muita coisa? Gere o arquivo de novo. Se os eventos aparecerem repetidos no calendário, apague os antigos.
+
+---
+
+## 7.3 Falar com o Grimório
+
+Toque no botão **🎙️** (fica no canto da tela, e também nas abas **Hoje** e **Atividades**). Depois **fale** pelo microfone 🎤 do teclado do celular, ou **escreva** o pedido do jeito que você falaria:
+
+| Você diz | O Grimório faz |
+|---|---|
+| *"Me lembra de dar remédio pro gato amanhã às 8"* | Cria a atividade com lembrete 15 min antes |
+| *"Academia toda segunda e quarta às 7 da manhã"* | Cria uma atividade que se repete |
+| *"Pagar o aluguel dia 5 com lembrete um dia antes"* | Cria com lembrete na véspera |
+| *"Reunião com cliente sexta às 14:30, importante"* | Cria com prioridade 🔥 alta |
+| *"Prova de cálculo dia 12/11 às 9h na sala 12"* | Marca a prova |
+| *"Concluir lavar a louça"* | Marca como feita ✅ |
+| *"O que eu tenho hoje?"* / *"O que tenho amanhã?"* | Mostra a lista do dia |
+| *"Começar foco em derivadas"* | Acende a vela de foco 🕯️ |
+
+![Falar com o Grimório](img/28-falar.png)
+
+O Grimório mostra o que entendeu e **só salva quando você toca em ✔ Confirmar**. Quer mudar algo? Toque em **✎ Ajustar**.
+
+> 🔒 O pedido é entendido **no próprio aparelho**, sem IA externa e sem enviar nada para a internet. O microfone 🎤 do teclado é do seu celular.
+>
+> **"Ei Siri" / "Ok Google" direto no Grimório?** Ainda não dá: a Siri e o Google só conversam com apps publicados nas lojas (App Store / Play Store). Mas, com o calendário do celular (passo 7.2), eles conseguem **ler** seus compromissos: *"Ei Siri, o que tenho amanhã?"*.
 
 ---
 
 ## 8. O bichinho virtual (timer de foco)
+
+> 📱 No celular, o bichinho começa **minimizado** (uma bolinha no canto) para não cobrir suas tarefas. Toque nela para abrir, e no **▾** para minimizar de novo.
 
 Fica no canto da tela:
 

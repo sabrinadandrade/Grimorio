@@ -11,15 +11,18 @@ Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho
 
 - **Site:** <https://sabrinadandrade.github.io/Grimorio/> · **App Android:** [Grimorio.apk](https://github.com/sabrinadandrade/Grimorio/releases/latest)
 - 📖 **Todo o passo a passo (computador, iPhone e Android) está no [Tutorial](docs/TUTORIAL.md)**, com prints de cada tela.
+- ✨ **Novidades:** veja as [notas de atualização](CHANGELOG.md).
 
 ## ✨ O que ele faz
 
 - **Plano de estudos automático**: você cadastra matérias, temas e provas. O Grimório espalha os temas nos dias antes de cada prova e deixa a véspera para uma revisão leve.
 - **Feitiços de hoje**: poucas tarefas por dia, com XP, níveis (de Aprendiz a Arquimaga 👑) e luas que vão enchendo 🌑→🌕.
 - **Atividades da vida toda** 🆕: estudos, rotina diária, casa, pets, cuidados maternais/paternais, trabalho, compromissos e saúde, com **prioridade** (🔥 alta, ⭐ média, 🌙 baixa), **repetição** (todo dia ou dias da semana) e **lembrete**.
-- **Subtarefas, visão da semana, sequência de dias 🔥 e conquistas 🏆** 🆕
+- **🎙️ Falar com o Grimório** 🆕: peça por voz (microfone do teclado) ou escrevendo, como *"me lembra de dar remédio pro gato amanhã às 8"*, *"prova de cálculo dia 12/11"*, *"concluir lavar a louça"* ou *"o que eu tenho hoje?"*. Tudo é entendido no próprio aparelho, sem IA externa.
+- **📅 Calendário do celular** 🆕: exporte atividades e provas com alarmes para o calendário do iPhone ou do Android, que avisa mesmo com o app fechado.
+- **Subtarefas, visão da semana, sequência de dias 🔥 e conquistas 🏆**
 - **Lembretes com seu pet** 🆕: na hora, seu pet aparece na tela te lembrando. No app Android, chega notificação mesmo com o app fechado.
-- **Feito para todo mundo:** nome ou apelido com **pronome** (ela/dela, ele/dele, elu/delu), **menu lateral** no celular, bichinho com **tamanho ajustável (−/+)**, botões grandes, **tamanho do texto** e modo **menos animações**.
+- **Feito para todo mundo:** nome ou apelido com **pronome** (ela/dela, ele/dele, elu/delu), **menu lateral** no celular (abre arrastando da borda), **cards minimizáveis**, bichinho com **tamanho ajustável (−/+)** e minimizável, botões grandes, **tamanho do texto** e modo **menos animações**.
 - **Bichinho virtual (timer de foco)**: estilo tamagotchi, em 5 formatos (ovo, coração, chapéu de bruxa, estrela e lua). Seu pet dorme na pausa 😴.
 - **Tarot de estudos (flashcards)**: as cartas que você erra voltam mais vezes.
 - **Pets personalizáveis**: gato, cachorro, ratinho, hamster, coelho, galinha, pato, passarinho, cobra, tartaruga, sapo, peixe, morcego e raposa. Você escolhe cores, padrão ou raça (tigrado, siamês, frajola, pintado…), cor dos olhos e acessório (chapéu de bruxa, laço, coroa…).
@@ -54,6 +57,8 @@ js/
   store.js         dados (localStorage)
   safety.js        IndexedDB, backup automático, cópias de segurança
   vault.js         backup criptografado com senha
+  voice.js         🎙️ comandos por voz/texto (interpretador local)
+  calendar.js      exportação .ics com alarmes
   planner.js       gerador do plano de estudos
   importers.js     json, csv, ics
   connectors/      um arquivo por instituição
@@ -82,6 +87,8 @@ Your pets become teachers, every task is a spell, and the focus timer is a virtu
 - **Custom pets**: 14 species, with your choice of colors, patterns or breeds, eye color and accessories.
 - **Color themes**: 7 presets, plus fully custom colors.
 - **Connect your school**: paste text copied from the portal (no passwords), or import `.csv`, `.ics` or `.json`.
+- **Talk to it**: voice (keyboard dictation) or typed requests like *"remind me to call mom tomorrow at 5 pm"*, parsed on the device.
+- **Phone calendar export**: `.ics` with alarms, so the phone's calendar notifies even with the app closed.
 - **Portuguese and English**, works **offline** and can be installed as a PWA.
 - **100% local, no server**: data never leaves the device. It is mirrored to IndexedDB, can be auto-backed-up to a local file, and exported as a passphrase-encrypted `.grimorio` file (PBKDF2 + AES-GCM) to move between devices.
 
