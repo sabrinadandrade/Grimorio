@@ -56,6 +56,14 @@ window.G = window.G || {};
     const { error } = await C.client.auth.signInWithOtp({ email, options: { emailRedirectTo: location.href.split("#")[0] } });
     if (error) throw error;
   };
+  /* entrar com o código de 6 dígitos do e-mail (funciona no app instalado do iPhone)
+   * sign in with the emailed one-time code (works inside installed iOS home-screen apps) */
+  C.verifyCode = async function (email, code) {
+    if (!C.client) await C.init();
+    const { data, error } = await C.client.auth.verifyOtp({ email, token: code.replace(/\D/g, ""), type: "email" });
+    if (error) throw error;
+    C.user = data.user; C.status = "idle"; notify(); await C.sync();
+  };
   C.signOut = async function () { if (C.client) await C.client.auth.signOut(); C.user = null; C.status = "signedOut"; notify(); };
 
   /* baixa e decide quem vence / pull and resolve */

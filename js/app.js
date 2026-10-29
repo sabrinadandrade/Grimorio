@@ -306,8 +306,10 @@ window.G = window.G || {};
     if (!C.configured()) {
       body = `<p class="small">${t("cloudOffInfo")}</p>`;
     } else if (!C.user) {
-      body = `<div class="row2" style="grid-template-columns:2fr auto;align-items:end"><label class="f">${t("cloudEmail")}<input type="text" id="cEmail" inputmode="email" autocomplete="email" placeholder="voce@email.com"></label>
-        <button class="cute" onclick="G.UI.cloudSignIn()">${t("cloudSend")}</button></div>`;
+      body = `<div class="row2" style="grid-template-columns:2fr auto;align-items:end"><label class="f">${t("cloudEmail")}<input type="text" id="cEmail" inputmode="email" autocomplete="email" placeholder="voce@email.com" value="${esc(UI._email || "")}"></label>
+        <button class="cute" onclick="G.UI.cloudSignIn()">${t("cloudSend")}</button></div>
+        ${UI._email ? `<div class="row2" style="grid-template-columns:1fr auto;align-items:end"><label class="f">${t("cloudCode")}<input type="text" id="cCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></label>
+        <button class="cute alt" onclick="G.UI.cloudCode()">${t("cloudEnter")}</button></div><p class="small">${t("cloudCodeHelp")}</p>` : ""}`;
     } else {
       body = `<p>☁️ ${t("cloudSignedAs", { e: esc(C.user.email || "") })}</p><p class="small">${t("cloudLast", { d: when(C.lastSync) })}</p>
         <div class="nav"><button class="cute" onclick="G.cloud.sync()">${t("cloudSyncNow")}</button><button class="cute ghost" onclick="G.cloud.signOut()">${t("cloudSignOut")}</button></div>`;
@@ -331,7 +333,8 @@ window.G = window.G || {};
       <details id="snaps"><summary class="small">${t("snapshots")}</summary><div id="snapList" class="small">…</div></details>`, "safetyWin");
   }
   UI.cloudChanged = () => { renderXP(); if (tab === "data" && $("#cloudWin")) $("#cloudWin").outerHTML = cloudWin(); };
-  UI.cloudSignIn = async () => { const e = ($("#cEmail").value || "").trim(); if (!/.+@.+\..+/.test(e)) return; try { await G.cloud.signIn(e); G.toast(t("cloudSent")); } catch (err) { alert("⚠️ " + (err.message || err)); } };
+  UI.cloudSignIn = async () => { const e = ($("#cEmail").value || "").trim(); if (!/.+@.+\..+/.test(e)) return; try { await G.cloud.signIn(e); UI._email = e; G.toast(t("cloudSent")); UI.cloudChanged(); setTimeout(() => $("#cCode") && $("#cCode").focus(), 100); } catch (err) { alert("⚠️ " + (err.message || err)); } };
+  UI.cloudCode = async () => { const c = ($("#cCode").value || "").trim(); if (c.replace(/\D/g, "").length < 6) return; try { await G.cloud.verifyCode(UI._email, c); UI._email = ""; G.toast("☁️ ✨"); G.burst(null, 100); UI.cloudChanged(); } catch (err) { alert("⚠️ " + t("cloudBadCode") + "\n" + (err.message || err)); } };
   UI.cloudCfg = async () => { const u = $("#cUrl").value, k = $("#cKey").value; if ((u || k) && !G.cloud.validCustom(u, k)) { alert(t("cloudBadCfg")); return; } G.cloud.setCustom(u, k); G.cloud.client = null; await G.cloud.init(); pData(); };
   UI.fileOn = async () => { if (await G.safety.enableFile()) { G.toast(t("saved")); } pData(); renderXP(); };
   UI.fileResume = async () => { await G.safety.resumeFile(); pData(); renderXP(); };

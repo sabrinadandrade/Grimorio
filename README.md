@@ -27,7 +27,7 @@ O Grimório é **local-first**: funciona sem internet e sem conta, e você não 
 | 📦 Navegador | Salva no `localStorage` **e** numa cópia em **IndexedDB**. Se uma for apagada, o app recupera da outra. Também pede **armazenamento persistente** ao navegador. |
 | 🛟 Cópias automáticas | Antes de importar, restaurar ou baixar da nuvem, guarda uma cópia de segurança que dá pra restaurar com um clique. |
 | 💾 Backup automático em arquivo | No Chrome e no Edge, escolha um arquivo no seu computador e o Grimório salva nele a cada mudança. |
-| ☁️ Nuvem (opcional) | Login por link mágico no e-mail e sincronização entre celular e PC via **Supabase (Postgres)**. Cada pessoa só acessa os próprios dados (Row Level Security). Veja [docs/SUPABASE.md](docs/SUPABASE.md). |
+| ☁️ Nuvem (opcional) | Login por código enviado no e-mail e sincronização entre celular e PC via **Supabase (Postgres)**. Cada pessoa só acessa os próprios dados (Row Level Security). Veja [docs/SUPABASE.md](docs/SUPABASE.md). |
 | 📤 Exportar / importar | Backup `.json` manual a qualquer momento. Se faltar backup, um lembrete aparece depois de 7 dias. |
 
 ## 🚀 Como usar
@@ -88,7 +88,7 @@ Your pets become teachers, every task is a spell, and the focus timer is a virtu
 - **Color themes**: 7 presets, plus fully custom colors.
 - **Connect your school**: paste text copied from the portal (no passwords), or import `.csv`, `.ics` or `.json`.
 - **Portuguese and English**, works **offline** and can be installed as a PWA.
-- **No data loss**: data is mirrored to IndexedDB, auto-backed-up to a local file, and optionally synced to the cloud with **Supabase** (magic-link login plus Row Level Security). See [docs/SUPABASE.md](docs/SUPABASE.md).
+- **No data loss**: data is mirrored to IndexedDB, auto-backed-up to a local file, and optionally synced to the cloud with **Supabase** (emailed one-time code login plus Row Level Security). See [docs/SUPABASE.md](docs/SUPABASE.md).
 
 To use it, open <https://sabrinadandrade.github.io/Grimorio/> or download the project and open `index.html`.
 To contribute (connectors, pets, themes, translations), see [CONTRIBUTING.md](CONTRIBUTING.md). License: MIT.

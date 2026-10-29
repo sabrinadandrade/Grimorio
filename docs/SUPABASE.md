@@ -1,6 +1,6 @@
 # ☁️ Ativando a nuvem (Supabase) — passo a passo
 
-Com a nuvem ativada, cada pessoa entra com o próprio e-mail (por um link mágico, sem senha) e o grimório dela fica salvo num banco de dados de verdade, o **Postgres do Supabase**. Assim ela não perde nada se trocar de computador ou limpar o navegador, e consegue usar no celular e no PC.
+Com a nuvem ativada, cada pessoa entra com o próprio e-mail (recebe um código de 6 dígitos, sem senha) e o grimório dela fica salvo num banco de dados de verdade, o **Postgres do Supabase**. Assim ela não perde nada se trocar de computador ou limpar o navegador, e consegue usar no celular e no PC.
 
 Sem a nuvem, o Grimório continua funcionando normalmente, guardando os dados no navegador, com cópia em IndexedDB e backup em arquivo.
 
@@ -29,7 +29,17 @@ Sem a nuvem, o Grimório continua funcionando normalmente, guardando os dados no
    - **Site URL**: o endereço do seu Grimório, ex.: `https://sabrinadandrade.github.io/Grimorio/`
    - **Redirect URLs**: clique em **Add URL** e adicione o endereço com `**` no final, ex.: `https://sabrinadandrade.github.io/Grimorio/**`. Se for testar no seu computador, adicione também `http://localhost:8000/**`.
    - ⚠️ O endereço do GitHub Pages diferencia maiúsculas: use o nome do repositório exatamente como ele está (`Grimorio` ≠ `grimorio`).
-3. (Opcional) Em **Authentication → Emails**, traduza o e-mail do link mágico para português. 💌
+3. **Importante:** em **Authentication → Emails → Templates**, abra os modelos **Magic Link** e **Confirm signup** e coloque o código `{{ .Token }}` no texto. O Grimório pede esse código de 6 dígitos, que funciona até no app instalado no iPhone. Modelo pronto em português:
+
+```html
+<h2>☾ Grimório ☽</h2>
+<p>Seu código para entrar:</p>
+<h1 style="letter-spacing:8px">{{ .Token }}</h1>
+<p>Digite esse código no Grimório. Ele vale por 1 hora.</p>
+<p>Se você não pediu, é só ignorar este e-mail. 🐾</p>
+```
+
+   Assunto sugerido: `☾ Seu código do Grimório: {{ .Token }}`
 
 > O servidor de e-mail grátis do Supabase envia poucos e-mails por hora. Se muita gente for usar, configure um SMTP próprio (ex.: Resend ou Brevo) em **Authentication → Emails → SMTP Settings**.
 
@@ -46,7 +56,7 @@ G.CONFIG = {
 };
 ```
 
-4. Faça o commit e o push. Pronto! Em **Importar / conectar → Nuvem**, as pessoas digitam o e-mail e recebem o link.
+4. Faça o commit e o push. Pronto! Em **Importar / conectar → Nuvem**, as pessoas digitam o e-mail, recebem um código e entram.
 
 ### "Mas a chave fica pública no código?"
 
