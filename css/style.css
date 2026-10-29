@@ -145,6 +145,8 @@ details.sub .in { padding:10px 14px 14px }
 #tama .row button:active { transform:translate(2px,2px); box-shadow:none }
 #tama .chain { position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:1.3rem }
 #tama .hide { position:absolute; top:4px; right:4px; border:2px solid var(--ink); background:var(--card); border-radius:50%; width:22px; height:22px; font-size:.8rem; line-height:1; padding:0; z-index:2 }
+.ioshint { position:fixed; left:10px; right:10px; bottom:10px; z-index:150; animation:pop .3s; font-size:.95rem }
+.ioshint .ishare { display:inline-block; border:2px solid var(--ink); border-radius:6px; padding:0 5px; background:var(--cardAlt) }
 #fx { position:fixed; inset:0; pointer-events:none; z-index:99 }
 .toast { position:fixed; left:50%; top:18px; transform:translateX(-50%); background:var(--ink); color:var(--primary); border:3px solid var(--primary); padding:10px 20px; border-radius:16px; font-weight:900; z-index:230; animation:pop .3s; box-shadow:4px 4px 0 var(--ink) }
 .trail { position:fixed; pointer-events:none; z-index:140; font-size:12px; animation:fade .8s forwards }

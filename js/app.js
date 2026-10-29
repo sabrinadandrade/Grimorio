@@ -423,6 +423,21 @@ window.G = window.G || {};
       : "🎃 ☾ ✦ bem-vinda(o) ao seu grimório de estudos ✦ cada missão é um feitiço ✦ seus pets acreditam em você ✦ alguns minutinhos de foco, depois sonequinha ✦ 🦇 ✦ ☽ ✦ 🐾 ✦ 👻 ✦ 🎃";
   }
 
+  /* ================= AVISO DE INSTALAÇÃO NO IPHONE / iOS INSTALL HINT ================= */
+  function iosHint() {
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const standalone = window.navigator.standalone || matchMedia("(display-mode: standalone)").matches;
+    let dismissed = false; try { dismissed = localStorage.getItem("grimorio.iosHint") === "1"; } catch (e) { }
+    if (!isIOS || standalone || dismissed || G.isNative()) return;
+    const safari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|GSA|Instagram|FBAN|FBAV/.test(ua);
+    const el = document.createElement("div"); el.className = "ioshint";
+    el.innerHTML = `<div class="win" style="margin:0"><div class="bar">📱 ${G.lang === "en" ? "install.exe" : "instalar.exe"}<span class="dots"><i></i><i></i><i></i></span></div><div class="wbody">
+      ${safari ? t("iosHint") : t("iosHintSafari")}<div class="nav" style="margin-top:8px"><button class="cute" id="iosOk">${t("iosOk")}</button></div></div></div>`;
+    document.body.appendChild(el);
+    el.querySelector("#iosOk").onclick = () => { try { localStorage.setItem("grimorio.iosHint", "1"); } catch (e) { } el.remove(); };
+  }
+
   /* ================= INÍCIO / START ================= */
   G.start = async function () {
     G.load(); G.applyTheme(G.state.theme); document.documentElement.lang = G.lang === "pt" ? "pt-BR" : G.lang;
@@ -430,7 +445,7 @@ window.G = window.G || {};
     // proteção: recupera do IndexedDB se o localStorage foi limpo / recover from IndexedDB if needed
     if (await G.safety.recover()) { G.applyTheme(G.state.theme); G.tamaRender(); UI.refresh(); G.toast(t("recovered")); }
     else G.safety.mirror();
-    onboarding();
+    onboarding(); iosHint();
     await G.safety.requestPersist(); await G.safety.initFile(); renderXP();
     G.cloud.init();
   };
