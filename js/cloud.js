@@ -46,6 +46,9 @@ window.G = window.G || {};
       });
       if (C.user) await C.sync();
       addEventListener("online", () => { if (C.user) C.sync(); });
+      // atualiza quando volta pro app e a cada 5 min / refresh on focus and every 5 min
+      document.addEventListener("visibilitychange", () => { if (!document.hidden && C.user && Date.now() - C.lastSync > 60000) C.sync(); });
+      setInterval(() => { if (C.user && !document.hidden) C.sync(); }, 5 * 60000);
     } catch (e) { C.status = "offline"; C.error = e.message; }
     notify();
   };
@@ -85,6 +88,7 @@ window.G = window.G || {};
         else if (remoteHasData && localHasData) pull = rT === lT ? false : confirm(G.t("cloudChoose"));
         else if (!remoteHasData) pull = false;
       }
+      C.remoteSeen = rT;
       if (pull) {
         if (localHasData && G.safety) await G.safety.snapshot("before-cloud-pull");
         G.state = Object.assign(G.defaultState(), remote, { cloudUser: C.user.id }); G.lang = G.state.lang;
@@ -109,8 +113,14 @@ window.G = window.G || {};
     if (pushing) { pending = true; return; }
     pushing = true;
     try {
+      // outro aparelho (ou uma atualização) mudou a nuvem? então busca antes de enviar
+      // did another device change the cloud? pull before pushing
+      const chk = await C.client.from("grimoires").select("updated_at, data->updatedAt").eq("user_id", C.user.id).maybeSingle();
+      const rT = chk.data ? (+chk.data.updatedAt || Date.parse(chk.data.updated_at) || 0) : 0;
+      if (C.remoteSeen != null && rT > C.remoteSeen + 1000 && rT > (G.state.updatedAt || 0) - 1) { pushing = false; return C.sync(); }
       const { error } = await C.client.from("grimoires").upsert({ user_id: C.user.id, data: G.state, updated_at: new Date(G.state.updatedAt || Date.now()).toISOString() });
       if (error) throw error;
+      C.remoteSeen = G.state.updatedAt || Date.now();
       C.lastSync = Date.now(); C.status = "idle"; C.error = "";
       G.state.lastBackupAt = Date.now(); try { localStorage.setItem(G.STORE_KEY, JSON.stringify(G.state)); } catch (e) { }
     } catch (e) { C.status = navigator.onLine ? "error" : "offline"; C.error = e.message || String(e); }
