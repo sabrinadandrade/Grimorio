@@ -7,6 +7,8 @@ Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho
 
 ![Grimório](docs/screenshot.png)
 
+> ⚡ **Quer o resumo?** Veja o **[Guia rápido](docs/GUIA-RAPIDO.md)**: pontos importantes e como usar no iPhone e no Android, numa página só.
+>
 > 📖 **Nunca usou? Comece pelo [Tutorial passo a passo para iniciantes](docs/TUTORIAL.md)**: com prints de cada tela, do primeiro acesso até usar no celular.
 
 ## ✨ O que ele faz

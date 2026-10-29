@@ -2,6 +2,8 @@
 
 Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Não precisa saber nada de computador: é só seguir na ordem.
 
+> ⚡ Prefere uma página só? Veja o **[Guia rápido](GUIA-RAPIDO.md)** (pontos importantes + iPhone e Android).
+
 > **Resumo em 1 minuto:** abra o site → coloque seu nome → cadastre (ou importe) suas matérias e provas → clique em **✨ Gerar plano** → todo dia abra **Hoje** e faça uma coisa de cada vez, com o timer. Para a vida fora dos estudos, cadastre **Atividades** (casa, pets, trabalho…) com prioridade e lembrete, e seu pet te avisa! Pronto!
 
 ### Sumário
