@@ -1,0 +1,83 @@
+# Gera o APK do Grimório para Android e publica em Releases ("Grimório para Android").
+# Builds the Grimório Android APK and publishes it to Releases.
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "docs/**", "supabase/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Instalar dependências
+        run: npm install --no-audit --no-fund
+
+      - name: Preparar o app (Capacitor)
+        run: |
+          npm run build:web
+          npx cap add android
+          npx capacitor-assets generate --android --iconBackgroundColor '#3a1d5c' --iconBackgroundColorDark '#3a1d5c' --splashBackgroundColor '#3a1d5c' --splashBackgroundColorDark '#3a1d5c'
+          npx cap sync android
+          sed -i "s/versionCode 1$/versionCode ${{ github.run_number }}/; s/versionName \"1.0\"/versionName \"1.${{ github.run_number }}\"/" android/app/build.gradle
+          grep -E "versionCode|versionName" android/app/build.gradle
+
+      - name: Compilar APK
+        env:
+          KS_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KS_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          cd android
+          chmod +x gradlew
+          if [ -n "$KS_B64" ]; then
+            ./gradlew assembleRelease --no-daemon
+            echo "$KS_B64" | base64 -d > ../release.jks
+            BT=$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)
+            "$ANDROID_HOME/build-tools/$BT/zipalign" -p -f 4 app/build/outputs/apk/release/app-release-unsigned.apk ../aligned.apk
+            "$ANDROID_HOME/build-tools/$BT/apksigner" sign --ks ../release.jks --ks-pass env:KS_PASS --ks-key-alias "$KS_ALIAS" --key-pass env:KEY_PASS --out ../Grimorio.apk ../aligned.apk
+            rm -f ../release.jks
+            echo "SIGNED=sim" >> "$GITHUB_ENV"
+          else
+            echo "::warning::Sem chave de assinatura (secrets). Gerando APK de teste (debug)."
+            ./gradlew assembleDebug --no-daemon
+            cp app/build/outputs/apk/debug/app-debug.apk ../Grimorio.apk
+            echo "SIGNED=nao" >> "$GITHUB_ENV"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Grimorio-apk
+          path: Grimorio.apk
+
+      - name: Publicar em Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete android-latest --yes --cleanup-tag || true
+          NOTE="Baixe o arquivo **Grimorio.apk** abaixo no seu celular Android e toque nele para instalar. Na primeira vez, o Android pede para permitir instalar apps desta fonte. Passo a passo: https://github.com/${{ github.repository }}/blob/main/docs/TUTORIAL.md#android-app"
+          if [ "$SIGNED" = "nao" ]; then NOTE="$NOTE
+
+          ⚠️ Versão de teste (debug): para atualizar, desinstale a anterior."; fi
+          gh release create android-latest Grimorio.apk --title "🐾 Grimório para Android (versão 1.${{ github.run_number }})" --notes "$NOTE" --latest

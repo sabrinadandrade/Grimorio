@@ -89,7 +89,16 @@ window.G = window.G || {};
     return G.applyParsed(obj);
   };
 
-  G.download = function (name, text, type) {
+  G.isNative = () => !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  G.download = async function (name, text, type) {
+    if (G.isNative()) { // app Android: salva e abre o menu "Compartilhar" / Android app: save + share sheet
+      try {
+        const { Filesystem, Share } = window.Capacitor.Plugins;
+        const r = await Filesystem.writeFile({ path: name, data: text, directory: "CACHE", encoding: "utf8" });
+        await Share.share({ title: name, url: r.uri, dialogTitle: name });
+      } catch (e) { alert("⚠️ " + (e.message || e)); }
+      return;
+    }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([text], { type: type || "text/plain" }));
     a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);

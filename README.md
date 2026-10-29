@@ -1,8 +1,8 @@
-# ☾ Grimório ☽ — planner de estudos kawaii
+# ☾ Grimório ☽ — planner kawaii de estudos e vida pessoal
 
 > 🇧🇷 Português · [🇺🇸 English below](#-english)
 
-Um planner de estudos **fofo, mágico e anos 90**, feito para quem tem dificuldade de foco.
+Um planner **fofo, mágico e anos 90** para **estudos e assuntos pessoais** (faculdade, escola, concurso, curso livre, metas, casa, saúde…), feito para quem tem dificuldade de foco.
 Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho virtual. 🐾🔮
 
 ![Grimório](docs/screenshot.png)
@@ -35,6 +35,8 @@ O Grimório é **local-first**: funciona sem internet e sem conta, e você não 
 ## 🚀 Como usar
 
 - **Online:** <https://sabrinadandrade.github.io/Grimorio/>
+- **📱 Android:** baixe o **[Grimorio.apk](https://github.com/sabrinadandrade/Grimorio/releases/latest)** e toque nele para instalar ([passo a passo](docs/TUTORIAL.md#android-app)).
+- **🍎 iPhone:** abra o site no Safari → **Compartilhar** → **Adicionar à Tela de Início** ([passo a passo](docs/TUTORIAL.md#2-como-abrir)).
 - **No seu computador:** baixe o projeto (botão verde *Code → Download ZIP*), descompacte e abra o `index.html`. Não precisa instalar nada.
 
 ## 🎓 Instituições suportadas

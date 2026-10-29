@@ -1,7 +1,7 @@
 {
-  "name": "Grimório — planner de estudos kawaii",
+  "name": "Grimório: planner kawaii",
   "short_name": "Grimório",
-  "description": "Planner de estudos kawaii anos 90 com pets, timer de foco e flashcards.",
+  "description": "Planner kawaii anos 90 para estudos e assuntos pessoais, com pets, timer de foco e flashcards.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#3a1d5c",

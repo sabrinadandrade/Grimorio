@@ -53,9 +53,17 @@ Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Nã
 3. Role e toque em **Adicionar à Tela de Início** → **Adicionar**.
 4. Pronto: aparece o ícone do gatinho de chapéu na sua tela, igual um app. 🐈‍⬛
 
-### No Android
-1. Abra o link no **Chrome**.
-2. Toque nos **três pontinhos ⋮** → **Adicionar à tela inicial** (ou **Instalar app**).
+<a id="android-app"></a>
+### No Android: baixar o app (APK) 📱
+1. No celular, abra **https://github.com/sabrinadandrade/Grimorio/releases/latest**
+2. Lá embaixo, em **Assets**, toque em **Grimorio.apk** para baixar.
+3. Quando terminar, toque na notificação do download (ou abra o app **Arquivos → Downloads** e toque em **Grimorio.apk**).
+4. Na **primeira vez**, o Android avisa que o app não veio da Play Store. Toque em **Configurações** → ative **Permitir desta fonte** → volte e toque em **Instalar**.
+5. Pronto: o gatinho de chapéu aparece na sua tela! 🐈‍⬛
+
+> 🔄 **Atualizar:** baixe o **Grimorio.apk** de novo pelo mesmo link e instale por cima. Seus dados continuam lá (e, se você usa a nuvem, ficam salvos de qualquer jeito).
+
+> **Prefere não instalar nada?** Abra o site no **Chrome** → **três pontinhos ⋮** → **Adicionar à tela inicial**. Funciona igualzinho.
 
 ---
 
@@ -73,6 +81,22 @@ Na primeira vez aparece esta janela:
 No começo o grimório está vazio. Os botões levam você para o próximo passo:
 
 ![Grimório vazio](img/02-vazio.png)
+
+---
+
+## 3.1 Não é só para a faculdade! 💜
+
+"Matéria" no Grimório pode ser **qualquer área da sua vida**, e "prova" pode ser **qualquer data importante**. Exemplos:
+
+| Matéria | Temas (viram feitiços) | "Prova" (data-alvo) |
+|---|---|---|
+| 🧘 Saúde | Marcar dentista · Caminhar 3x · Beber água | Consulta no dia 20 |
+| 🏠 Casa | Organizar guarda-roupa · Limpar geladeira | Visita da família |
+| 💰 Finanças | Listar gastos · Montar orçamento | Dia de pagar contas |
+| 🎸 Curso livre / hobby | Aula 1 · Aula 2 · Praticar | Apresentação |
+| 📚 Concurso / ENEM | Português · Matemática · Redação | Dia da prova |
+
+E para coisas soltas do dia, use o **feitiço extra** na aba **Feitiços de hoje** ([passo 7](#7-usar-no-dia-a-dia-feitiços-de-hoje)).
 
 ---
 

@@ -1,0 +1,6 @@
+{
+  "appId": "io.github.sabrinadandrade.grimorio",
+  "appName": "Grimório",
+  "webDir": "www",
+  "android": { "backgroundColor": "#3a1d5c" }
+}

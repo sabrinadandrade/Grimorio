@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>☾ Grimório ☽</title>
-<meta name="description" content="Grimório: planner de estudos kawaii anos 90 com pets, timer de foco e flashcards. Open source, offline, sem conta.">
+<meta name="description" content="Grimório: planner kawaii anos 90 para estudos e assuntos pessoais, com pets, timer de foco e flashcards. Open source, offline.">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#3a1d5c">
@@ -47,6 +47,6 @@
 <script src="js/tama.js"></script>
 <script src="js/cloud.js"></script>
 <script src="js/app.js"></script>
-<script>G.start(); if (location.protocol.startsWith("http") && "serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").then(r => r.update());</script>
+<script>G.start(); if (!window.Capacitor && location.protocol.startsWith("http") && "serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").then(r => r.update());</script>
 </body>
 </html>
