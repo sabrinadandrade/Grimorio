@@ -34,6 +34,7 @@ O Grimório é **local-first**: funciona sem internet e sem conta, e você não 
 | 🛟 Cópias automáticas | Antes de importar, restaurar ou baixar da nuvem, guarda uma cópia de segurança que dá pra restaurar com um clique. |
 | 💾 Backup automático em arquivo | No Chrome e no Edge, escolha um arquivo no seu computador e o Grimório salva nele a cada mudança. |
 | ☁️ Nuvem (opcional) | Login por código enviado no e-mail e sincronização entre celular e PC via **Supabase (Postgres)**. Cada pessoa só acessa os próprios dados (Row Level Security). Veja [docs/SUPABASE.md](docs/SUPABASE.md). |
+| 🔐 Cofre (opcional) | Criptografia de ponta a ponta com senha-mestra (PBKDF2-SHA256 600 mil rodadas + AES-GCM 256, direto no navegador). Nem o servidor lê seus dados. Também dá para exportar backup criptografado (`.grimorio`). |
 | 📤 Exportar / importar | Backup `.json` manual a qualquer momento. Se faltar backup, um lembrete aparece depois de 7 dias. |
 
 ## 🚀 Como usar

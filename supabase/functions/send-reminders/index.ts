@@ -45,6 +45,27 @@ Deno.serve(async () => {
     const now = localNow(tz);
     const name = ((g.data && g.data.owner && g.data.owner.name) || "").trim();
     const done = (g.data && g.data.actDone) || {};
+    // Cofre ligado: o servidor não lê nada; só tem os HORÁRIOS (ms) dos próximos lembretes.
+    // Vault on: the server can't read anything, it only has upcoming reminder TIMES (ms).
+    if (g.data && g.data.enc === 1) {
+      const nowMs = Date.now();
+      for (const fire of (Array.isArray(g.data.sched) ? g.data.sched : [])) {
+        if (typeof fire !== "number" || fire > nowMs || fire < nowMs - 3 * 60000) continue;
+        const key = `${g.user_id}|enc|${fire}`;
+        const { error: dup } = await db.from("push_sent").insert({ key });
+        if (dup) continue;
+        const payload = JSON.stringify({ title: "🔔 Grimório", body: "Você tem um lembrete! Abra o app para ver 💜", tag: key });
+        for (const s of mySubs) {
+          try { await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, { TTL: 3600, urgency: "high" }); sent++; }
+          catch (e) {
+            // deno-lint-ignore no-explicit-any
+            const code = (e as any)?.statusCode;
+            if (code === 404 || code === 410) await db.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
+          }
+        }
+      }
+      continue;
+    }
     for (const a of (g.data && g.data.activities) || []) {
       if (a.remind == null || a.remind < 0 || !a.time) continue;
       const [hh, mm] = String(a.time).split(":").map(Number);

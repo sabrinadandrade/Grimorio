@@ -108,10 +108,18 @@ window.G = window.G || {};
   G.readFile = function (file) {
     return new Promise((res, rej) => {
       const r = new FileReader();
-      r.onload = () => {
+      r.onload = async () => {
         const txt = r.result, n = file.name.toLowerCase();
         try {
-          if (n.endsWith(".json")) res(G.importJSON(JSON.parse(txt)));
+          let obj = null; if (n.endsWith(".json") || n.endsWith(".grimorio")) obj = JSON.parse(txt);
+          if (obj && G.vault && G.vault.isSealed(obj)) { // backup criptografado / encrypted backup
+            for (let msg = G.t("importEncMsg"); ;) {
+              const p = await G.vault.ask("ask", msg); if (!p) return res(null);
+              try { obj = await G.vault.openFile(obj, p); break; } catch (e) { msg = "⚠️ " + e.message; }
+            }
+          }
+          if (obj) res(G.importJSON(obj));
+          else if (n.endsWith(".json")) res(G.importJSON(JSON.parse(txt)));
           else if (n.endsWith(".ics")) res(G.applyParsed(G.icsToParsed(txt)));
           else if (n.endsWith(".csv")) res(G.applyParsed(G.csvToParsed(txt) || {}));
           else res(null);

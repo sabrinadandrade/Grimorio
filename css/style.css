@@ -226,3 +226,4 @@ body.calm .marq span, body.calm .bob { animation:none } body.calm .inner { trans
 }
 .addrow { grid-template-columns:2fr 1fr auto; align-items:end }
 @media (prefers-reduced-motion: reduce) { .marq span, .bob { animation:none } .inner { transition:none } }
+.vaultbox{margin-top:10px;padding:10px;border:2px dashed var(--accent2);border-radius:14px}

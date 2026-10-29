@@ -67,7 +67,12 @@ window.G = window.G || {};
     if (error) throw error;
     C.user = data.user; C.status = "idle"; notify(); await C.sync();
   };
-  C.signOut = async function () { if (C.client) await C.client.auth.signOut(); C.user = null; C.status = "signedOut"; notify(); };
+  // nuvem em texto aberto e mais nova = o cofre foi desligado em outro aparelho / plaintext newer cloud = vault turned off elsewhere
+  function firstPlainOk(remote) { if ((remote.updatedAt || 0) > (G.state.updatedAt || 0) && G.state.cloudUser) { G.vault.forget(); return true; } return false; }
+  C.unlock = async function (pass) { if (!C.lockedEnv) return; await G.vault.unlock(C.lockedEnv, pass); C.lockedEnv = null; C.status = "idle"; await C.sync(); };
+  C.vaultOn = async function (pass) { await G.vault.enable(pass); C._rekey = true; await C.push(true); };
+  C.vaultOff = async function () { await G.vault.forget(); C._rekey = true; await C.push(true); };
+  C.signOut = async function () { if (G.vault) await G.vault.forget(); if (C.client) await C.client.auth.signOut(); C.user = null; C.status = "signedOut"; notify(); };
 
   /* baixa e decide quem vence / pull and resolve */
   C.sync = async function () {
@@ -76,7 +81,14 @@ window.G = window.G || {};
     try {
       const { data, error } = await C.client.from("grimoires").select("data, updated_at").eq("user_id", C.user.id).maybeSingle();
       if (error) throw error;
-      const remote = data && data.data, rT = remote ? (remote.updatedAt || Date.parse(data.updated_at) || 0) : 0, lT = G.state.updatedAt || 0;
+      let remote = data && data.data;
+      if (G.vault && G.vault.isSealed(remote)) { // cofre: abre com a chave deste aparelho / vault: open with this device's key
+        const open = await G.vault.open(remote);
+        if (!open) { C.lockedEnv = remote; C.status = "locked"; notify(); if (!C._asked) { C._asked = true; setTimeout(() => G.UI && G.UI.vaultUnlock && G.UI.vaultUnlock(), 300); } return; }
+        open.updatedAt = remote.updatedAt; remote = open;
+      } else if (remote && G.vault && G.vault.on()) firstPlainOk(remote);
+      C.lockedEnv = null;
+      const rT = remote ? (remote.updatedAt || Date.parse(data.updated_at) || 0) : 0, lT = G.state.updatedAt || 0;
       const has = s => !!(s && ((s.subjects || []).length || (s.cards || []).length || Object.keys(s.plan || {}).length));
       const localHasData = has(G.state), remoteHasData = has(remote);
       const firstTimeHere = G.state.cloudUser !== C.user.id; // primeira sincronização deste aparelho com esta conta
@@ -109,17 +121,23 @@ window.G = window.G || {};
 
   C.push = async function (force) {
     if (!C.client || !C.user) return;
+    if (C.status === "locked") return; // trancado: nunca sobrescreve a nuvem / locked: never overwrite the cloud
     if (!force && G.state.cloudUser !== C.user.id) return C.sync(); // ainda não sincronizou neste aparelho
     if (pushing) { pending = true; return; }
     pushing = true;
     try {
       // outro aparelho (ou uma atualização) mudou a nuvem? então busca antes de enviar
       // did another device change the cloud? pull before pushing
-      const chk = await C.client.from("grimoires").select("updated_at, data->updatedAt").eq("user_id", C.user.id).maybeSingle();
+      const chk = await C.client.from("grimoires").select("updated_at, data->updatedAt, data->enc, data->salt").eq("user_id", C.user.id).maybeSingle();
       const rT = chk.data ? (+chk.data.updatedAt || Date.parse(chk.data.updated_at) || 0) : 0;
       if (C.remoteSeen != null && rT > C.remoteSeen + 1000 && rT > (G.state.updatedAt || 0) - 1) { pushing = false; return C.sync(); }
-      const { error } = await C.client.from("grimoires").upsert({ user_id: C.user.id, data: G.state, updated_at: new Date(G.state.updatedAt || Date.now()).toISOString() });
+      // a nuvem está trancada com outra senha (ou sem cofre aqui)? não envia; busca e pede a senha
+      const rk = chk.data && chk.data.enc === 1 ? chk.data.salt : null, fl = G.vault && G.vault.flag();
+      if (rk && !C._rekey && (!fl || fl.salt !== rk)) { pushing = false; return C.sync(); }
+      const body = G.vault && G.vault.on() ? await G.vault.seal(G.state) : G.state;
+      const { error } = await C.client.from("grimoires").upsert({ user_id: C.user.id, data: body, updated_at: new Date(G.state.updatedAt || Date.now()).toISOString() });
       if (error) throw error;
+      C._rekey = false;
       C.remoteSeen = G.state.updatedAt || Date.now();
       C.lastSync = Date.now(); C.status = "idle"; C.error = "";
       G.state.lastBackupAt = Date.now(); try { localStorage.setItem(G.STORE_KEY, JSON.stringify(G.state)); } catch (e) { }

@@ -483,7 +483,7 @@ window.G = window.G || {};
         <div class="nav" style="margin-top:8px"><button class="cute" onclick="G.UI.analyze()">${t("analyze")}</button></div><div id="parsed"></div>
         <p class="small">${t("privacy")}<br>${t("newConnector")}</p>`) +
       win("💾 " + (G.lang === "en" ? "files.exe" : "arquivos.exe"), `<div class="nav">
-        <label class="cute alt" style="display:inline-block">${t("importFile")}<input type="file" accept=".json,.csv,.ics" style="display:none" onchange="G.UI.file(this)"></label>
+        <label class="cute alt" style="display:inline-block">${t("importFile")}<input type="file" accept=".json,.grimorio,.csv,.ics" style="display:none" onchange="G.UI.file(this)"></label>
         <button class="cute" onclick="G.exportJSON()">${t("exportJson")}</button><button class="cute ghost" onclick="G.download('grimorio-modelo.csv',G.csvTemplate(),'text/csv')">${t("csvTemplate")}</button>
 <button class="cute danger" onclick="G.UI.reset()">${t("resetAll")}</button></div>
         <p class="small">${t("privacy")}</p>`);
@@ -503,6 +503,10 @@ window.G = window.G || {};
     } else {
       body = `<p>☁️ ${t("cloudSignedAs", { c: G.pw(t("connectedF"), t("connectedM"), t("connectedN")), e: esc(C.user.email || "") })}</p><p class="small">${t("cloudLast", { d: when(C.lastSync) })}</p>
         <div class="nav"><button class="cute" onclick="G.cloud.sync()">${t("cloudSyncNow")}</button><button class="cute ghost" onclick="G.cloud.signOut()">${t("cloudSignOut")}</button></div>`;
+      if (C.status === "locked") body += `<div class="vaultbox"><p>${t("vaultLocked")}</p><button class="cute big-cta" onclick="G.UI.vaultUnlock()">${t("vaultUnlock")}</button></div>`;
+      else if (G.vault.supported()) body += `<div class="vaultbox"><p class="small">${G.vault.on() ? t("vaultOnTxt") : t("vaultOffTxt")}</p><div class="nav">` + (G.vault.on()
+        ? `<button class="cute alt" onclick="G.UI.vaultSet()">${t("vaultChange")}</button><button class="cute ghost" onclick="G.UI.vaultOff()">${t("vaultDisable")}</button>`
+        : `<button class="cute big-cta" onclick="G.UI.vaultSet()">${t("vaultEnable")}</button>`) + `</div></div>`;
     }
     if (C.status === "offline") body += `<p class="small">${t("cloudOffline")}</p>`;
     if (C.status === "error") body += `<p class="small">${t("cloudErr", { e: esc(C.error) })}</p>`;
@@ -518,10 +522,21 @@ window.G = window.G || {};
       : S.fileStatus === "paused" ? `<button class="cute" onclick="G.UI.fileResume()">${t("fileResume")}</button>`
       : S.fileStatus === "off" ? `<button class="cute" onclick="G.UI.fileOn()">${t("fileEnable")}</button>` : "";
     return win("🛡️ " + (G.lang === "en" ? "data_protection.exe" : "protecao_dos_dados.exe"), `<p class="small">${S.persisted ? t("persistOn") : t("persistOff")}</p>
-      <h3>💾 ${t("fileBackup")}</h3><p class="small">${fileTxt}</p><div class="nav">${fileBtn}<button class="cute alt" onclick="G.UI.exportNow()">${t("exportJson")}</button></div>
+      <h3>💾 ${t("fileBackup")}</h3><p class="small">${fileTxt}</p><div class="nav">${fileBtn}<button class="cute alt" onclick="G.UI.exportNow()">${t("exportJson")}</button>${G.vault.supported() ? `<button class="cute" onclick="G.UI.exportEnc()">${t("exportEnc")}</button>` : ""}</div>
       <p class="small">${t("lastBackup", { d: when(G.state.lastBackupAt) })}</p>
       <details id="snaps"><summary class="small">${t("snapshots")}</summary><div id="snapList" class="small">…</div></details>`, "safetyWin");
   }
+  UI.vaultUnlock = async () => {
+    if (document.getElementById("vaultModal")) return;
+    let msg = t("vaultUnlockMsg");
+    for (;;) {
+      const p = await G.vault.ask("ask", msg); if (!p) return UI.cloudChanged();
+      try { await G.cloud.unlock(p); G.toast("🔓 ✨"); UI.cloudChanged(); return; } catch (e) { msg = "⚠️ " + (e.message || e); }
+    }
+  };
+  UI.vaultSet = async () => { const p = await G.vault.ask("new", t("vaultNewMsg")); if (!p) return; try { await G.cloud.vaultOn(p); G.toast(t("vaultEnabled")); G.burst(null, 80); } catch (e) { alert("⚠️ " + (e.message || e)); } UI.cloudChanged(); };
+  UI.vaultOff = async () => { if (!confirm(t("vaultDisableAsk"))) return; await G.cloud.vaultOff(); UI.cloudChanged(); };
+  UI.exportEnc = async () => { const p = await G.vault.ask("new", t("exportEncMsg")); if (!p) return; await G.vault.exportFile(p); G.state.lastBackupAt = Date.now(); G.save({ keepTime: true }); pData(); };
   UI.cloudChanged = () => { renderXP(); if (tab === "data" && $("#cloudWin")) $("#cloudWin").outerHTML = cloudWin(); };
   UI.cloudSignIn = async () => { const e = ($("#cEmail").value || "").trim(); if (!/.+@.+\..+/.test(e)) return; try { await G.cloud.signIn(e); UI._email = e; G.toast(t("cloudSent")); UI.cloudChanged(); setTimeout(() => $("#cCode") && $("#cCode").focus(), 100); } catch (err) { alert("⚠️ " + (err.message || err)); } };
   UI.cloudCode = async () => { const c = ($("#cCode").value || "").trim(); if (c.replace(/\D/g, "").length < 6) return; try { await G.cloud.verifyCode(UI._email, c); UI._email = ""; G.toast("☁️ ✨"); G.burst(null, 100); UI.cloudChanged(); } catch (err) { alert("⚠️ " + t("cloudBadCode") + "\n" + (err.message || err)); } };

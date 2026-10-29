@@ -396,6 +396,17 @@ Salva tudo na internet e deixa usar no computador **e** no celular.
 
 > Não existe senha para criar ou lembrar: toda vez que precisar entrar, é só pedir um código novo.
 
+#### 🔐 Cofre: criptografia de ponta a ponta (opcional, para quem quer privacidade máxima)
+Com o login, só você acessa seus dados. Com o **cofre**, nem o servidor consegue lê-los: tudo vai para a nuvem **embaralhado** com uma **senha-mestra** que só você sabe.
+
+1. Na janela **nuvem.exe**, toque em **🔐 Ligar criptografia de ponta a ponta**.
+2. Crie a senha-mestra (mínimo 8 caracteres) e repita. **Anote num lugar seguro!**
+3. Em cada aparelho novo, depois de entrar com o código do e-mail, o Grimório pede a senha-mestra **uma vez**.
+
+> ⚠️ **Se você esquecer a senha-mestra, ninguém consegue recuperar os dados da nuvem** (nem a gente). Os dados que estão no seu aparelho continuam lá, e dá para ligar o cofre de novo com outra senha.
+>
+> Com o cofre ligado, os avisos com o app fechado dizem só **"🔔 Você tem um lembrete"**, porque o servidor não sabe o que é. O servidor vê apenas os **horários** dos próximos lembretes.
+
 ### Proteção 2: 💾 Backup automático no computador (Chrome e Edge)
 Na janela **protecao_dos_dados.exe**, clique em **💾 Ativar backup automático** e escolha onde salvar o arquivo. O Grimório salva nele **sempre que algo muda**.
 
@@ -404,7 +415,7 @@ Na janela **protecao_dos_dados.exe**, clique em **💾 Ativar backup automático
 > Às vezes o navegador pede permissão de novo: aparece **⏸️ pausado**, então é só clicar em **▶️ Reativar**.
 
 ### Proteção 3: 📤 Backup manual
-Clique em **💾 Exportar backup (.json)** de vez em quando e guarde o arquivo (no Drive, por exemplo). Para voltar, use **📂 Importar arquivo**. Se você ficar **7 dias sem backup**, o Grimório te lembra.
+Clique em **💾 Exportar backup (.json)** de vez em quando e guarde o arquivo (no Drive, por exemplo). Para um arquivo que **só abre com senha**, use **🔐 Exportar backup criptografado** (gera um `.grimorio`). Para voltar, use **📂 Importar arquivo**. Se você ficar **7 dias sem backup**, o Grimório te lembra.
 
 ### Fiz besteira! Como desfazer?
 Antes de importar um backup, apagar tudo ou baixar da nuvem, o Grimório guarda uma **cópia de segurança**. Abra **protecao_dos_dados.exe → Cópias de segurança automáticas** e clique em **Restaurar**.
