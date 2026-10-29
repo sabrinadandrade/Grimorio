@@ -76,7 +76,7 @@ window.G = window.G || {};
     ["acts5", "🗓️", s => (s.activities || []).length >= 5],
     ["subs", "✅", s => (s.activities || []).some(a => (a.subtasks || []).length && [...G.doneDays()].some(d => { const [x, y] = G.subProgress(a, d); return y && x === y; }))],
     ["lvl5", "⚗️", s => Math.floor((s.xp || 0) / 100) + 1 >= 5], ["petlover", "🐾", s => (s.pets || []).length >= 3],
-    ["cloud", "☁️", () => !!(G.cloud && G.cloud.user)]
+    ["backup", "💾", s => !!s.lastBackupAt]
   ];
   G.checkAchievements = function () {
     const s = st(); s.achieved = s.achieved || {}; const fresh = [];

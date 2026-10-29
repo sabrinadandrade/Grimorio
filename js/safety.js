@@ -83,7 +83,6 @@ window.G = window.G || {};
   G.safety.needsReminder = () => {
     if (!G.state.subjects.length) return false;
     if (G.safety.fileStatus === "on") return false;
-    if (G.cloud && G.cloud.user) return false;
     return Date.now() - (G.state.lastBackupAt || G.state.createdAt || Date.now()) > 7 * 864e5;
   };
 })();

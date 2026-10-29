@@ -50,7 +50,7 @@ window.G = window.G || {};
       <div class="xpbar"><div class="xpfill" style="width:${rest}%"></div></div><div class="small" style="color:var(--onBg)">${t("toNext", { n: 100 - rest })}</div>
       <div style="margin-top:4px">${t("moonOfTerm")}: ${moonOf(f)} ${Math.round(f * 100)}% ${t("ofSpells")}</div>
       <div style="margin-top:4px">🔥 <b>${(() => { const n = G.streak ? G.streak() : 0; return n === 0 ? t("streak0") : n === 1 ? t("streak1") : t("streak", { n }); })()}</b> · <a href="#" style="color:var(--primary)" onclick="G.UI.show('trophies');return false">🏆 ${Object.keys(G.state.achieved || {}).length}/${(G.ACH || []).length}</a></div>
-      <div style="margin-top:4px"><button class="cute ghost" style="padding:2px 10px;font-size:.78rem" onclick="G.UI.show('data')">${G.cloud && G.cloud.user ? t("badgeCloud") : G.safety && G.safety.fileStatus === "on" ? t("badgeFile") : t("badgeLocal")}</button></div>`;
+      <div style="margin-top:4px"><button class="cute ghost" style="padding:2px 10px;font-size:.78rem" onclick="G.UI.show('data')">${G.safety && G.safety.fileStatus === "on" ? t("badgeFile") : t("badgeLocal")}</button></div>`;
   }
   function renderCountdowns() {
     const today = G.todayIso();
@@ -213,18 +213,10 @@ window.G = window.G || {};
     const perm = G.reminders.permission();
     const nInfo = perm === "native" ? t("notifInfoNative") : /iPhone|iPad|iPod/.test(navigator.userAgent) ? t("notifInfoIos") : t("notifInfoWeb");
     const nBody = `<p class="small">${nInfo}</p>` + (perm === "default" ? `<button class="cute" onclick="G.UI.askNotif()">${t("notifAsk")}</button>` : perm === "granted" ? `<p>${t("notifOn")}</p>` : perm === "denied" ? `<p class="small">${t("notifDenied")}</p>` : perm === "native" ? `<button class="cute" onclick="G.UI.askNotif()">${t("notifAsk")}</button>` : `<p class="small">${t("notifUnsupported")}</p>`);
-    const ps = G.push.status;
-    const pBody = perm === "native" ? "" : `<h3>${t("pushTitle")}</h3>` + (ps === "on" ? `<p>${t("pushOn")}</p><button class="cute ghost" onclick="G.UI.pushOff()">${t("pushDisable")}</button>`
-      : ps === "install" ? `<p class="small">${t("pushInstall")}</p>` : ps === "unsupported" ? `<p class="small">${t("pushUnsupported")}</p>`
-      : !(G.cloud && G.cloud.user) ? `<p class="small">${t("pushNeedCloud")}</p><button class="cute alt" onclick="G.UI.show('data')">☁️ ${t("cloud")}</button>`
-      : `<button class="cute big-cta" onclick="G.UI.pushOn()">${t("pushEnable")}</button>`);
     $("#panel").innerHTML = win("🗓️ " + (G.lang === "en" ? "activities.exe" : "atividades.exe"),
       `<div class="nav"><button class="cute big-cta" onclick="G.UI.newAct()">${t("newAct")}</button></div>${chips}${rows || `<p>${t("noActs")}</p>`}`) +
-      win(t("notifTitle") + " · " + (G.lang === "en" ? "reminders.exe" : "lembretes.exe"), nBody + pBody);
-    G.push.refresh().then(s => { if (s !== ps && tab === "acts") pActs(); });
+      win(t("notifTitle") + " · " + (G.lang === "en" ? "reminders.exe" : "lembretes.exe"), nBody);
   }
-  UI.pushOn = async () => { try { await G.push.enable(); G.toast(t("pushOk")); G.burst(null, 80); } catch (e) { alert("⚠️ " + (e.message || e)); } pActs(); };
-  UI.pushOff = async () => { await G.push.disable(); pActs(); };
   UI.actFilter = k => { actFilter = k; pActs(); };
   UI.askNotif = async () => { const r = await G.reminders.ask(); if (r === "granted") { G.toast(t("notifOn")); try { if (!G.isNative()) new Notification("☾ Grimório ☽", { body: t("notifOn"), icon: "assets/icon-192.png" }); } catch (e) { } } pActs(); };
 
@@ -482,7 +474,7 @@ window.G = window.G || {};
     const ci = G.state.institution;
     const c = G.connectors.get(ci);
     const conns = G.connectors.list.map(x => `<button class="cute ${x.id === ci ? "" : "ghost"}" onclick="G.UI.inst('${x.id}')">${x.emoji} ${esc(G.lang === "en" && x.nameEn ? x.nameEn : x.name)}</button>`).join("");
-    $("#panel").innerHTML = cloudWin() + safetyWin() +
+    $("#panel").innerHTML = transferWin() + safetyWin() +
       win("🎓 " + (G.lang === "en" ? "connect_school.exe" : "conectar_faculdade.exe"), `<h3>${t("institution")}</h3><div class="conns">${conns}</div>
         <div class="found"><b>${t("connectorHelp")}:</b><br>${c.help[G.lang] || c.help.pt}</div>
         <textarea id="paste" style="min-height:150px" placeholder="${t("pasteHere")}"></textarea>
@@ -496,30 +488,12 @@ window.G = window.G || {};
     fillSnaps();
   }
   const when = ts => ts ? new Date(ts).toLocaleString(G.lang === "en" ? "en-US" : "pt-BR", { dateStyle: "short", timeStyle: "short" }) : t("never");
-  function cloudWin() {
-    const C = G.cloud;
-    let body;
-    if (!C.configured()) {
-      body = `<p class="small">${t("cloudOffInfo")}</p>`;
-    } else if (!C.user) {
-      body = `<div class="row2" style="grid-template-columns:2fr auto;align-items:end"><label class="f">${t("cloudEmail")}<input type="text" id="cEmail" inputmode="email" autocomplete="email" placeholder="voce@email.com" value="${esc(UI._email || "")}"></label>
-        <button class="cute" onclick="G.UI.cloudSignIn()">${t("cloudSend")}</button></div>
-        ${UI._email ? `<div class="row2" style="grid-template-columns:1fr auto;align-items:end"><label class="f">${t("cloudCode")}<input type="text" id="cCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></label>
-        <button class="cute alt" onclick="G.UI.cloudCode()">${t("cloudEnter")}</button></div><p class="small">${t("cloudCodeHelp")}</p>` : ""}`;
-    } else {
-      body = `<p>☁️ ${t("cloudSignedAs", { c: G.pw(t("connectedF"), t("connectedM"), t("connectedN")), e: esc(C.user.email || "") })}</p><p class="small">${t("cloudLast", { d: when(C.lastSync) })}</p>
-        <div class="nav"><button class="cute" onclick="G.cloud.sync()">${t("cloudSyncNow")}</button><button class="cute ghost" onclick="G.cloud.signOut()">${t("cloudSignOut")}</button></div>`;
-      if (C.status === "locked") body += `<div class="vaultbox"><p>${t("vaultLocked")}</p><button class="cute big-cta" onclick="G.UI.vaultUnlock()">${t("vaultUnlock")}</button></div>`;
-      else if (G.vault.supported()) body += `<div class="vaultbox"><p class="small">${G.vault.on() ? t("vaultOnTxt") : t("vaultOffTxt")}</p><div class="nav">` + (G.vault.on()
-        ? `<button class="cute alt" onclick="G.UI.vaultSet()">${t("vaultChange")}</button><button class="cute ghost" onclick="G.UI.vaultOff()">${t("vaultDisable")}</button>`
-        : `<button class="cute big-cta" onclick="G.UI.vaultSet()">${t("vaultEnable")}</button>`) + `</div></div>`;
-    }
-    if (C.status === "offline") body += `<p class="small">${t("cloudOffline")}</p>`;
-    if (C.status === "error") body += `<p class="small">${t("cloudErr", { e: esc(C.error) })}</p>`;
-    const cc = C.config();
-    body += `<details style="margin-top:8px"><summary class="small">${t("cloudAdvanced")}</summary><div class="row2"><label class="f">${t("cloudUrl")}<input type="text" id="cUrl" value="${esc(cc.url)}" placeholder="https://xxxx.supabase.co"></label>
-      <label class="f">${t("cloudKey")}<input type="text" id="cKey" value="${esc(cc.key)}"></label></div><button class="cute ghost" onclick="G.UI.cloudCfg()">${t("cloudSaveCfg")}</button></details>`;
-    return win("☁️ " + (G.lang === "en" ? "cloud.exe" : "nuvem.exe") + " · " + t("cloud"), body, "cloudWin");
+  /* passar para outro aparelho: só por arquivo, nada fica em servidor / move to another device: by file only */
+  function transferWin() {
+    return win("📲 " + (G.lang === "en" ? "move_device.exe" : "passar_aparelho.exe") + " · " + t("moveTitle"), `<p>${t("localOnly")}</p>
+      <ol class="small steps"><li>${t("move1")}</li><li>${t("move2")}</li><li>${t("move3")}</li></ol>
+      <div class="nav"><button class="cute big-cta" onclick="G.UI.exportEnc()">${t("exportEnc")}</button>
+      <label class="cute alt" style="display:inline-block">${t("importFile")}<input type="file" accept=".json,.grimorio,.csv,.ics" style="display:none" onchange="G.UI.file(this)"></label></div>`, "moveWin");
   }
   function safetyWin() {
     const S = G.safety;
@@ -532,21 +506,14 @@ window.G = window.G || {};
       <p class="small">${t("lastBackup", { d: when(G.state.lastBackupAt) })}</p>
       <details id="snaps"><summary class="small">${t("snapshots")}</summary><div id="snapList" class="small">…</div></details>`, "safetyWin");
   }
-  UI.vaultUnlock = async () => {
-    if (document.getElementById("vaultModal")) return;
-    let msg = t("vaultUnlockMsg");
-    for (;;) {
-      const p = await G.vault.ask("ask", msg); if (!p) return UI.cloudChanged();
-      try { await G.cloud.unlock(p); G.toast("🔓 ✨"); UI.cloudChanged(); return; } catch (e) { msg = "⚠️ " + (e.message || e); }
-    }
-  };
-  UI.vaultSet = async () => { const p = await G.vault.ask("new", t("vaultNewMsg")); if (!p) return; try { await G.cloud.vaultOn(p); G.toast(t("vaultEnabled")); G.burst(null, 80); } catch (e) { alert("⚠️ " + (e.message || e)); } UI.cloudChanged(); };
-  UI.vaultOff = async () => { if (!confirm(t("vaultDisableAsk"))) return; await G.cloud.vaultOff(); UI.cloudChanged(); };
   UI.exportEnc = async () => { const p = await G.vault.ask("new", t("exportEncMsg")); if (!p) return; await G.vault.exportFile(p); G.state.lastBackupAt = Date.now(); G.save({ keepTime: true }); pData(); };
-  UI.cloudChanged = () => { renderXP(); if (tab === "data" && $("#cloudWin")) $("#cloudWin").outerHTML = cloudWin(); };
-  UI.cloudSignIn = async () => { const e = ($("#cEmail").value || "").trim(); if (!/.+@.+\..+/.test(e)) return; try { await G.cloud.signIn(e); UI._email = e; G.toast(t("cloudSent")); UI.cloudChanged(); setTimeout(() => $("#cCode") && $("#cCode").focus(), 100); } catch (err) { alert("⚠️ " + (err.message || err)); } };
-  UI.cloudCode = async () => { const c = ($("#cCode").value || "").trim(); if (c.replace(/\D/g, "").length < 6) return; try { await G.cloud.verifyCode(UI._email, c); UI._email = ""; G.toast("☁️ ✨"); G.burst(null, 100); UI.cloudChanged(); } catch (err) { alert("⚠️ " + t("cloudBadCode") + "\n" + (err.message || err)); } };
-  UI.cloudCfg = async () => { const u = $("#cUrl").value, k = $("#cKey").value; if ((u || k) && !G.cloud.validCustom(u, k)) { alert(t("cloudBadCfg")); return; } G.cloud.setCustom(u, k); G.cloud.client = null; await G.cloud.init(); pData(); };
+  // limpa restos da antiga nuvem (sessão, chaves, avisos) / clean up leftovers from the old cloud version
+  async function cleanupCloud() {
+    try { Object.keys(localStorage).filter(k => /^sb-|^grimorio\.(cloud|e2e)$/.test(k)).forEach(k => localStorage.removeItem(k)); } catch (e) { }
+    if (G.idbSet) G.idbSet("vaultKey", null);
+    delete G.state.cloudUser; delete G.state.tz;
+    try { if ("serviceWorker" in navigator) { const r = await navigator.serviceWorker.getRegistration(); const s = r && r.pushManager && await r.pushManager.getSubscription(); if (s) await s.unsubscribe(); } } catch (e) { }
+  }
   UI.fileOn = async () => { if (await G.safety.enableFile()) { G.toast(t("saved")); } pData(); renderXP(); };
   UI.fileResume = async () => { await G.safety.resumeFile(); pData(); renderXP(); };
   UI.fileOff = async () => { await G.safety.disableFile(); pData(); renderXP(); };
@@ -651,7 +618,6 @@ window.G = window.G || {};
   /* ================= INÍCIO / START ================= */
   G.start = async function () {
     G.load(); G.applyTheme(G.state.theme); document.documentElement.lang = G.lang === "pt" ? "pt-BR" : G.lang;
-    G.state.tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || G.state.tz;
     G.applyA11y(); G.fxInit(); marquee(); G.tamaRender(); UI.refresh();
     document.addEventListener("click", e => { if ($("#tabs").classList.contains("open") && !e.target.closest("#tabs,#menuBtn")) UI.menu(false); });
     document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#tabs").classList.contains("open")) UI.menu(false); });
@@ -664,6 +630,6 @@ window.G = window.G || {};
     onboarding(); iosHint();
     await G.safety.requestPersist(); await G.safety.initFile(); renderXP();
     G.reminders.start();
-    G.cloud.init();
+    cleanupCloud();
   };
 })();

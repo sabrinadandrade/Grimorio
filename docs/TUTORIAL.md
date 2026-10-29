@@ -20,8 +20,8 @@ Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Nã
 11. [O que cai](#11-o-que-cai)
 12. [Seus pets](#12-seus-pets)
 13. [Aparência: cores e formato do bichinho](#13-aparência)
-14. [Seus dados: backup e nuvem (não perca nada!)](#14-seus-dados-backup-e-nuvem)
-15. [Usar no computador e no celular ao mesmo tempo](#15-usar-no-computador-e-no-celular-ao-mesmo-tempo)
+14. [Seus dados: onde ficam e como fazer backup (não perca nada!)](#14-seus-dados-onde-ficam-e-backup)
+15. [Passar para outro aparelho](#15-passar-para-outro-aparelho)
 16. [Problemas comuns (e como resolver)](#16-problemas-comuns)
 17. [Dicionário de palavras difíceis](#17-dicionário-de-palavras-difíceis)
 
@@ -63,7 +63,7 @@ Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Nã
 4. Na **primeira vez**, o Android avisa que o app não veio da Play Store. Toque em **Configurações** → ative **Permitir desta fonte** → volte e toque em **Instalar**.
 5. Pronto: o gatinho de chapéu aparece na sua tela! 🐈‍⬛
 
-> 🔄 **Atualizar:** baixe o **Grimorio.apk** de novo pelo mesmo link e instale por cima. Seus dados continuam lá (e, se você usa a nuvem, ficam salvos de qualquer jeito).
+> 🔄 **Atualizar:** baixe o **Grimorio.apk** de novo pelo mesmo link e instale por cima. Seus dados continuam lá. Por garantia, faça um backup antes.
 
 > **Prefere não instalar nada?** Abra o site no **Chrome** → **três pontinhos ⋮** → **Adicionar à tela inicial**. Funciona igualzinho.
 
@@ -272,10 +272,8 @@ Na hora do lembrete, **seu pet aparece na tela** com um somzinho:
 | Onde | Como você é avisado |
 |---|---|
 | 🤖 **App Android (APK)** | Notificação de verdade no celular, **mesmo com o app fechado**. |
-| 💻 **Computador** (Chrome, Edge, Opera…) | O pet aparece e o navegador mostra uma notificação. Conectado à nuvem, toque em **📲 Ativar avisos com o app fechado** para receber até com a aba fechada. |
-| 🍎 **iPhone** (iOS 16.4 ou mais novo) | Com o Grimório **instalado na Tela de Início** e conectado à nuvem: toque em **📲 Ativar avisos com o app fechado** e aceite. Pronto, chega notificação **mesmo com o app fechado**. |
-
-> 📲 **Avisos com o app fechado** precisam de duas coisas: estar **conectado à nuvem** (aba *Importar / conectar → Nuvem*) e o servidor ter as notificações ligadas (quem usa o site oficial já tem; quem monta o próprio servidor, veja o [guia do Supabase](SUPABASE.md#5-avisos-com-o-app-fechado-opcional)). Ative uma vez **em cada aparelho**.
+| 💻 **Computador** (Chrome, Edge, Opera…) | O pet aparece e o navegador mostra uma notificação, **com o Grimório aberto** (pode estar em outra aba). |
+| 🍎 **iPhone** | O pet aparece quando o Grimório está aberto. Abra o app algumas vezes por dia 💜 |
 
 > 💡 Se você abrir o Grimório **depois** do horário (até 2 horas), o pet ainda te avisa do que passou.
 
@@ -376,63 +374,41 @@ Na aba **Aparência**:
 
 ---
 
-## 14. Seus dados: backup e nuvem
+## 14. Seus dados: onde ficam e backup
 
 ### Onde ficam meus dados?
-**No seu próprio navegador**, no aparelho que você está usando. Ninguém mais vê. O Grimório guarda **duas cópias** e recupera sozinho se uma sumir.
+**Só no seu aparelho**, dentro do navegador (ou do app Android). O Grimório **não tem servidor nem banco de dados**: nada é enviado para a internet, e ninguém mais vê. Ele guarda **duas cópias** no aparelho e recupera sozinho se uma sumir.
 
-⚠️ **Mas atenção:** se você **limpar os dados de navegação** ou **trocar de aparelho**, pode perder tudo. Por isso, **escolha pelo menos uma proteção abaixo**. A melhor é a **nuvem**. ☁️
+⚠️ **Mas atenção:** se você **limpar os dados de navegação**, **desinstalar o app** ou **perder o aparelho**, os dados vão junto. Por isso, **faça backup** de vez em quando (o Grimório te lembra depois de 7 dias).
 
-### Proteção 1: ☁️ Nuvem (recomendado)
-Salva tudo na internet e deixa usar no computador **e** no celular.
+![Passar para outro aparelho](img/19-passar-aparelho.png)
 
-![Nuvem](img/19-nuvem.png)
-
-1. Aba **Importar / conectar** → janela **nuvem.exe**.
-2. Digite seu **e-mail** e clique em **✉️ Enviar código**.
-3. Abra seu e-mail. Chega uma mensagem **"☾ Seu código do Grimório: 123456"** (se não chegar em 1 minuto, **olhe o spam**).
-4. Digite o **código** no Grimório e clique em **🔑 Entrar**.
-5. O selo no topo muda para **☁️ na nuvem**. Pronto! A partir daí, tudo que você muda é salvo sozinho.
-
-> Não existe senha para criar ou lembrar: toda vez que precisar entrar, é só pedir um código novo.
-
-#### 🔐 Cofre: criptografia de ponta a ponta (opcional, para quem quer privacidade máxima)
-Com o login, só você acessa seus dados. Com o **cofre**, nem o servidor consegue lê-los: tudo vai para a nuvem **embaralhado** com uma **senha-mestra** que só você sabe.
-
-1. Na janela **nuvem.exe**, toque em **🔐 Ligar criptografia de ponta a ponta**.
-2. Crie a senha-mestra (mínimo 8 caracteres) e repita. **Anote num lugar seguro!**
-3. Em cada aparelho novo, depois de entrar com o código do e-mail, o Grimório pede a senha-mestra **uma vez**.
-
-> ⚠️ **Se você esquecer a senha-mestra, ninguém consegue recuperar os dados da nuvem** (nem a gente). Os dados que estão no seu aparelho continuam lá, e dá para ligar o cofre de novo com outra senha.
->
-> Com o cofre ligado, os avisos com o app fechado dizem só **"🔔 Você tem um lembrete"**, porque o servidor não sabe o que é. O servidor vê apenas os **horários** dos próximos lembretes.
-
-### Proteção 2: 💾 Backup automático no computador (Chrome e Edge)
+### Proteção 1: 💾 Backup automático no computador (Chrome e Edge)
 Na janela **protecao_dos_dados.exe**, clique em **💾 Ativar backup automático** e escolha onde salvar o arquivo. O Grimório salva nele **sempre que algo muda**.
 
 ![Proteção dos dados](img/20-protecao.png)
 
 > Às vezes o navegador pede permissão de novo: aparece **⏸️ pausado**, então é só clicar em **▶️ Reativar**.
 
-### Proteção 3: 📤 Backup manual
+### Proteção 2: 📤 Backup manual
 Clique em **💾 Exportar backup (.json)** de vez em quando e guarde o arquivo (no Drive, por exemplo). Para um arquivo que **só abre com senha**, use **🔐 Exportar backup criptografado** (gera um `.grimorio`). Para voltar, use **📂 Importar arquivo**. Se você ficar **7 dias sem backup**, o Grimório te lembra.
 
 ### Fiz besteira! Como desfazer?
-Antes de importar um backup, apagar tudo ou baixar da nuvem, o Grimório guarda uma **cópia de segurança**. Abra **protecao_dos_dados.exe → Cópias de segurança automáticas** e clique em **Restaurar**.
+Antes de importar um backup ou apagar tudo, o Grimório guarda uma **cópia de segurança**. Abra **protecao_dos_dados.exe → Cópias de segurança automáticas** e clique em **Restaurar**.
 
 ---
 
-## 15. Usar no computador e no celular ao mesmo tempo
+## 15. Passar para outro aparelho
 
-1. **No aparelho onde estão seus dados** (ex.: o computador): entre na **nuvem** ([passo 14](#14-seus-dados-backup-e-nuvem)).
-2. **No outro aparelho** (ex.: o iPhone): abra o Grimório → **Importar / conectar → Nuvem** → **mesmo e-mail** → digite o código.
-3. Seus dados aparecem sozinhos. ✨
+Como tudo fica só no aparelho, para levar seu grimório do computador para o celular (ou para um aparelho novo) você usa um **arquivo trancado com senha**:
 
-- Se o celular estava **vazio**, ele puxa tudo da nuvem automaticamente.
-- Se os **dois** já tinham coisas diferentes, ele pergunta qual manter. Toque em **OK** para usar o da nuvem.
-- Para forçar uma atualização: **Nuvem → 🔄 Sincronizar agora**.
+1. **No aparelho onde estão seus dados:** aba **Importar / conectar** → janela **passar_aparelho.exe** → **🔐 Exportar backup criptografado**. Crie uma senha (mínimo 8 caracteres) e **anote**.
+2. Leve o arquivo **`.grimorio`** para o outro aparelho: **AirDrop**, cabo USB, pendrive… Se precisar mandar por algum app, tudo bem: o arquivo está **trancado** e só abre com a senha.
+3. **No outro aparelho:** abra o Grimório → **Importar / conectar** → **📂 Importar arquivo** → escolha o arquivo e digite a senha.
 
-> 📱 **iPhone:** use sempre o **código** (não o link do e-mail). No iPhone, o link abre no Safari e não dentro do app da Tela de Início.
+> ⚠️ Os dois aparelhos **não se atualizam sozinhos**. O que você mudar num deles fica só nele, até você passar o arquivo de novo. Dica: escolha **um aparelho principal** e use o outro só para consultar.
+>
+> Esqueceu a senha do arquivo? Ele não abre de jeito nenhum (nem a gente consegue). Exporte um novo no aparelho original.
 
 ---
 
@@ -441,23 +417,17 @@ Antes de importar um backup, apagar tudo ou baixar da nuvem, o Grimório guarda 
 **O site não atualizou / está diferente do que eu esperava**
 → No computador, aperte **Ctrl + Shift + R**. No celular, feche o app de vez (deslize para cima) e abra de novo.
 
-**O código não chegou no e-mail**
-→ Olhe o **spam** e as abas "Promoções"/"Social". Espere 1 minutinho. Ainda nada? Peça outro código.
-
-**Apareceu "código errado ou vencido"**
-→ Use sempre o código do **último** e-mail. Ele vale por 1 hora.
-
 **Meu celular não mostra minhas coisas**
-→ Confira se você entrou na nuvem **com o mesmo e-mail** nos dois aparelhos. Depois toque em **🔄 Sincronizar agora**.
+→ Cada aparelho tem o seu grimório. Passe os dados com um backup trancado: veja o [passo 15](#15-passar-para-outro-aparelho).
 
 **Sumiu tudo!**
-→ Calma! Tente nesta ordem: (1) entre na nuvem, que baixa sua última versão; (2) **Cópias de segurança automáticas → Restaurar**; (3) **Importar arquivo** com seu último backup.
+→ Calma! Tente nesta ordem: (1) **Cópias de segurança automáticas → Restaurar**; (2) **Importar arquivo** com seu último backup.
 
 **O plano ficou com tarefas demais num dia**
 → Isso acontece quando há muitos temas e poucos dias até a prova. Na aba **Matérias & provas**, junte temas parecidos numa linha só (ex.: `Derivadas e regra da cadeia`) e clique em **Gerar plano** de novo. Você também pode apagar feitiços com o **✕**.
 
 **O lembrete não apareceu**
-→ Confira se a atividade tem **hora** e **lembrete** escolhidos. No computador e no Android pelo navegador, ative as notificações (aba **Atividades → 🔔 Ativar notificações**) e deixe o Grimório aberto. Para avisos com o app fechado, conecte-se à nuvem e toque em **📲 Ativar avisos com o app fechado** (no iPhone, instale na Tela de Início antes), ou use o **app Android**.
+→ Confira se a atividade tem **hora** e **lembrete** escolhidos. No computador e no Android pelo navegador, ative as notificações (aba **Atividades → 🔔 Ativar notificações**) e deixe o Grimório aberto. Para avisos com o app fechado, use o **app Android**.
 
 **Pulei uns dias e o plano ficou para trás**
 → Sem culpa! 💛 É só clicar em **✨ Gerar / atualizar plano** de novo: ele redistribui o que falta a partir de hoje.
@@ -477,8 +447,7 @@ Antes de importar um backup, apagar tudo ou baixar da nuvem, o Grimório guarda 
 | **Navegador** | O programa que abre sites: Chrome, Edge, Opera, Safari, Firefox. |
 | **Aba** | Cada "botão-página" do Grimório (Hoje, Atividades, Tarot…). Também é cada página aberta no navegador. |
 | **Backup** | Uma cópia de segurança dos seus dados. |
-| **Nuvem** | Guardar os dados na internet, para não perder e usar em vários aparelhos. |
-| **Sincronizar** | Deixar os dados iguais em todos os aparelhos. |
+| **Backup criptografado** | Um arquivo de backup trancado com senha. Sem a senha, ninguém consegue ler. |
 | **Importar / Exportar** | Trazer dados de um arquivo para o Grimório / tirar os dados do Grimório para um arquivo. |
 | **CSV** | Um tipo de arquivo de planilha simples (abre no Excel e no Google Planilhas). |
 | **.ics** | Um arquivo de calendário (Google Agenda, Outlook…). |

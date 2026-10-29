@@ -39,13 +39,12 @@ window.G = window.G || {};
     G.lang = G.state.lang;
     return G.state;
   };
-  /* salva em 2 lugares (localStorage + IndexedDB), no arquivo de backup e na nuvem, se ativados
-   * saves to localStorage + IndexedDB, plus the backup file and the cloud when enabled */
+  /* salva só neste aparelho: localStorage + IndexedDB (+ arquivo de backup, se ativado)
+   * saves only on this device: localStorage + IndexedDB (+ backup file when enabled) */
   G.save = function (opts) {
     if (!(opts && opts.keepTime)) G.state.updatedAt = Date.now();
     try { localStorage.setItem(KEY, JSON.stringify(G.state)); } catch (e) { }
     if (G.safety) { G.safety.mirror(); G.safety.scheduleFile(); }
-    if (G.cloud && !(opts && opts.noCloud)) G.cloud.schedulePush();
     if (G.reminders) G.reminders.scheduleNative();
   };
   G.reset = async function () {

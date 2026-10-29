@@ -15,7 +15,7 @@ Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho
 - **Feitiços de hoje**: poucas tarefas por dia, com XP, níveis (de Aprendiz a Arquimaga 👑) e luas que vão enchendo 🌑→🌕.
 - **Atividades da vida toda** 🆕: estudos, rotina diária, casa, pets, cuidados maternais/paternais, trabalho, compromissos e saúde, com **prioridade** (🔥 alta, ⭐ média, 🌙 baixa), **repetição** (todo dia ou dias da semana) e **lembrete**.
 - **Subtarefas, visão da semana, sequência de dias 🔥 e conquistas 🏆** 🆕
-- **Lembretes com seu pet** 🆕: na hora, seu pet aparece na tela te lembrando. Com a nuvem ligada, chega notificação **mesmo com o app fechado**: no iPhone (instalado na Tela de Início), no computador e no Android.
+- **Lembretes com seu pet** 🆕: na hora, seu pet aparece na tela te lembrando. No app Android, chega notificação mesmo com o app fechado.
 - **Feito para todo mundo:** nome ou apelido com **pronome** (ela/dela, ele/dele, elu/delu), **menu em cascata** no celular, bichinho com **tamanho ajustável (−/+)**, botões grandes, **tamanho do texto** e modo **menos animações**.
 - **Bichinho virtual (timer de foco)**: estilo tamagotchi, em 5 formatos (ovo, coração, chapéu de bruxa, estrela e lua). Seu pet dorme na pausa 😴.
 - **Tarot de estudos (flashcards)**: as cartas que você erra voltam mais vezes.
@@ -31,10 +31,10 @@ O Grimório é **local-first**: funciona sem internet e sem conta, e você não 
 | Camada | O que faz |
 |---|---|
 | 📦 Navegador | Salva no `localStorage` **e** numa cópia em **IndexedDB**. Se uma for apagada, o app recupera da outra. Também pede **armazenamento persistente** ao navegador. |
-| 🛟 Cópias automáticas | Antes de importar, restaurar ou baixar da nuvem, guarda uma cópia de segurança que dá pra restaurar com um clique. |
+| 🛟 Cópias automáticas | Antes de importar ou restaurar, guarda uma cópia de segurança que dá pra restaurar com um clique. |
 | 💾 Backup automático em arquivo | No Chrome e no Edge, escolha um arquivo no seu computador e o Grimório salva nele a cada mudança. |
-| ☁️ Nuvem (opcional) | Login por código enviado no e-mail e sincronização entre celular e PC via **Supabase (Postgres)**. Cada pessoa só acessa os próprios dados (Row Level Security). Veja [docs/SUPABASE.md](docs/SUPABASE.md). |
-| 🔐 Cofre (opcional) | Criptografia de ponta a ponta com senha-mestra (PBKDF2-SHA256 600 mil rodadas + AES-GCM 256, direto no navegador). Nem o servidor lê seus dados. Também dá para exportar backup criptografado (`.grimorio`). |
+| 🔒 100% local | Sem servidor e sem banco de dados: tudo fica só no aparelho de cada pessoa. Nenhum dado é enviado para a internet. |
+| 🔐 Backup criptografado | Exporte um arquivo `.grimorio` trancado com senha (PBKDF2-SHA256 600 mil rodadas + AES-GCM 256, direto no navegador) para guardar ou passar para outro aparelho. |
 | 📤 Exportar / importar | Backup `.json` manual a qualquer momento. Se faltar backup, um lembrete aparece depois de 7 dias. |
 
 ## 🚀 Como usar
@@ -66,8 +66,7 @@ js/
   pets.js          gerador de pets em SVG
   store.js         dados (localStorage)
   safety.js        IndexedDB, backup automático, cópias de segurança
-  cloud.js         sincronização com Supabase (opcional)
-  config.js        URL e chave pública do Supabase
+  vault.js         backup criptografado com senha
   planner.js       gerador do plano de estudos
   importers.js     json, csv, ics
   connectors/      um arquivo por instituição
@@ -97,7 +96,7 @@ Your pets become teachers, every task is a spell, and the focus timer is a virtu
 - **Color themes**: 7 presets, plus fully custom colors.
 - **Connect your school**: paste text copied from the portal (no passwords), or import `.csv`, `.ics` or `.json`.
 - **Portuguese and English**, works **offline** and can be installed as a PWA.
-- **No data loss**: data is mirrored to IndexedDB, auto-backed-up to a local file, and optionally synced to the cloud with **Supabase** (emailed one-time code login plus Row Level Security). See [docs/SUPABASE.md](docs/SUPABASE.md).
+- **100% local, no server**: data never leaves the device. It is mirrored to IndexedDB, can be auto-backed-up to a local file, and exported as a passphrase-encrypted `.grimorio` file (PBKDF2 + AES-GCM) to move between devices.
 
 A beginner tutorial (in Portuguese, with screenshots) is in [docs/TUTORIAL.md](docs/TUTORIAL.md). To use it, open <https://sabrinadandrade.github.io/Grimorio/> or download the project and open `index.html`.
 To contribute (connectors, pets, themes, translations), see [CONTRIBUTING.md](CONTRIBUTING.md). License: MIT.

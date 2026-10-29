@@ -77,7 +77,7 @@ G.I18N = {
     spellsN:"{n} feitiços de estudo", nothing:"livre ✨", streak:"{n} dias seguidos", streak1:"1 dia seguido", streak0:"comece sua sequência hoje!",
     achievements:"Conquistas", unlocked:"Conquista desbloqueada!", locked:"bloqueada",
     ach:{ first:["Primeiro feitiço","Marque sua primeira tarefa como feita"], full:["Lua cheia","Complete todas as tarefas de um dia"], s3:["Chama acesa","3 dias seguidos fazendo algo"], s7:["Semana mágica","7 dias seguidos"], s30:["Ritual do mês","30 dias seguidos"],
-      candles10:["10 velas","Termine 10 blocos de foco no bichinho"], cards25:["Leitora de tarot","Acerte 25 cartas do tarot"], acts5:["Organização","Cadastre 5 atividades"], subs:["Passo a passo","Complete todas as subtarefas de uma atividade"], lvl5:["Feitiçaria nível 5","Chegue ao nível 5"], petlover:["Família de pets","Tenha 3 pets ou mais"], cloud:["Na nuvem","Conecte seu grimório à nuvem"] },
+      candles10:["10 velas","Termine 10 blocos de foco no bichinho"], cards25:["Leitora de tarot","Acerte 25 cartas do tarot"], acts5:["Organização","Cadastre 5 atividades"], subs:["Passo a passo","Complete todas as subtarefas de uma atividade"], lvl5:["Feitiçaria nível 5","Chegue ao nível 5"], petlover:["Família de pets","Tenha 3 pets ou mais"], backup:["Guardiã(o) dos dados","Faça seu primeiro backup"] },
     acts:"Atividades", newAct:"+ Nova atividade", editAct:"Editar atividade", actTitle:"O que você precisa fazer?", area:"Área", priority:"Prioridade",
     when:"Quando", date:"Data", time:"Hora", repeat:"Repetir", repNone:"Não repete", repDaily:"Todo dia", repWeekly:"Dias da semana", everyDay:"todo dia",
     remind:"Lembrete", remNone:"Sem lembrete", remAtTime:"Na hora", remBefore:"{m} min antes", remHourBefore:"{h} h antes", remDayBefore:"1 dia antes",
@@ -85,37 +85,38 @@ G.I18N = {
     actsToday:"🗓️ Atividades de hoje", studyToday:"📚 Feitiços de estudo", noActs:"Nenhuma atividade cadastrada ainda. Que tal criar a primeira? ✨", noActsDay:"Nenhuma atividade para este dia.",
     allAreas:"Todas", actSaved:"Atividade salva! ✨", actDone:"Feito! +15 XP ✨", needTitle:"Escreva o que precisa fazer 🐾",
     remHey:"Ei, {n}!", remIn:"Daqui a {m} min!", remAt:"Hoje às {h}.", remNow:"É agora!", remDone:"✔ Feito", remSnooze:"⏰ Adiar 10 min", remOk:"OK",
-    pushTitle:"📲 Avisos com o app fechado", pushOn:"✅ Este aparelho recebe avisos mesmo com o Grimório fechado.", pushEnable:"📲 Ativar avisos com o app fechado", pushDisable:"Desativar neste aparelho", pushNeedCloud:"Primeiro entre na nuvem (aba Importar / conectar → Nuvem). Os avisos usam a sua conta.", pushInstall:"No iPhone, primeiro instale o Grimório: Safari → Compartilhar ⬆️ → Adicionar à Tela de Início. Depois abra pelo ícone e volte aqui.", pushUnsupported:"Este navegador não recebe avisos com o app fechado.", pushOk:"Pronto! Você vai receber avisos mesmo com o app fechado 📲✨",
+    
     notifTitle:"🔔 Notificações", notifAsk:"🔔 Ativar notificações", notifOn:"✅ Notificações ativadas.", notifDenied:"⚠️ As notificações estão bloqueadas. Libere nas configurações do navegador (ícone de cadeado ao lado do endereço).",
     notifUnsupported:"Este navegador não manda notificações. Os lembretes aparecem com seu pet enquanto o Grimório estiver aberto.",
-    notifInfoWeb:"Com o Grimório aberto (mesmo em outra aba), seu pet aparece e o navegador avisa. Para avisos com o app fechado, use o botão 📲 abaixo.",
-    notifInfoIos:"No iPhone, com o Grimório aberto o pet aparece na tela. Para avisos com o app fechado, use o botão 📲 abaixo.",
+    notifInfoWeb:"Com o Grimório aberto (mesmo em outra aba), seu pet aparece e o navegador avisa. No app Android, o aviso chega até com o app fechado.",
+    notifInfoIos:"No iPhone, o lembrete aparece com seu pet quando o Grimório está aberto. Abra o app algumas vezes ao dia 💜",
     notifInfoNative:"✅ O app vai te avisar no celular, mesmo fechado.",
     nextUp:"Próximo", today2:"hoje", tomorrow2:"amanhã",
     pronoun:"Pronome", pronElaa:"ela / dela", pronEle:"ele / dele", pronElu:"elu / delu", nameOrNick:"Nome ou apelido",
-    welcomeF:"Bem-vinda", welcomeM:"Bem-vindo", welcomeN:"Bem-vinde", connectedF:"Conectada", connectedM:"Conectado", connectedN:"Conectade",
+    welcomeF:"Bem-vinda", welcomeM:"Bem-vindo", welcomeN:"Bem-vinde", 
     menu:"Menu", tamaBigger:"Aumentar o bichinho", tamaSmaller:"Diminuir o bichinho",
     a11y:"Acessibilidade", textSize:"Tamanho do texto", lessMotion:"Menos animações (sem confete e letreiro)", iosHint:"<b>Instale o Grimório no seu iPhone:</b> toque em <span class=\"ishare\">Compartilhar ⬆️</span> aqui embaixo no Safari → <b>Adicionar à Tela de Início</b> → <b>Adicionar</b>. Ele vira um app, com ícone e tela cheia! 🐈‍⬛", iosHintSafari:"<b>Para instalar no iPhone</b>, abra este endereço no <b>Safari</b> (copie o link e cole lá). Depois: <span class=\"ishare\">Compartilhar ⬆️</span> → <b>Adicionar à Tela de Início</b>.", iosOk:"Entendi ✨", tutorialText:"Primeira vez por aqui? O tutorial explica tudo, passo a passo, com prints de cada tela: importar da faculdade, gerar o plano, timer, tarot, backup e usar no celular.", tutorialBtn:"📖 Abrir o tutorial completo", notesHelp:"Temas de cada matéria e suas anotações do que costuma cair (edite em Matérias & provas).",
     safety:"Proteção dos dados", persistOn:"✅ Armazenamento persistente ativado: o navegador não apaga seus dados sozinho.", persistOff:"⚠️ O navegador ainda pode limpar os dados se faltar espaço. Ative um backup abaixo!",
     fileBackup:"Backup automático no computador", fileOn:"✅ Salvando automaticamente em um arquivo no seu computador.", filePaused:"⏸️ Backup automático pausado: clique para reativar (o navegador pede permissão de novo).",
-    fileOff:"Escolha um arquivo e eu salvo tudo nele sempre que algo mudar.", fileUnsupported:"Seu navegador não salva arquivo automático (funciona no Chrome e Edge). Use o backup manual ou a nuvem.",
+    fileOff:"Escolha um arquivo e eu salvo tudo nele sempre que algo mudar.", fileUnsupported:"Seu navegador não salva arquivo automático (funciona no Chrome e Edge). Use o backup manual.",
     fileEnable:"💾 Ativar backup automático", fileResume:"▶️ Reativar", fileDisable:"Desativar", lastBackup:"Último backup: {d}", never:"nunca",
     snapshots:"Cópias de segurança automáticas", restore:"Restaurar", restoreConfirm:"Voltar para essa cópia? A versão atual vira uma cópia também.", restored:"Restaurado ✨",
     reminder:"🛟 Faz mais de 7 dias sem backup! Seus dados ficam só neste navegador.", reminderBtn:"Fazer backup agora",
     recovered:"Recuperei seus dados da cópia de segurança 🛟",
-    cloud:"Nuvem (sincronizar entre aparelhos)", cloudOffInfo:"A nuvem ainda não foi configurada neste Grimório. Quem publica o site precisa preencher js/config.js (veja docs/SUPABASE.md).",
-    cloudAdvanced:"Avançado: usar meu próprio servidor Supabase", cloudUrl:"Project URL", cloudKey:"anon public key", cloudSaveCfg:"Salvar servidor", cloudBadCfg:"Isso não parece um servidor Supabase. A URL é tipo https://xxxx.supabase.co e a chave começa com sb_publishable_ (ou eyJ…). Deixe em branco pra usar a nuvem padrão do Grimório.",
-    cloudEmail:"Seu e-mail", cloudSend:"✉️ Enviar código", cloudSent:"Enviado! Digite o código do e-mail, ou toque no link dele neste mesmo navegador ✨", cloudCode:"Código do e-mail", cloudEnter:"🔑 Entrar", cloudCodeHelp:"No app instalado no celular, use o código: o link do e-mail abre no navegador, não dentro do app. Não chegou? Olhe o spam e espere 1 minutinho.", cloudBadCode:"Código errado ou vencido. Peça um novo.",
-    vaultTitle:"Cofre · criptografia de ponta a ponta", vaultPass:"Senha-mestra (mínimo 8 caracteres)", vaultPass2:"Repita a senha-mestra", vaultOk:"🔐 Confirmar", vaultShort:"A senha precisa ter pelo menos 8 caracteres.", vaultMismatch:"As duas senhas não são iguais.", vaultWrong:"Senha errada. Tente de novo 💜",
-    vaultWarn:"⚠️ Anote essa senha num lugar seguro. Se você esquecer, ninguém consegue recuperar os dados da nuvem (nem a gente). Os dados deste aparelho continuam aqui.",
-    vaultOnTxt:"🔐 <b>Criptografia de ponta a ponta ligada.</b> Seus dados vão para a nuvem embaralhados com a sua senha-mestra: nem o servidor consegue ler. Os avisos com o app fechado dizem só que há um lembrete.",
-    vaultOffTxt:"🔓 Seus dados estão protegidos pelo seu login. Para que <b>nem o servidor</b> consiga lê-los, ligue a criptografia de ponta a ponta com uma senha-mestra.",
-    vaultEnable:"🔐 Ligar criptografia de ponta a ponta", vaultChange:"🔑 Trocar senha-mestra", vaultDisable:"Desligar", vaultDisableAsk:"Desligar a criptografia? Seus dados voltam a ficar só protegidos pelo login.", vaultEnabled:"Pronto! Seus dados estão trancados com a sua senha 🔐✨",
-    vaultLocked:"🔐 Seus dados na nuvem estão trancados com uma senha-mestra. Digite a senha para destravar neste aparelho.", vaultUnlock:"🔓 Destravar com a senha", vaultUnlockMsg:"Digite a senha-mestra do seu grimório.", vaultNewMsg:"Crie uma senha-mestra. Ela será pedida uma vez em cada aparelho novo.",
+    
+    
+    
+    moveTitle:"Passar para outro aparelho", localOnly:"🔒 <b>Seus dados ficam só neste aparelho.</b> O Grimório não tem servidor nem banco de dados: nada sai daqui sem você mandar.", move1:"Aqui, toque em <b>🔐 Exportar backup criptografado</b> e crie uma senha.", move2:"Leve o arquivo <b>.grimorio</b> para o outro aparelho (AirDrop, cabo, pendrive…). Mesmo que passe por algum app, ele está trancado.", move3:"No outro aparelho, abra o Grimório → <b>📂 Importar arquivo</b> → escolha o arquivo e digite a senha.",
+    vaultTitle:"Backup trancado com senha", vaultPass:"Senha (mínimo 8 caracteres)", vaultPass2:"Repita a senha", vaultOk:"🔐 Confirmar", vaultShort:"A senha precisa ter pelo menos 8 caracteres.", vaultMismatch:"As duas senhas não são iguais.", vaultWrong:"Senha errada. Tente de novo 💜",
+    vaultWarn:"⚠️ Anote essa senha num lugar seguro. Se você esquecer, ninguém consegue abrir esse arquivo (nem a gente).",
+    
+    
+    
+    
     exportEnc:"🔐 Exportar backup criptografado", exportEncMsg:"Escolha uma senha para este arquivo. Ela será pedida para abri-lo.", importEncMsg:"Este backup está criptografado. Digite a senha dele.",
-    cloudSignedAs:"{c} como {e}", cloudSyncNow:"🔄 Sincronizar agora", cloudSignOut:"Sair", cloudPulled:"Baixei a versão mais nova da nuvem ☁️", cloudChoose:"Encontrei um grimório na nuvem e outro neste aparelho.\n\nOK = usar o da NUVEM (recomendado)\nCancelar = substituir a nuvem pelo DESTE aparelho",
-    cloudLast:"Última sincronização: {d}", cloudErr:"⚠️ Não consegui falar com a nuvem: {e}", cloudOffline:"📴 Sem internet: suas mudanças ficam guardadas e sobem quando voltar.",
-    badgeCloud:"☁️ na nuvem", badgeFile:"💾 backup automático", badgeLocal:"📦 só neste navegador",
+    
+    
+    badgeFile:"💾 backup automático", badgeLocal:"📦 só neste navegador",
   },
   en: {
     langName: "English",
@@ -191,7 +192,7 @@ G.I18N = {
     spellsN:"{n} study spells", nothing:"free ✨", streak:"{n}-day streak", streak1:"1-day streak", streak0:"start your streak today!",
     achievements:"Achievements", unlocked:"Achievement unlocked!", locked:"locked",
     ach:{ first:["First spell","Mark your first task as done"], full:["Full moon","Complete every task of a day"], s3:["Flame lit","3 days in a row"], s7:["Magic week","7 days in a row"], s30:["Monthly ritual","30 days in a row"],
-      candles10:["10 candles","Finish 10 focus blocks"], cards25:["Tarot reader","Get 25 tarot cards right"], acts5:["Organized","Create 5 activities"], subs:["Step by step","Finish all subtasks of an activity"], lvl5:["Level 5 witchcraft","Reach level 5"], petlover:["Pet family","Have 3 or more pets"], cloud:["In the cloud","Connect your grimoire to the cloud"] },
+      candles10:["10 candles","Finish 10 focus blocks"], cards25:["Tarot reader","Get 25 tarot cards right"], acts5:["Organized","Create 5 activities"], subs:["Step by step","Finish all subtasks of an activity"], lvl5:["Level 5 witchcraft","Reach level 5"], petlover:["Pet family","Have 3 or more pets"], backup:["Data keeper","Make your first backup"] },
     acts:"Activities", newAct:"+ New activity", editAct:"Edit activity", actTitle:"What do you need to do?", area:"Area", priority:"Priority",
     when:"When", date:"Date", time:"Time", repeat:"Repeat", repNone:"Doesn't repeat", repDaily:"Every day", repWeekly:"Days of the week", everyDay:"every day",
     remind:"Reminder", remNone:"No reminder", remAtTime:"At the time", remBefore:"{m} min before", remHourBefore:"{h} h before", remDayBefore:"1 day before",
@@ -199,37 +200,38 @@ G.I18N = {
     actsToday:"🗓️ Today's activities", studyToday:"📚 Study spells", noActs:"No activities yet. How about creating the first one? ✨", noActsDay:"No activities for this day.",
     allAreas:"All", actSaved:"Activity saved! ✨", actDone:"Done! +15 XP ✨", needTitle:"Write what you need to do 🐾",
     remHey:"Hey, {n}!", remIn:"In {m} min!", remAt:"Today at {h}.", remNow:"It's now!", remDone:"✔ Done", remSnooze:"⏰ Snooze 10 min", remOk:"OK",
-    pushTitle:"📲 Alerts with the app closed", pushOn:"✅ This device gets alerts even with the Grimoire closed.", pushEnable:"📲 Turn on closed-app alerts", pushDisable:"Turn off on this device", pushNeedCloud:"Sign in to the cloud first (Import / connect → Cloud). Alerts use your account.", pushInstall:"On iPhone, install the Grimoire first: Safari → Share ⬆️ → Add to Home Screen. Then open it from the icon and come back here.", pushUnsupported:"This browser can\u0027t get closed-app alerts.", pushOk:"Done! You\u0027ll get alerts even with the app closed 📲✨",
+    
     notifTitle:"🔔 Notifications", notifAsk:"🔔 Turn on notifications", notifOn:"✅ Notifications on.", notifDenied:"⚠️ Notifications are blocked. Allow them in your browser settings (lock icon next to the address).",
     notifUnsupported:"This browser can't send notifications. Reminders show up with your pet while the Grimoire is open.",
     notifInfoWeb:"With the Grimoire open (even in another tab), your pet shows up and the browser notifies you. For notifications with the app closed, use the Android app.",
-    notifInfoIos:"On iPhone, your pet shows up while the Grimoire is open. For closed-app alerts, use the 📲 button below.",
+    notifInfoIos:"On iPhone, reminders show up with your pet while the Grimoire is open. Open it a few times a day 💜",
     notifInfoNative:"✅ The app will notify you on your phone, even when closed.",
     nextUp:"Next", today2:"today", tomorrow2:"tomorrow",
     pronoun:"Pronouns", pronElaa:"she / her", pronEle:"he / him", pronElu:"they / them", nameOrNick:"Name or nickname",
-    welcomeF:"Welcome", welcomeM:"Welcome", welcomeN:"Welcome", connectedF:"Signed in", connectedM:"Signed in", connectedN:"Signed in",
+    welcomeF:"Welcome", welcomeM:"Welcome", welcomeN:"Welcome", 
     menu:"Menu", tamaBigger:"Make the pet bigger", tamaSmaller:"Make the pet smaller",
     a11y:"Accessibility", textSize:"Text size", lessMotion:"Less motion (no confetti or marquee)", iosHint:"<b>Install the Grimoire on your iPhone:</b> tap <span class=\"ishare\">Share ⬆️</span> in Safari → <b>Add to Home Screen</b> → <b>Add</b>. It becomes an app with its own icon! 🐈‍⬛", iosHintSafari:"<b>To install on iPhone</b>, open this address in <b>Safari</b>. Then: <span class=\"ishare\">Share ⬆️</span> → <b>Add to Home Screen</b>.", iosOk:"Got it ✨", tutorialText:"First time here? The tutorial (in Portuguese) explains everything step by step, with screenshots.", tutorialBtn:"📖 Open the full tutorial", notesHelp:"Each subject\u0027s topics and your notes on what\u0027s usually on the exam (edit in Subjects & exams).",
     safety:"Data protection", persistOn:"✅ Persistent storage is on: the browser won't clear your data on its own.", persistOff:"⚠️ The browser may still clear data when low on space. Turn on a backup below!",
     fileBackup:"Automatic backup on your computer", fileOn:"✅ Automatically saving to a file on your computer.", filePaused:"⏸️ Auto-backup paused: click to resume (the browser asks permission again).",
-    fileOff:"Pick a file and I'll save everything to it whenever something changes.", fileUnsupported:"Your browser can't auto-save files (works on Chrome and Edge). Use manual backup or the cloud.",
+    fileOff:"Pick a file and I'll save everything to it whenever something changes.", fileUnsupported:"Your browser can't auto-save files (works on Chrome and Edge). Use manual backup.",
     fileEnable:"💾 Turn on auto-backup", fileResume:"▶️ Resume", fileDisable:"Turn off", lastBackup:"Last backup: {d}", never:"never",
     snapshots:"Automatic safety copies", restore:"Restore", restoreConfirm:"Go back to this copy? The current version becomes a copy too.", restored:"Restored ✨",
     reminder:"🛟 More than 7 days without a backup! Your data lives only in this browser.", reminderBtn:"Back up now",
     recovered:"I recovered your data from the safety copy 🛟",
-    cloud:"Cloud (sync across devices)", cloudOffInfo:"Cloud isn't set up in this Grimoire yet. Whoever hosts the site must fill js/config.js (see docs/SUPABASE.md).",
-    cloudAdvanced:"Advanced: use my own Supabase server", cloudUrl:"Project URL", cloudKey:"anon public key", cloudSaveCfg:"Save server", cloudBadCfg:"That doesn\u0027t look like a Supabase server. The URL looks like https://xxxx.supabase.co and the key starts with sb_publishable_ (or eyJ…). Leave blank to use the Grimoire default cloud.",
-    cloudEmail:"Your email", cloudSend:"✉️ Send code", cloudSent:"Sent! Type the code from your email, or tap its link in this same browser ✨", cloudCode:"Code from email", cloudEnter:"🔑 Sign in", cloudCodeHelp:"On phones, use the code: the email link opens in the browser, not inside the installed app. Not there? Check spam and wait a minute.", cloudBadCode:"Wrong or expired code. Request a new one.",
-    vaultTitle:"Vault · end-to-end encryption", vaultPass:"Master passphrase (at least 8 characters)", vaultPass2:"Repeat the master passphrase", vaultOk:"🔐 Confirm", vaultShort:"The passphrase needs at least 8 characters.", vaultMismatch:"The two passphrases don\u0027t match.", vaultWrong:"Wrong passphrase. Try again 💜",
-    vaultWarn:"⚠️ Write this passphrase down somewhere safe. If you forget it, nobody can recover your cloud data (not even us). Data on this device stays here.",
-    vaultOnTxt:"🔐 <b>End-to-end encryption is on.</b> Your data goes to the cloud scrambled with your master passphrase: not even the server can read it. Closed-app alerts only say there is a reminder.",
-    vaultOffTxt:"🔓 Your data is protected by your login. To make sure <b>not even the server</b> can read it, turn on end-to-end encryption with a master passphrase.",
-    vaultEnable:"🔐 Turn on end-to-end encryption", vaultChange:"🔑 Change master passphrase", vaultDisable:"Turn off", vaultDisableAsk:"Turn off encryption? Your data will be protected only by your login again.", vaultEnabled:"Done! Your data is locked with your passphrase 🔐✨",
-    vaultLocked:"🔐 Your cloud data is locked with a master passphrase. Type it to unlock on this device.", vaultUnlock:"🔓 Unlock with passphrase", vaultUnlockMsg:"Type your grimoire\u0027s master passphrase.", vaultNewMsg:"Create a master passphrase. It will be asked once on each new device.",
+    
+    
+    
+    moveTitle:"Move to another device", localOnly:"🔒 <b>Your data stays only on this device.</b> The Grimoire has no server or database: nothing leaves unless you send it.", move1:"Here, tap <b>🔐 Export encrypted backup</b> and create a passphrase.", move2:"Take the <b>.grimorio</b> file to the other device (AirDrop, cable, USB drive…). Even if it passes through an app, it stays locked.", move3:"On the other device, open the Grimoire → <b>📂 Import file</b> → pick the file and type the passphrase.",
+    vaultTitle:"Passphrase-locked backup", vaultPass:"Passphrase (at least 8 characters)", vaultPass2:"Repeat the passphrase", vaultOk:"🔐 Confirm", vaultShort:"The passphrase needs at least 8 characters.", vaultMismatch:"The two passphrases don\u0027t match.", vaultWrong:"Wrong passphrase. Try again 💜",
+    vaultWarn:"⚠️ Write this passphrase down somewhere safe. If you forget it, nobody can open that file (not even us).",
+    
+    
+    
+    
     exportEnc:"🔐 Export encrypted backup", exportEncMsg:"Choose a passphrase for this file. It will be needed to open it.", importEncMsg:"This backup is encrypted. Type its passphrase.",
-    cloudSignedAs:"{c} as {e}", cloudSyncNow:"🔄 Sync now", cloudSignOut:"Sign out", cloudPulled:"Downloaded the newest version from the cloud ☁️", cloudChoose:"There is a grimoire in the cloud and another on this device.\n\nOK = use the CLOUD one (recommended)\nCancel = replace the cloud with THIS device\u0027s",
-    cloudLast:"Last sync: {d}", cloudErr:"⚠️ Couldn't reach the cloud: {e}", cloudOffline:"📴 Offline: your changes are kept and will upload when you're back.",
-    badgeCloud:"☁️ in the cloud", badgeFile:"💾 auto-backup", badgeLocal:"📦 this browser only",
+    
+    
+    badgeFile:"💾 auto-backup", badgeLocal:"📦 this browser only",
   }
 };
 G.lang = "pt";
