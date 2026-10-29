@@ -82,7 +82,7 @@ window.G = window.G || {};
     left--;
     if (left <= 0) {
       beep();
-      if (phase === "focus") { G.state.pomos++; G.addXP(10); G.burst($("#tama"), 80); G.toast(G.t("candleDone")); phase = "pause"; left = modes()[mode][1] * 60; }
+      if (phase === "focus") { G.state.pomos++; G.logDay && G.logDay("pomos"); G.addXP(10); G.burst($("#tama"), 80); G.toast(G.t("candleDone")); phase = "pause"; left = modes()[mode][1] * 60; }
       else { G.toast(G.t("wakeUp")); phase = "focus"; left = modes()[mode][0] * 60; clearInterval(tick); tick = null; }
     }
     draw();

@@ -20,6 +20,8 @@ Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho
 - **Atividades da vida toda** 🆕: estudos, rotina diária, casa, pets, cuidados maternais/paternais, trabalho, compromissos e saúde, com **prioridade** (🔥 alta, ⭐ média, 🌙 baixa), **repetição** (todo dia ou dias da semana) e **lembrete**.
 - **🎙️ Falar com o Grimório** 🆕: peça por voz (microfone do teclado) ou escrevendo, como *"me lembra de dar remédio pro gato amanhã às 8"*, *"prova de cálculo dia 12/11"*, *"concluir lavar a louça"* ou *"o que eu tenho hoje?"*. Tudo é entendido no próprio aparelho, sem IA externa.
 - **📅 Calendário do celular** 🆕: exporte atividades e provas com alarmes para o calendário do iPhone ou do Android, que avisa mesmo com o app fechado.
+- **📊 Resumo da semana** 🆕: concluídas por dia e por área, velas de foco, sequência e em que horário você rende mais.
+- **↩ Desfazer** 🆕 depois de concluir ou apagar, e **abas organizadas em 6 grupos**.
 - **Subtarefas, visão da semana, sequência de dias 🔥 e conquistas 🏆**
 - **Lembretes com seu pet** 🆕: na hora, seu pet aparece na tela te lembrando. No app Android, chega notificação mesmo com o app fechado.
 - **Feito para todo mundo:** nome ou apelido com **pronome** (ela/dela, ele/dele, elu/delu), **menu lateral** no celular (abre arrastando da borda), **cards minimizáveis**, bichinho com **tamanho ajustável (−/+)** e minimizável, botões grandes, **tamanho do texto** e modo **menos animações**.
@@ -59,6 +61,7 @@ js/
   vault.js         backup criptografado com senha
   voice.js         🎙️ comandos por voz/texto (interpretador local)
   calendar.js      exportação .ics com alarmes
+  stats.js         resumo da semana
   planner.js       gerador do plano de estudos
   importers.js     json, csv, ics
   connectors/      um arquivo por instituição

@@ -220,9 +220,9 @@ details.sub .in { padding:10px 14px 14px }
 #tama .scr.compact #tcat svg { width:calc(40px * var(--fs)); height:calc(40px * var(--fs)) }
 /* subtarefas / subtasks */
 .subs { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:6px }
-.sub { display:flex; align-items:center; gap:6px; min-height:40px; border:2px solid var(--ink); border-radius:12px; background:var(--card); padding:4px 10px 4px 6px; font-weight:800; font-size:.88rem; touch-action:manipulation }
-.sub .box { width:24px; height:24px; border:2.5px solid var(--ink); border-radius:7px; display:grid; place-items:center; background:var(--card); font-size:.85rem }
-.sub.on { background:var(--accent) } .sub.on .box { background:var(--primary) } .sub.on { text-decoration:line-through }
+.subs .sub { display:flex; align-items:center; gap:6px; min-height:40px; border:2px solid var(--ink); border-radius:12px; background:var(--card); padding:4px 10px 4px 6px; font-weight:800; font-size:.88rem; touch-action:manipulation }
+.subs .sub .box { width:24px; height:24px; border:2.5px solid var(--ink); border-radius:7px; display:grid; place-items:center; background:var(--card); font-size:.85rem }
+.subs .sub.on { background:var(--accent) } .subs .sub.on .box { background:var(--primary) } .subs .sub.on { text-decoration:line-through }
 /* semana / week */
 .weekgrid { display:grid; grid-template-columns:repeat(7,1fr); gap:8px }
 .wday { border:3px solid var(--ink); border-radius:14px; background:var(--cardAlt); padding:6px; display:flex; flex-direction:column; gap:5px; min-height:160px; box-shadow:3px 3px 0 var(--ink) }
@@ -313,3 +313,45 @@ input[type=text], input[type=date], input[type=time], input[type=number], input[
 .cmdchips { display:flex; gap:6px; flex-wrap:wrap } .cmdchips .chip { background:var(--cardAlt); border:2px solid var(--ink); border-radius:999px; padding:3px 10px; font-size:.86rem }
 .cmdlist { margin:6px 0; padding-left:20px; line-height:1.7 }
 @media (max-width:600px) { .talkfab { width:54px; height:54px; left:10px; bottom:calc(10px + env(safe-area-inset-bottom)) } }
+
+/* ===== sub-abas dos grupos / group sub-tabs ===== */
+.subtabs { display:flex; gap:8px; flex-wrap:wrap; margin:-6px 0 14px }
+.subtab { min-height:44px; padding:6px 14px; border:3px solid var(--ink); border-radius:999px; background:var(--cardAlt); font-weight:900; font-size:.92rem; box-shadow:3px 3px 0 var(--ink); touch-action:manipulation; white-space:nowrap }
+.subtab.on { background:var(--accent2); }
+.subtab:active { transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink) }
+.tabs .tabsub { display:none }
+@media (max-width:900px) {
+  .subtabs { position:sticky; top:62px; z-index:70; flex-wrap:nowrap; overflow-x:auto; margin:0 -12px 12px; padding:8px 12px; background:var(--bg); scrollbar-width:none } .subtabs::-webkit-scrollbar { display:none }
+  .tabs .tabsub { display:flex; flex-direction:column; gap:6px; padding-left:18px; margin:-2px 0 4px; border-left:3px dashed var(--accent2); margin-left:20px }
+  .tabs .tab.sub { min-height:44px; font-size:.95rem; padding:4px 12px; border-width:2px; box-shadow:2px 2px 0 var(--ink) }
+}
+.toast.undo { display:flex; align-items:center; gap:12px; padding:8px 8px 8px 18px; max-width:calc(100vw - 24px) }
+.toast.undo button { min-height:40px; padding:4px 14px; border:2px solid var(--primary); border-radius:999px; background:var(--primary); color:var(--ink); font-weight:900; white-space:nowrap; cursor:pointer }
+
+/* ===== 📊 resumo da semana / weekly summary ===== */
+.stiles { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:8px 0 }
+.stile { border:3px solid var(--ink); border-radius:16px; background:var(--cardAlt); padding:10px 12px; display:flex; flex-direction:column; gap:2px; box-shadow:3px 3px 0 var(--ink) }
+.stile b { font-family:"Mochiy Pop One",cursive; font-weight:400; font-size:2rem; line-height:1.1; color:var(--ink) }
+.stile span { font-weight:900; font-size:.9rem } .stile small { color:var(--inkSoft); font-size:.8rem }
+.smood { font-weight:900; margin:10px 0 }
+.sbars { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; align-items:end; height:150px; padding:8px 4px 0; border-bottom:2px solid var(--inkSoft) }
+.sbar { position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:stretch; background:none; border:0; padding:0 0 22px; cursor:pointer; touch-action:manipulation; min-width:0 }
+.sbar .sfill { display:block; width:min(100%,44px); margin:0 auto; background:var(--accent2); border:2px solid var(--ink); border-bottom:0; border-radius:6px 6px 0 0 }
+.sbar.now .sfill { background:var(--primary) }
+.sbar .slbl { position:absolute; bottom:0; left:0; right:0; text-align:center; font-size:.8rem; font-weight:900; color:var(--inkSoft) }
+.sbar.now .slbl { color:var(--ink) }
+.sbar:hover::after, .sbar:focus-visible::after, .sbar.tip::after { content:attr(data-tip); position:absolute; bottom:calc(100% + 4px); left:50%; transform:translateX(-50%); white-space:nowrap; background:var(--ink); color:var(--card); font-size:.8rem; font-weight:800; padding:4px 8px; border-radius:8px; z-index:3; pointer-events:none }
+.sbar:first-child:hover::after, .sbar:first-child.tip::after { left:0; transform:none } .sbar:last-child:hover::after, .sbar:last-child.tip::after { left:auto; right:0; transform:none }
+.stiphint { margin-top:4px }
+.hbars { display:flex; flex-direction:column; gap:8px }
+.hrow { display:grid; grid-template-columns:minmax(110px,40%) 1fr 32px; gap:8px; align-items:center }
+.hlbl { font-weight:800; font-size:.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.htrack { height:18px; display:block } .hfill { display:block; height:100%; min-width:6px; background:var(--accent2); border:2px solid var(--ink); border-left:0; border-radius:0 6px 6px 0 }
+.hval { text-align:right }
+.stable { border-collapse:collapse; margin-top:6px } .stable th, .stable td { border:1.5px solid var(--inkSoft); padding:3px 10px; text-align:left }
+@media (max-width:600px) { .stiles { gap:6px } .stile { padding:8px } .stile b { font-size:1.6rem } .stile span { font-size:.8rem } }
+@media (max-width:600px) { .hrow { grid-template-columns:minmax(0,45%) 1fr 28px } .hlbl { white-space:normal; line-height:1.15; font-size:.85rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical } }
+/* telas bem estreitas (320px) / very narrow screens */
+.petgrid { grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr)) }
+.row2 { grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr)) }
+.row2 > *, .petcard { min-width:0 }

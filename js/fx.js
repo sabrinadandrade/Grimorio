@@ -6,6 +6,15 @@ window.G = window.G || {};
     const el = document.createElement("div"); el.className = "toast"; el.textContent = t;
     document.body.appendChild(el); setTimeout(() => el.remove(), 2300);
   };
+  /* aviso com botão "Desfazer" / toast with an Undo button */
+  G.toastUndo = function (msg, onUndo, ms) {
+    document.querySelectorAll(".toast").forEach(x => x.remove());
+    const el = document.createElement("div"); el.className = "toast undo"; el.setAttribute("role", "status");
+    el.innerHTML = `<span></span><button type="button">↩ ${G.t("undo")}</button>`; el.firstChild.textContent = msg;
+    let done = false; const kill = () => { if (!done) { done = true; el.remove(); } };
+    el.querySelector("button").onclick = () => { if (done) return; kill(); onUndo(); };
+    document.body.appendChild(el); setTimeout(kill, ms || 6000);
+  };
   G.bubble = function (el, txt) {
     document.querySelectorAll(".bubble").forEach(b => b.remove());
     const r = el.getBoundingClientRect(), b = document.createElement("div");

@@ -83,26 +83,38 @@ window.G = window.G || {};
   }
 
   /* ================= ABAS / TABS ================= */
-  const TABS = ["today", "acts", "week", "cal", "tarot", "notes", "subjects", "pets", "trophies", "look", "data", "tips"];
+  /* 6 grupos de abas; os grupos com várias páginas têm sub-abas / 6 tab groups with sub-tabs */
+  const GROUPS = { today: ["today"], week: ["week"], acts: ["acts"], study: ["subjects", "tarot", "notes", "cal"], me: ["pets", "look", "trophies"], more: ["data", "tips"] };
+  const TABS = Object.keys(GROUPS);
+  const ICON = { today: "✦", week: "📆", acts: "🗓️", study: "📚", me: "🐾", more: "💾", subjects: "📚", tarot: "🔮", notes: "📝", cal: "🌙", pets: "🐾", look: "🎨", trophies: "🏆", data: "💾", tips: "🕯️" };
+  const groupOf = leaf => TABS.find(g => GROUPS[g].includes(leaf)) || "today";
+  const lastSub = () => ((G.state.ui = G.state.ui || {}).lastSub = G.state.ui.lastSub || {});
   function renderTabs() {
-    const pets = G.state.pets;
+    const pets = G.state.pets, cur = groupOf(tab);
     const owner = (G.state.owner && G.state.owner.name) || "";
     $("#tabs").innerHTML = `<div class="dhead"><div class="dpets">${pets.slice(0, 3).map(p => G.petSVG(p, 46, "happy")).join("")}</div><b>${esc(document.getElementById("title").textContent || "Grimório")}</b>${owner ? `<span>✦ ${esc(owner)} ✦</span>` : ""}<button class="dclose" aria-label="fechar" onclick="G.UI.menu(false)">✕</button></div>` + TABS.map((k, i) => {
-      const p = pets[i % Math.max(1, pets.length)];
-      return `<button class="tab ${k === tab ? "on" : ""}" data-tab="${k}">${p ? G.petSVG(p, 32, k === tab ? "happy" : "ok") : ""}${t("tabs." + k)}</button>`;
+      const p = pets[i % Math.max(1, pets.length)], subs = GROUPS[k];
+      return `<button class="tab ${k === cur ? "on" : ""}" data-tab="${k}">${p ? G.petSVG(p, 32, k === cur ? "happy" : "ok") : ""}${t("tabs." + k)}</button>` +
+        (subs.length > 1 ? `<div class="tabsub">${subs.map(s => `<button class="tab sub ${s === tab ? "on" : ""}" data-tab="${s}">${ICON[s]} ${t("tabs." + s)}</button>`).join("")}</div>` : "");
     }).join("");
-    document.querySelectorAll(".tab").forEach((b, i) => { b.style.setProperty("--i", i); b.onclick = () => { UI.menu(false); UI.show(b.dataset.tab); }; });
-    const p0 = pets[TABS.indexOf(tab) % Math.max(1, pets.length)];
-    $("#menuBtn").innerHTML = `<span class="mb-ic" aria-hidden="true"><i></i><i></i><i></i></span><span class="mb-t">${t("tabs." + tab)}</span>${p0 ? G.petSVG(p0, 34, "happy") : ""}`;
+    document.querySelectorAll("#tabs .tab").forEach((b, i) => { b.style.setProperty("--i", i); b.onclick = () => { UI.menu(false); UI.show(b.dataset.tab); }; });
+    const p0 = pets[TABS.indexOf(cur) % Math.max(1, pets.length)];
+    const label = GROUPS[cur].length > 1 ? t("tabs." + cur) + " · " + t("tabs." + tab) : t("tabs." + tab);
+    $("#menuBtn").innerHTML = `<span class="mb-ic" aria-hidden="true"><i></i><i></i><i></i></span><span class="mb-t">${esc(label)}</span>${p0 ? G.petSVG(p0, 34, "happy") : ""}`;
     $("#menuBtn").setAttribute("aria-label", "menu");
     $("#menuBtn").onclick = () => UI.menu(!$("#tabs").classList.contains("open"));
+    // sub-abas do grupo atual / current group's sub-tabs
+    const subs = GROUPS[cur];
+    $("#subtabs").innerHTML = subs.length > 1 ? subs.map(s => `<button class="subtab ${s === tab ? "on" : ""}" data-sub="${s}" role="tab" aria-selected="${s === tab}">${ICON[s]} ${t("tabs." + s)}</button>`).join("") : "";
+    $("#subtabs").style.display = subs.length > 1 ? "" : "none";
+    document.querySelectorAll("#subtabs .subtab").forEach(b => b.onclick = () => UI.show(b.dataset.sub));
   }
   UI.menu = open => {
     $("#tabs").classList.toggle("open", open); $("#menuBtn").classList.toggle("open", open); $("#scrim").classList.toggle("on", open);
     document.body.classList.toggle("drawer-open", open); $("#menuBtn").setAttribute("aria-expanded", open ? "true" : "false");
     if (open) setTimeout(() => { const on = $("#tabs .tab.on"); on && on.focus({ preventScroll: true }); }, 50);
   };
-  UI.show = k => { tab = k; renderTabs(); renderPanel(); const top = matchMedia("(max-width:900px)").matches ? $("#panel").offsetTop - 74 : $("#tabs").offsetTop; window.scrollTo({ top: Math.max(0, top - 10), behavior: G.state.a11y && G.state.a11y.lessMotion ? "auto" : "smooth" }); };
+  UI.show = k => { if (GROUPS[k] && !GROUPS[k].includes(k)) k = lastSub()[k] && GROUPS[k].includes(lastSub()[k]) ? lastSub()[k] : GROUPS[k][0]; tab = k; lastSub()[groupOf(k)] = k; renderTabs(); renderPanel(); const top = matchMedia("(max-width:900px)").matches ? ($("#subtabs").style.display === "none" ? $("#panel") : $("#subtabs")).offsetTop - 74 : $("#tabs").offsetTop; window.scrollTo({ top: Math.max(0, top - 10), behavior: G.state.a11y && G.state.a11y.lessMotion ? "auto" : "smooth" }); };
   function renderPanel() {
     const P = { today: pToday, acts: pActs, week: pWeek, trophies: pTrophies, cal: pCal, tarot: pTarot, notes: pNotes, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
     $("#panel").innerHTML = ""; $("#panel").className = "panel on"; P[tab]();
@@ -134,12 +146,10 @@ window.G = window.G || {};
     const body = remind + `<div class="nav"><button class="cute" onclick="G.UI.go(-1)">${t("before")}</button>
       <button class="cute" onclick="G.UI.goto('${td}')">${t("today")}</button><button class="cute" onclick="G.UI.go(1)">${t("after")}</button></div>
       <div class="daytitle"><span class="pill">${viewDay === td ? t("todayTag") : fmt(viewDay).toUpperCase()}</span><h2 style="margin:0">${esc(title)}</h2><span style="font-size:1.6rem">${isExam ? "📝" : moonOf(total ? doneAll / total : 0)}</span></div>
-      <h3>${t("actsToday")}</h3>
-      ${acts.length ? acts.map(a => actHTML(a, viewDay)).join("") : `<p class="small">${t("noActsDay")}</p>`}
+      <h3>${t("dayList")}</h3>
+      ${dayList(acts, tasks)}
       <div class="nav"><button class="cute" onclick="G.UI.newAct('${viewDay}')">${t("newAct")}</button><button class="cute alt" onclick="G.UI.talk()">🎙️ ${t("talkBtn")}</button></div>
-      ${(tasks.length || G.state.subjects.length) ? `<h3>${t("studyToday")}</h3>
-      <p class="small">${isExam ? t("examHelp") : tasks.length ? t("spellHelp") : t("noPlan")}</p>
-      ${tasks.map(x => taskHTML(x)).join("")}
+      ${(tasks.length || G.state.subjects.length) ? `<p class="small">${isExam ? t("examHelp") : tasks.length ? t("spellHelp") : t("noPlan")}</p>
       <div class="row2 addrow">
         <label class="f">${t("taskTitle")}<input type="text" id="newTask" placeholder="✨"></label>
         <label class="f">${t("subject")}<select id="newTaskSub">${subjOptions("")}</select></label>
@@ -158,6 +168,14 @@ window.G = window.G || {};
         ${a.notes ? `<span>${esc(a.notes)}</span>` : ""}
         ${(a.subtasks || []).length ? `<div class="subs">${a.subtasks.map(s => { const sd = G.subDone(a, iso, s.id); return `<button class="sub ${sd ? "on" : ""}" onclick="G.UI.subToggle('${a.id}','${iso}','${s.id}',this)"><span class="box">${sd ? "✔" : ""}</span>${esc(s.text)}</button>`; }).join("")}<span class="small">${G.subProgress(a, iso).join("/")}</span></div>` : ""}</div>
       <button class="cute ghost iconbtn" title="${t("editAct")}" onclick="G.UI.editAct('${a.id}')">✎</button></div>`;
+  }
+  /* lista única do dia: atividades e feitiços juntos, por prioridade e horário / one list for the day */
+  function dayList(acts, tasks) {
+    const R = { high: 0, mid: 2, low: 3 };
+    const items = [...acts.map(a => ({ k: [G.actDone(a, viewDay) ? 1 : 0, R[a.priority] ?? 2, a.time || "99:99"], h: actHTML(a, viewDay) })),
+      ...tasks.map(x => ({ k: [x.done ? 1 : 0, x.kind === "exam" ? -1 : 1, "99:99"], h: taskHTML(x) }))];
+    items.sort((a, b) => a.k[0] - b.k[0] || a.k[1] - b.k[1] || a.k[2].localeCompare(b.k[2]));
+    return items.length ? items.map(x => x.h).join("") : `<p class="small">${t("dayEmpty")}</p>`;
   }
   function taskHTML(x) {
     const s = G.subj(x.subjectId), p = s ? G.pet(s.petId) : G.state.pets[0];
@@ -182,13 +200,20 @@ window.G = window.G || {};
   };
   UI.actToggle = (id, iso, el) => {
     const a = G.state.activities.find(x => x.id === id); if (!a) return;
+    const before = snap();
     const v = !G.actDone(a, iso); G.setActDone(a, iso, v); G.save();
-    if (v) { G.addXP(15); G.burst(el); G.toast(t("actDone")); }
+    if (v) { G.addXP(15); G.burst(el); UI.undoable(t("actDone"), before); }
     if (v && (a.subtasks || []).length) (a.subtasks || []).forEach(s => G.setSubDone(a, iso, s.id, true));
     if (v) G.save();
     if (tab === "today") pToday(); else if (tab === "acts") pActs(); else if (tab === "week") pWeek(); renderHeader();
     if (v) setTimeout(() => { const c = document.querySelector(`[onclick*="${id}','${iso}"]`); c && G.bubble(c, G.phrase()); }, 120);
   };
+  /* ↩ desfazer: guarda uma foto do grimório antes da ação / undo: snapshot before the action */
+  const snap = () => JSON.stringify(G.state);
+  UI.undoable = (msg, before) => G.toastUndo(msg, () => {
+    G.state = Object.assign(G.defaultState(), JSON.parse(before)); G.save({ keepTime: false });
+    G.applyTheme && G.applyTheme(G.state.theme); G.tamaRender && G.tamaRender(); UI.refresh(); G.toast(t("undone"));
+  });
   UI.actToggleSilent = (id, iso, v) => {
     const a = G.state.activities.find(x => x.id === id); if (!a || G.actDone(a, iso) === v) return;
     G.setActDone(a, iso, v); if (v) { (a.subtasks || []).forEach(s => G.setSubDone(a, iso, s.id, true)); G.addXP(15); } G.save();
@@ -249,8 +274,8 @@ window.G = window.G || {};
     ed.onclick = () => { const p = { title: r.title, area: r.area, priority: r.priority, date: r.date, time: r.time, repeat: r.repeat, days: r.days, remind: r.time ? r.remind : -1 }; close(); UI.editAct(null, r.date, p); };
     ok.onclick = () => {
       if (ok.disabled) return;
-      const msg = G.cmd.run(r); close();
-      if (msg) { G.toast(msg); G.burst(null, 50); }
+      const before = snap(); const msg = G.cmd.run(r); close();
+      if (msg) { UI.undoable(msg, before); G.burst(null, 50); }
       if (r.intent === "exam") renderCountdowns();
       UI.refresh();
     };
@@ -267,16 +292,17 @@ window.G = window.G || {};
   UI.goto = d => { viewDay = d; if (tab !== "today") UI.show("today"); else pToday(); };
   UI.toggle = (id, el) => {
     const [d, x] = findTask(id); if (!x) return;
-    x.done = !x.done; G.save();
+    const before = snap();
+    x.done = !x.done; if (x.done) x.doneAt = Date.now(); else delete x.doneAt; G.save();
     if (x.done) {
-      G.addXP(20); G.burst(el); G.toast(t("spellDone"));
+      G.addXP(20); G.burst(el); UI.undoable(t("spellDone"), before);
       if (G.state.plan[d].every(y => y.done)) setTimeout(() => { G.burst(null, 200); G.toast(t("dayDone")); G.addXP(30); }, 700);
     }
     pToday(); renderHeader();
     if (x.done) setTimeout(() => { const c = document.querySelector(`[onclick*="${id}"]`); c && G.bubble(c, G.phrase()); }, 120);
   };
   UI.focus = id => { const [, x] = findTask(id); if (!x) return; const s = G.subj(x.subjectId); G.startFocus(((s && s.emoji) || "✨") + " " + x.title, s && s.petId); };
-  UI.delTask = id => { const [d] = findTask(id); if (!d) return; G.state.plan[d] = G.state.plan[d].filter(y => y.id !== id); if (!G.state.plan[d].length) delete G.state.plan[d]; G.save(); pToday(); renderHeader(); };
+  UI.delTask = id => { const [d] = findTask(id); if (!d) return; UI.undoable(t("deleted"), snap()); G.state.plan[d] = G.state.plan[d].filter(y => y.id !== id); if (!G.state.plan[d].length) delete G.state.plan[d]; G.save(); pToday(); renderHeader(); };
   UI.addTask = () => {
     const v = $("#newTask").value.trim(); if (!v) return;
     (G.state.plan[viewDay] = G.state.plan[viewDay] || []).push({ id: G.uid(), kind: "extra", subjectId: $("#newTaskSub").value, title: v, detail: "", done: false });
@@ -343,7 +369,7 @@ window.G = window.G || {};
     pick("[data-rep]", "rep", v => { a.repeat = v; q("#aDays").style.display = v === "weekly" ? "" : "none"; q("#aDateL").firstChild.textContent = v === "none" ? t("date") : t("startDate"); if (v === "weekly" && !a.days.length) { a.days = [G.dow(q("#aDate").value || G.todayIso())]; m.querySelector(`[data-day="${a.days[0]}"]`).classList.add("on"); } });
     m.querySelectorAll("[data-day]").forEach(b => b.onclick = () => { const d = +b.dataset.day; b.classList.toggle("on"); a.days = b.classList.contains("on") ? [...new Set(a.days.concat(d))] : a.days.filter(x => x !== d); });
     q("#aCancel").onclick = () => m.remove();
-    if (q("#aDel")) q("#aDel").onclick = () => { if (!confirm(t("confirmDelete"))) return; G.state.activities = G.state.activities.filter(x => x.id !== id); G.save(); m.remove(); UI.refresh(); };
+    if (q("#aDel")) q("#aDel").onclick = () => { const before = snap(); G.state.activities = G.state.activities.filter(x => x.id !== id); G.save(); m.remove(); UI.refresh(); UI.undoable(t("deleted"), before); };
     q("#aSave").onclick = () => {
       a.title = q("#aTitle").value.trim(); if (!a.title) { G.toast(t("needTitle")); q("#aTitle").focus(); return; }
       a.date = q("#aDate").value || G.todayIso(); a.time = q("#aTime").value; a.remind = +q("#aRem").value; a.petId = q("#aPet").value; a.notes = q("#aNotes").value.trim();
@@ -370,7 +396,7 @@ window.G = window.G || {};
     try { const ac = new (window.AudioContext || window.webkitAudioContext)();[784, 988, 1175, 988].forEach((f, i) => { const os = ac.createOscillator(), g = ac.createGain(); os.type = "triangle"; os.frequency.value = f; os.connect(g); g.connect(ac.destination); const tt = ac.currentTime + i * .15; g.gain.setValueAtTime(.16, tt); g.gain.exponentialRampToValueAtTime(.001, tt + .25); os.start(tt); os.stop(tt + .25); }); } catch (e) { }
     el.querySelectorAll("[data-r]").forEach(b => b.onclick = () => {
       const r = b.dataset.r;
-      if (r === "done") { G.setActDone(o.a, o.iso, true); G.save(); G.addXP(15); G.burst(b, 60); G.toast(t("actDone")); if (tab === "today" || tab === "acts") renderPanel(); }
+      if (r === "done") { const before = snap(); G.setActDone(o.a, o.iso, true); G.save(); G.addXP(15); G.burst(b, 60); UI.undoable(t("actDone"), before); if (tab === "today" || tab === "acts") renderPanel(); }
       if (r === "snooze") G.reminders.snooze(o, 10);
       el.remove();
     });
@@ -393,7 +419,32 @@ window.G = window.G || {};
         <button class="wadd" onclick="G.UI.newAct('${d}')">+</button></div>`;
     }).join("");
     $("#panel").innerHTML = win("📆 " + (G.lang === "en" ? "week.exe" : "semana.exe"), `<div class="nav"><button class="cute" onclick="G.UI.week(-7)">${t("prevWeek")}</button><button class="cute" onclick="G.UI.week(0)">${t("thisWeek")}</button><button class="cute" onclick="G.UI.week(7)">${t("nextWeek")}</button></div>
-      <h3>${t("weekOf", { d: fmt(weekStart) })}</h3><div class="weekgrid">${cols}</div>`);
+      <h3>${t("weekOf", { d: fmt(weekStart) })}</h3><div class="weekgrid">${cols}</div>`) + summaryWin();
+  }
+  /* ===== 📊 resumo da semana / weekly summary ===== */
+  function summaryWin() {
+    const S = G.weekStats(), td = G.todayIso(), max = Math.max(1, ...S.days.map(x => x.n));
+    const diff = S.total - S.prevTotal;
+    const mood = !S.total ? t("sumNone") : !S.prevTotal ? t("sumFirst") : diff > 0 ? t("sumMore", { n: diff }) : diff < 0 ? t("sumLess") : t("sumSame");
+    const D = G.lang === "en" ? ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] : ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+    const bars = S.days.map(x => { const tip = `${fmt(x.d)}: ${t("sumTip", { n: x.n })}${x.pomos ? " · 🕯️ " + x.pomos : ""}`;
+      return `<button class="sbar ${x.d === td ? "now" : ""}" type="button" data-tip="${esc(tip)}" aria-label="${esc(tip)}"><span class="sfill" style="height:${x.n ? Math.max(6, Math.round(x.n / max * 100)) : 0}%"></span><span class="slbl">${D[G.dow(x.d)]}</span></button>`; }).join("");
+    const amax = Math.max(1, ...S.areas.map(a => a[1]));
+    const areas = S.areas.length ? S.areas.map(([k, n]) => { const ar = G.AREAS[k] || G.AREAS.daily; return `<div class="hrow"><span class="hlbl">${ar.emoji} ${esc(G.areaName(k))}</span><span class="htrack"><span class="hfill" style="width:${Math.round(n / amax * 100)}%"></span></span><b class="hval">${n}</b></div>`; }).join("") : `<p class="small">${t("sumNoAreas")}</p>`;
+    const slotName = { morning: t("sumMorning"), afternoon: t("sumAfternoon"), evening: t("sumEvening"), night: t("sumNight") };
+    const best = S.best ? t("sumBest", { p: slotName[S.best[0]], n: S.best[1], tot: S.timed }) : t("sumBestSoon");
+    const table = `<details class="small"><summary>${t("sumTable")}</summary><table class="stable"><thead><tr><th>${t("sumDay")}</th><th>${t("sumDone")}</th><th>🕯️</th></tr></thead><tbody>${S.days.map(x => `<tr><td>${fmt(x.d)}</td><td>${x.n}</td><td>${x.pomos}</td></tr>`).join("")}</tbody></table></details>`;
+    return win("📊 " + (G.lang === "en" ? "weekly_summary.exe" : "resumo_da_semana.exe"), `
+      <p class="small">${t("sumLast7")}</p>
+      <div class="stiles">
+        <div class="stile"><b>${S.total}</b><span>${t("sumDoneTile")}</span><small>${S.prevTotal ? (diff >= 0 ? "▲ " : "▼ ") + Math.abs(diff) + " " + t("sumVsPrev") : "&nbsp;"}</small></div>
+        <div class="stile"><b>${S.pomos}</b><span>🕯️ ${t("sumPomos")}</span><small>&nbsp;</small></div>
+        <div class="stile"><b>${S.streak}</b><span>🔥 ${t("sumStreak")}</span><small>${t("sumBestStreak", { n: S.bestStreak })}</small></div>
+      </div>
+      <p class="smood">${mood}</p>
+      <h3>${t("sumPerDay")}</h3><div class="sbars" role="img" aria-label="${esc(t("sumPerDay"))}">${bars}</div><p class="small stiphint">${t("sumTapHint")}</p>
+      <h3>${t("sumByArea")}</h3><div class="hbars">${areas}</div>
+      <h3>⏰ ${t("sumWhen")}</h3><p>${best}</p>${table}`, "sumWin");
   }
   UI.week = n => { weekStart = n === 0 ? mondayOf(G.todayIso()) : G.addDays(weekStart || mondayOf(G.todayIso()), n); pWeek(); };
 
@@ -466,7 +517,7 @@ window.G = window.G || {};
   UI.forgot = () => { if (!curCard) return; curCard.miss = (curCard.miss || 0) + 1; G.save(); G.toast(t("forgotToast")); UI.nextCard(); };
   UI.addCard = () => { if (G.addCard($("#cSub").value, $("#cQ").value, $("#cA").value)) { G.save(); tarotFilter = null; pTarot(); G.toast(t("saved")); } };
   UI.addBulk = () => { const sid = $("#cSub").value; let n = 0; $("#cBulk").value.split("\n").forEach(l => { const [q, a] = l.split(";;"); if (G.addCard(sid, (q || "").trim(), (a || "").trim())) n++; }); G.save(); tarotFilter = null; pTarot(); G.toast("+" + n + " 🃏"); };
-  UI.delCard = id => { G.state.cards = G.state.cards.filter(c => c.id !== id); G.save(); pTarot(); };
+  UI.delCard = id => { UI.undoable(t("deleted"), snap()); G.state.cards = G.state.cards.filter(c => c.id !== id); G.save(); pTarot(); };
 
   /* ================= MATÉRIAS / SUBJECTS ================= */
   function pSubjects() {
@@ -503,10 +554,10 @@ window.G = window.G || {};
     G.save();
   };
   UI.addSubject = () => { const s = G.findOrCreateSubject((G.lang === "en" ? "New subject " : "Nova matéria ") + (G.state.subjects.length + 1)); G.save(); pSubjects(); };
-  UI.delSubject = id => { if (!confirm(t("confirmDelete"))) return; G.state.subjects = G.state.subjects.filter(s => s.id !== id); G.state.exams = G.state.exams.filter(e => e.subjectId !== id); G.save(); pSubjects(); renderHeader(); };
+  UI.delSubject = id => { if (!confirm(t("confirmDelete"))) return; UI.undoable(t("deleted"), snap()); G.state.subjects = G.state.subjects.filter(s => s.id !== id); G.state.exams = G.state.exams.filter(e => e.subjectId !== id); G.save(); pSubjects(); renderHeader(); };
   UI.addExam = () => { G.state.exams.push({ id: G.uid(), subjectId: G.state.subjects[0].id, date: G.addDays(G.todayIso(), 7), time: "09:00", place: "" }); G.save(); pSubjects(); renderCountdowns(); };
   UI.eset = (id, k, v) => { const e = G.state.exams.find(x => x.id === id); e[k] = v; later(); renderCountdowns(); };
-  UI.delExam = id => { G.state.exams = G.state.exams.filter(e => e.id !== id); G.save(); pSubjects(); renderCountdowns(); };
+  UI.delExam = id => { UI.undoable(t("deleted"), snap()); G.state.exams = G.state.exams.filter(e => e.id !== id); G.save(); pSubjects(); renderCountdowns(); };
   UI.setset = (k, v) => { G.state.settings[k] = (k === "startDate") ? v : +v; G.save(); };
   UI.regen = () => { G.buildPlan(); viewDay = null; G.toast(t("regenDone")); G.burst(null, 80); renderHeader(); UI.show("today"); };
 
@@ -534,7 +585,7 @@ window.G = window.G || {};
   UI.species = (id, v) => { const p = G.pet(id), d = G.SPECIES[v].d; Object.assign(p, { species: v, base: d.base, accent: d.accent, pattern: d.pattern, eye: d.eye, ears: d.ears }); G.save(); pPets(); renderHeader(); };
   UI.rndPet = id => { const p = G.pet(id); Object.assign(p, G.randomPet()); G.save(); pPets(); renderHeader(); };
   UI.addPet = () => { const np = Object.assign({ id: G.uid(), name: "Pet " + (G.state.pets.length + 1), gender: "n" }, G.randomPet()); G.state.pets.push(np); G.save(); pPets(); renderHeader(); renderTabs(); };
-  UI.delPet = id => { if (!confirm(t("confirmDelete"))) return; G.state.pets = G.state.pets.filter(p => p.id !== id); G.save(); pPets(); renderHeader(); renderTabs(); };
+  UI.delPet = id => { if (!confirm(t("confirmDelete"))) return; UI.undoable(t("deleted"), snap()); G.state.pets = G.state.pets.filter(p => p.id !== id); G.save(); pPets(); renderHeader(); renderTabs(); };
 
   /* ================= APARÊNCIA / LOOK ================= */
   function pLook() {
@@ -668,7 +719,7 @@ window.G = window.G || {};
   }
 
   /* ================= DICAS / TIPS ================= */
-  G.VERSION = "2.1";
+  G.VERSION = "2.2";
   const newsWin = () => win("✨ " + (G.lang === "en" ? "whats_new.txt" : "novidades.txt") + " · v" + G.VERSION, `<ul class="tip">${t("newsList").map(x => `<li>${x}</li>`).join("")}</ul>
     <div class="nav"><a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/CHANGELOG.md" target="_blank" rel="noopener">📜 ${t("newsAll")}</a></div>`, "newsWin");
   function pTips() { $("#panel").innerHTML = newsWin() + win("🕯️ " + (G.lang === "en" ? "focus_tips.doc" : "dicas_de_foco.doc"), `<ul class="tip">${t("tipList").map(x => `<li>${x}</li>`).join("")}</ul>`) +
@@ -718,6 +769,7 @@ window.G = window.G || {};
     G.applyA11y(); G.fxInit(); marquee(); G.tamaRender(); UI.refresh();
     document.addEventListener("click", e => { if ($("#tabs").classList.contains("open") && !e.target.closest("#tabs,#menuBtn")) UI.menu(false); });
     document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#tabs").classList.contains("open")) UI.menu(false); });
+    document.addEventListener("click", e => { const b = e.target.closest(".sbar"); document.querySelectorAll(".sbar.tip").forEach(x => x !== b && x.classList.remove("tip")); if (b) b.classList.toggle("tip"); });
     // minimizar janelas (clique no botão, ou na barra quando já está minimizada)
     document.addEventListener("click", e => {
       const b = e.target.closest(".win > .bar .minbtn") || (e.target.closest(".win.min > .bar") && !e.target.closest(".modal") ? e.target.closest(".win.min > .bar") : null);

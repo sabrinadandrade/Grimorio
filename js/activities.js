@@ -42,7 +42,7 @@ window.G = window.G || {};
       (G.PRIORITIES[x.priority] || G.PRIORITIES.mid).rank - (G.PRIORITIES[y.priority] || G.PRIORITIES.mid).rank || (x.time || "99").localeCompare(y.time || "99"));
   };
   G.actDone = (a, iso) => !!st().actDone[a.id + "|" + iso];
-  G.setActDone = (a, iso, v) => { const k = a.id + "|" + iso; if (v) st().actDone[k] = true; else delete st().actDone[k]; };
+  G.setActDone = (a, iso, v) => { const k = a.id + "|" + iso; if (v) st().actDone[k] = Date.now(); else delete st().actDone[k]; };
   G.repeatLabel = a => {
     const D = G.lang === "en" ? ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] : ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
     if (a.repeat === "daily") return G.t("everyDay");

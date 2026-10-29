@@ -4,7 +4,34 @@ Tudo o que mudou em cada versão, do mais novo para o mais antigo.
 
 ---
 
-## ✨ v2.1 — 29/10/2026 · "Fala comigo!"
+## ✨ v2.2 — 29/10/2026 · "Tudo no lugar"
+
+### 🗂️ Abas organizadas em 6 grupos
+- **Hoje**, **Semana**, **Atividades**, **Estudos** (Matérias & provas, Tarot, O que cai, Calendário lunar), **Meu grimório** (Meus pets, Aparência, Conquistas) e **Dados e ajuda** (Importar / conectar, Dicas de foco).
+- Os grupos com várias páginas mostram **sub-abas** logo acima do conteúdo. No celular, elas também aparecem no menu lateral, embaixo do grupo.
+- O Grimório lembra a última sub-aba que você abriu em cada grupo.
+
+### 📋 Uma lista só na aba Hoje
+- Atividades e feitiços de estudo agora ficam numa **lista única do dia**, ordenada por prioridade e horário, com os itens feitos no fim.
+
+### ↩ Desfazer
+- Concluiu ou apagou algo sem querer? Aparece um aviso com **↩ Desfazer** por 6 segundos, e tudo volta como estava, até o XP.
+- Vale para atividades, feitiços, provas, cartas do tarot, matérias, pets e pedidos feitos por voz.
+- Apagar uma atividade não pede mais confirmação, porque agora dá para desfazer.
+
+### 📊 Resumo da semana
+- Nova janela **resumo_da_semana.exe** na aba Semana, com os últimos 7 dias: coisas feitas (comparadas aos 7 dias anteriores), velas de foco, sequência e recorde.
+- Gráficos de **concluídas por dia** (toque na barra para ver o número) e **por área**, com versão em tabela.
+- **Quando você rende mais:** manhã, tarde, noite ou madrugada, a partir do horário em que você concluiu as tarefas nos últimos 30 dias.
+- A partir desta versão, o Grimório guarda o horário de cada conclusão e as velas de foco de cada dia, sempre no aparelho.
+
+### 🛠️ Correções
+- Em telas bem estreitas (320 px), os campos das matérias ficavam espremidos ao lado do título. Corrigido.
+- Os cartões de pets se ajustam a telas pequenas.
+
+---
+
+## v2.1 — 29/10/2026 · "Fala comigo!"
 
 ### 🎙️ Falar com o Grimório
 - Novo botão **🎙️** fixo no canto da tela, e também nas abas **Hoje** e **Atividades**.

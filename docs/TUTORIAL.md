@@ -85,6 +85,8 @@ Na primeira vez aparece esta janela:
 
 > 📱 **No celular**, o menu fica no botão **☰** no canto de cima, como nos apps (Instagram, iFood…): toque nele e o menu lateral desliza com todas as opções. Também dá para **arrastar o dedo da borda esquerda da tela para a direita** para abrir. Para fechar, toque numa opção, no **✕**, fora do menu ou arraste para a esquerda. No computador, as abas ficam fixas no topo.
 >
+> 🗂️ **As abas ficam em 6 grupos:** **Hoje**, **Semana**, **Atividades**, **Estudos** (Matérias & provas, Tarot, O que cai, Calendário lunar), **Meu grimório** (Meus pets, Aparência, Conquistas) e **Dados e ajuda** (Importar / conectar, Dicas de foco). Nos grupos com várias páginas, as sub-abas aparecem logo acima do conteúdo (e, no celular, também no menu lateral, embaixo do grupo). O Grimório lembra a última sub-aba que você abriu.
+>
 > ➖ **Minimizar:** todo card tem um botãozinho **−** no canto (nas janelas, é a primeira bolinha da barra). Toque para recolher e no **+** para abrir de novo; o Grimório lembra como você deixou. O bichinho virtual tem o botão **▾**: ele vira uma bolinha com o seu pet (mostrando o tempo, se o timer estiver rodando). Toque na bolinha para abrir.
 >
 > 💾 Nas janelas de cadastro, os botões **Salvar** e **Cancelar** ficam sempre visíveis embaixo, sem precisar rolar a tela.
@@ -120,7 +122,7 @@ Para a rotina e os compromissos, use as **Atividades** ([passo 7.1](#71-atividad
 
 ## 4. Colocar suas matérias e provas
 
-Abra a aba **Matérias & provas** (os botões redondos com um pet são as **abas**).
+Abra a aba **Estudos → Matérias & provas** (os botões redondos com um pet são as **abas**).
 
 ### 4.1 Criar uma matéria
 1. Clique em **+ Nova matéria**.
@@ -146,7 +148,7 @@ Na janela **provas.exe**, clique em **+ Nova prova** e escolha a **matéria**, a
 
 ## 5. Importar da sua faculdade, escola ou curso
 
-Não quer digitar tudo? Vá na aba **Importar / conectar**. Tem 4 jeitos. **Nenhum pede a senha da sua faculdade.** 🔒
+Não quer digitar tudo? Vá na aba **Dados e ajuda → Importar / conectar**. Tem 4 jeitos. **Nenhum pede a senha da sua faculdade.** 🔒
 
 ### Jeito 1: colar o texto (qualquer instituição ou uso pessoal)
 1. Em **Instituição**, deixe **✨ Qualquer instituição / uso pessoal**.
@@ -194,7 +196,7 @@ Se suas provas já estão no **Google Agenda**, **Outlook**, **Moodle**, **Canva
 
 ## 6. Gerar o plano de estudos
 
-Na aba **Matérias & provas**, desça até **plano_de_estudos.exe**:
+Na aba **Estudos → Matérias & provas**, desça até **plano_de_estudos.exe**:
 
 ![Gerar plano](img/06-gerar-plano.png)
 
@@ -261,11 +263,28 @@ Na aba **Atividades** você vê **todas**, filtra por área (os botões colorido
 ### ✅ Subtarefas (checklist)
 No campo **Subtarefas**, escreva uma por linha (ex.: *Banheiro · Cozinha · Quarto*). Na aba **Hoje**, cada uma vira um quadradinho para marcar. Quando você marca **todas**, a atividade fica feita sozinha. ✨
 
+### ↩ Desfazer
+Marcou algo como feito ou apagou sem querer? Logo depois aparece um aviso com o botão **↩ Desfazer**. Toque nele em até 6 segundos e tudo volta como estava (até o XP).
+
+### 📋 Uma lista só
+Na aba **Hoje**, as atividades e os feitiços de estudo ficam numa **lista única do dia**, nesta ordem: provas, prioridade 🔥 alta, estudos, ⭐ média e 🌙 baixa, com os itens já feitos no fim.
+
 ### 📆 Semana
 A aba **Semana** mostra os 7 dias (de segunda a domingo), com atividades, provas e feitiços de estudo. Toque numa atividade para marcar como feita, no **+** para criar uma nova naquele dia, ou no nome do dia para abrir o dia completo. Use **◀ semana / semana ▶** para navegar.
 
+
+### 📊 Resumo da semana
+No fim da aba **Semana** fica a janela **resumo_da_semana.exe**, com os **últimos 7 dias**:
+- quantas coisas você concluiu (e a comparação com os 7 dias anteriores), quantas **velas de foco** acendeu e sua **sequência** de dias, com o recorde;
+- um gráfico de **concluídas por dia** (toque numa barra para ver o número) e outro **por área** (casa, pets, estudos…);
+- **quando você rende mais** (manhã, tarde, noite ou madrugada), para deixar as tarefas importantes para esse horário.
+
+![Resumo da semana](img/29-resumo.png)
+
+Tudo é calculado no seu aparelho. Para ver os números em lista, toque em **Ver em tabela**.
+
 ### 🔥 Sequência e 🏆 Conquistas
-Cada dia em que você faz **pelo menos uma coisa** conta na sua **sequência** (aparece no topo: "🔥 3 dias seguidos"). Na aba **Conquistas**, seus pets ganham coroa quando você desbloqueia algo: primeiro feitiço, lua cheia, 7 dias seguidos, 10 velas de foco, 25 cartas do tarot e outras.
+Cada dia em que você faz **pelo menos uma coisa** conta na sua **sequência** (aparece no topo: "🔥 3 dias seguidos"). Na aba **Meu grimório → Conquistas**, seus pets ganham coroa quando você desbloqueia algo: primeiro feitiço, lua cheia, 7 dias seguidos, 10 velas de foco, 25 cartas do tarot e outras.
 
 ---
 
@@ -346,7 +365,7 @@ Quando o tempo acaba, toca um somzinho, o pet **dorme** (hora da pausa 😴) e v
 
 ## 9. Calendário lunar
 
-A aba **Calendário lunar** mostra todos os dias do plano. A lua de cada dia **cresce** conforme você cumpre os feitiços. Clique num dia para abrir.
+A aba **Estudos → Calendário lunar** mostra todos os dias do plano. A lua de cada dia **cresce** conforme você cumpre os feitiços. Clique num dia para abrir.
 
 ![Calendário](img/11-calendario.png)
 
@@ -380,17 +399,17 @@ Quem pintou a Mona Lisa? ;; Leonardo da Vinci
 
 ## 11. O que cai
 
-A aba **O que cai** junta, de cada matéria, a data da prova, os temas e suas anotações. É ótima para **revisar na véspera**.
+A aba **Estudos → O que cai** junta, de cada matéria, a data da prova, os temas e suas anotações. É ótima para **revisar na véspera**.
 
 ![O que cai](img/15-o-que-cai.png)
 
-Para editar, use a aba **Matérias & provas** (campo **O que cai / anotações**).
+Para editar, use a aba **Estudos → Matérias & provas** (campo **O que cai / anotações**).
 
 ---
 
 ## 12. Seus pets
 
-Na aba **Meus pets** você cria pets parecidos com os seus de verdade!
+Na aba **Meu grimório → Meus pets** você cria pets parecidos com os seus de verdade!
 
 ![Pets](img/16-pets.png)
 
@@ -405,7 +424,7 @@ Cada matéria pode ter um pet professor (veja o [passo 4.1](#41-criar-uma-matér
 
 ## 13. Aparência
 
-Na aba **Aparência**:
+Na aba **Meu grimório → Aparência**:
 
 - **Nome ou apelido**, **pronome** (ela/dela, ele/dele, elu/delu) e **idioma**.
 - **Tema pronto:** Halloween, Kawaii amarelo, Pastel goth, Floresta encantada, Oceano, Morango, Noite estrelada.
@@ -449,7 +468,7 @@ Antes de importar um backup ou apagar tudo, o Grimório guarda uma **cópia de s
 
 Como tudo fica só no aparelho, para levar seu grimório do computador para o celular (ou para um aparelho novo) você usa um **arquivo trancado com senha**:
 
-1. **No aparelho onde estão seus dados:** aba **Importar / conectar** → janela **passar_aparelho.exe** → **🔐 Exportar backup criptografado**. Crie uma senha (mínimo 8 caracteres) e **anote**.
+1. **No aparelho onde estão seus dados:** aba **Dados e ajuda → Importar / conectar** → janela **passar_aparelho.exe** → **🔐 Exportar backup criptografado**. Crie uma senha (mínimo 8 caracteres) e **anote**.
 2. Leve o arquivo **`.grimorio`** para o outro aparelho: **AirDrop**, cabo USB, pendrive… Se precisar mandar por algum app, tudo bem: o arquivo está **trancado** e só abre com a senha.
 3. **No outro aparelho:** abra o Grimório → **Importar / conectar** → **📂 Importar arquivo** → escolha o arquivo e digite a senha.
 
@@ -471,7 +490,7 @@ Como tudo fica só no aparelho, para levar seu grimório do computador para o ce
 → Calma! Tente nesta ordem: (1) **Cópias de segurança automáticas → Restaurar**; (2) **Importar arquivo** com seu último backup.
 
 **O plano ficou com tarefas demais num dia**
-→ Isso acontece quando há muitos temas e poucos dias até a prova. Na aba **Matérias & provas**, junte temas parecidos numa linha só (ex.: `Derivadas e regra da cadeia`) e clique em **Gerar plano** de novo. Você também pode apagar feitiços com o **✕**.
+→ Isso acontece quando há muitos temas e poucos dias até a prova. Na aba **Estudos → Matérias & provas**, junte temas parecidos numa linha só (ex.: `Derivadas e regra da cadeia`) e clique em **Gerar plano** de novo. Você também pode apagar feitiços com o **✕**.
 
 **O lembrete não apareceu**
 → Confira se a atividade tem **hora** e **lembrete** escolhidos. No computador e no Android pelo navegador, ative as notificações (aba **Atividades → 🔔 Ativar notificações**) e deixe o Grimório aberto. Para avisos com o app fechado, use o **app Android**.
