@@ -15,10 +15,13 @@ window.G = window.G || {};
   C.config = () => {
     let o = {};
     try { o = JSON.parse(localStorage.getItem("grimorio.cloud") || "{}"); } catch (e) { }
+    if (!C.validCustom(o.url, o.key)) o = {}; // ignora servidor personalizado inválido / ignore invalid custom server
     return { url: o.url || (G.CONFIG && G.CONFIG.supabaseUrl) || "", key: o.key || (G.CONFIG && G.CONFIG.supabaseAnonKey) || "" };
   };
+  // URL do servidor: https://algo (sem caminho, tipo https://xxxx.supabase.co); chave: texto que não é link
+  C.validCustom = (url, key) => !!url && !!key && /^https?:\/\/[^\/\s]+\/?$/i.test(url.trim()) && !/^https?:/i.test(key.trim()) && key.trim().length > 20;
   C.configured = () => { const c = C.config(); return !!(c.url && c.key); };
-  C.setCustom = (url, key) => { try { if (url && key) localStorage.setItem("grimorio.cloud", JSON.stringify({ url: url.trim(), key: key.trim() })); else localStorage.removeItem("grimorio.cloud"); } catch (e) { } };
+  C.setCustom = (url, key) => { try { if (C.validCustom(url, key)) localStorage.setItem("grimorio.cloud", JSON.stringify({ url: url.trim(), key: key.trim() })); else localStorage.removeItem("grimorio.cloud"); } catch (e) { } };
 
   function loadLib() {
     if (window.supabase && window.supabase.createClient) return Promise.resolve();

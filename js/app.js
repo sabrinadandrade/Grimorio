@@ -332,7 +332,7 @@ window.G = window.G || {};
   }
   UI.cloudChanged = () => { renderXP(); if (tab === "data" && $("#cloudWin")) $("#cloudWin").outerHTML = cloudWin(); };
   UI.cloudSignIn = async () => { const e = ($("#cEmail").value || "").trim(); if (!/.+@.+\..+/.test(e)) return; try { await G.cloud.signIn(e); G.toast(t("cloudSent")); } catch (err) { alert("⚠️ " + (err.message || err)); } };
-  UI.cloudCfg = async () => { G.cloud.setCustom($("#cUrl").value, $("#cKey").value); G.cloud.client = null; await G.cloud.init(); pData(); };
+  UI.cloudCfg = async () => { const u = $("#cUrl").value, k = $("#cKey").value; if ((u || k) && !G.cloud.validCustom(u, k)) { alert(t("cloudBadCfg")); return; } G.cloud.setCustom(u, k); G.cloud.client = null; await G.cloud.init(); pData(); };
   UI.fileOn = async () => { if (await G.safety.enableFile()) { G.toast(t("saved")); } pData(); renderXP(); };
   UI.fileResume = async () => { await G.safety.resumeFile(); pData(); renderXP(); };
   UI.fileOff = async () => { await G.safety.disableFile(); pData(); renderXP(); };

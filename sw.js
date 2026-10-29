@@ -1,6 +1,6 @@
 /* Service worker: deixa o Grimório funcionar offline quando publicado (GitHub Pages).
  * Offline support when hosted. Bump VERSION when files change. */
-const VERSION = "grimorio-v3";
+const VERSION = "grimorio-v4";
 const FILES = ["./", "index.html", "css/style.css", "js/i18n.js", "js/config.js", "js/safety.js", "js/cloud.js", "js/themes.js", "js/pets.js", "js/store.js", "js/planner.js",
   "js/connectors/registry.js", "js/connectors/generic.js", "js/connectors/estacio.js", "js/importers.js", "js/fx.js", "js/tama.js",
   "js/app.js", "examples/exemplo-estacio-ads.js", "assets/icon.svg", "assets/icon-192.png", "assets/icon-512.png", "manifest.webmanifest"];
@@ -12,7 +12,7 @@ self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
   const sameOrigin = new URL(e.request.url).origin === location.origin;
   if (!sameOrigin) return;
-  e.respondWith(fetch(e.request).then(res => {
+  e.respondWith(fetch(e.request, { cache: "no-cache" }).then(res => {
     if (res.ok) { const cp = res.clone(); caches.open(VERSION).then(c => c.put(e.request, cp)); }
     return res;
   }).catch(() => caches.match(e.request)));
