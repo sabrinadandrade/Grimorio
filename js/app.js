@@ -86,7 +86,7 @@ window.G = window.G || {};
     if (!G.state.subjects.length && !keys.length) {
       $("#panel").innerHTML = win("✦ " + t("tabs.today").toLowerCase().replace(/ /g, "_") + ".exe", `<p>${t("emptyPlan")}</p><div class="nav">
         <button class="cute" onclick="G.UI.show('subjects')">📚 ${t("goSubjects")}</button><button class="cute alt" onclick="G.UI.show('data')">🎓 ${t("goImport")}</button>
-        <button class="cute ghost" onclick="G.UI.loadExample()">✨ ${t("loadExample")}</button></div>`);
+</div>`);
       return;
     }
     const tasks = P[viewDay] || [], n = tasks.filter(x => x.done).length;
@@ -295,7 +295,7 @@ window.G = window.G || {};
       win("💾 " + (G.lang === "en" ? "files.exe" : "arquivos.exe"), `<div class="nav">
         <label class="cute alt" style="display:inline-block">${t("importFile")}<input type="file" accept=".json,.csv,.ics" style="display:none" onchange="G.UI.file(this)"></label>
         <button class="cute" onclick="G.exportJSON()">${t("exportJson")}</button><button class="cute ghost" onclick="G.download('grimorio-modelo.csv',G.csvTemplate(),'text/csv')">${t("csvTemplate")}</button>
-        <button class="cute ghost" onclick="G.UI.loadExample()">✨ ${t("loadExample")}</button><button class="cute danger" onclick="G.UI.reset()">${t("resetAll")}</button></div>
+<button class="cute danger" onclick="G.UI.reset()">${t("resetAll")}</button></div>
         <p class="small">${t("privacy")}</p>`);
     fillSnaps();
   }
@@ -376,12 +376,7 @@ window.G = window.G || {};
     try { const r = await G.readFile(f); if (r) { if (!r.full) G.buildPlan(); G.applyTheme(G.state.theme); G.toast(t("importDone", r)); G.tamaRender(); UI.refresh(); } }
     catch (e) { alert("⚠️ " + e.message); }
   };
-  UI.loadExample = () => {
-    const ex = (G.EXAMPLES || [])[0]; if (!ex) return;
-    const pack = JSON.parse(JSON.stringify(ex.pack));
-    (pack.exams || []).forEach(e => { if (e.inDays != null) e.date = G.addDays(G.todayIso(), e.inDays); });
-    const r = G.applyParsed(pack); G.buildPlan(); viewDay = null; G.toast(t("importDone", r)); G.burst(null, 120); UI.refresh(); UI.show("today");
-  };
+
   UI.reset = async () => { if (!confirm(t("resetConfirm"))) return; await G.reset(); G.applyTheme(G.state.theme); G.tamaRender(); viewDay = null; tarotFilter = null; UI.refresh(); onboarding(); };
 
   /* ================= DICAS / TIPS ================= */

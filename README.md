@@ -65,7 +65,6 @@ js/
   tama.js          bichinho virtual / timer
   fx.js            efeitos (estrelinhas, balões)
   app.js           interface
-examples/          pacotes de exemplo
 ```
 
 ## 💜 Contribuindo

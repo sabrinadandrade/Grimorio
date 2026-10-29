@@ -19,7 +19,7 @@ window.G = window.G || {};
     tamaShape: "egg",
     institution: "generic",
     pets: [
-      { id: G.uid(), name: "Nyx", gender: "f", species: "cat", base: "#2b2533", accent: "#2b2533", pattern: "none", eye: "#e6e85a", accessory: "witch" }
+      { id: G.uid(), name: "Nyx", gender: "n", species: "cat", base: "#2b2533", accent: "#2b2533", pattern: "none", eye: "#e6e85a", accessory: "witch" }
     ],
     subjects: [],
     exams: [],

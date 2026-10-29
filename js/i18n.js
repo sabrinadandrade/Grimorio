@@ -6,7 +6,7 @@ G.I18N = {
   pt: {
     langName: "Português",
     grimoire: "Grimório",
-    titleOf: "{art} {name}", // "da Sabrina"
+    titleOf: "{art} {name}", // ex.: "da Ana"
     hello_m: "Bom dia", hello_a: "Boa tarde", hello_n: "Boa noite",
     progressLine: "{done} de {total} feitiços lançados. Um de cada vez 🧡",
     level: "Nível", xp: "XP", candles: "velas acesas", toNext: "{n} XP pro próximo nível",
@@ -21,7 +21,7 @@ G.I18N = {
     focus: "🕯️ Focar", teacher_f:"professora", teacher_m:"professor", teacher_n:"mestre",
     addTask:"+ feitiço extra", taskTitle:"Título do feitiço", remove:"remover", noPlan:"Nada planejado pra esse dia. Que tal descansar ou adicionar um feitiço extra?",
     emptyPlan:"Seu grimório ainda está vazio! Cadastre matérias e provas (ou importe da sua faculdade) e eu monto o plano. ✨",
-    goSubjects:"Cadastrar matérias", goImport:"Importar da faculdade", loadExample:"Carregar exemplo",
+    goSubjects:"Cadastrar matérias", goImport:"Importar da faculdade",
     spellDone:"Feitiço lançado! +20 XP ✨", dayDone:"LUA CHEIA! 🌕 Dia completo · +30 XP",
     calHelp:"A lua de cada dia cresce conforme você cumpre as missões 🌑→🌕. Clique num dia pra abrir.",
     cards:"cartas no baralho", toReinforce:"pra reforçar", noCards:"Nenhuma carta ainda. Crie as suas aqui embaixo! 🃏",
@@ -105,7 +105,7 @@ G.I18N = {
     focus: "🕯️ Focus", teacher_f:"teacher", teacher_m:"teacher", teacher_n:"teacher",
     addTask:"+ extra spell", taskTitle:"Spell title", remove:"remove", noPlan:"Nothing planned for this day. Rest, or add an extra spell?",
     emptyPlan:"Your grimoire is still empty! Add subjects and exams (or import from your school) and I'll build the plan. ✨",
-    goSubjects:"Add subjects", goImport:"Import from school", loadExample:"Load example",
+    goSubjects:"Add subjects", goImport:"Import from school",
     spellDone:"Spell cast! +20 XP ✨", dayDone:"FULL MOON! 🌕 Day complete · +30 XP",
     calHelp:"Each day's moon grows as you complete missions 🌑→🌕. Click a day to open it.",
     cards:"cards in the deck", toReinforce:"to reinforce", noCards:"No cards yet. Create yours below! 🃏",
