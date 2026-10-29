@@ -7,6 +7,8 @@ Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho
 
 ![Grimório](docs/screenshot.png)
 
+> 📖 **Nunca usou? Comece pelo [Tutorial passo a passo para iniciantes](docs/TUTORIAL.md)**: com prints de cada tela, do primeiro acesso até usar no celular.
+
 ## ✨ O que ele faz
 
 - **Plano de estudos automático**: você cadastra matérias, temas e provas. O Grimório espalha os temas nos dias antes de cada prova e deixa a véspera para uma revisão leve.
@@ -90,5 +92,5 @@ Your pets become teachers, every task is a spell, and the focus timer is a virtu
 - **Portuguese and English**, works **offline** and can be installed as a PWA.
 - **No data loss**: data is mirrored to IndexedDB, auto-backed-up to a local file, and optionally synced to the cloud with **Supabase** (emailed one-time code login plus Row Level Security). See [docs/SUPABASE.md](docs/SUPABASE.md).
 
-To use it, open <https://sabrinadandrade.github.io/Grimorio/> or download the project and open `index.html`.
+A beginner tutorial (in Portuguese, with screenshots) is in [docs/TUTORIAL.md](docs/TUTORIAL.md). To use it, open <https://sabrinadandrade.github.io/Grimorio/> or download the project and open `index.html`.
 To contribute (connectors, pets, themes, translations), see [CONTRIBUTING.md](CONTRIBUTING.md). License: MIT.

@@ -85,7 +85,8 @@ window.G = window.G || {};
     const P = G.state.plan, keys = Object.keys(P).sort(), td = G.todayIso();
     if (!G.state.subjects.length && !keys.length) {
       $("#panel").innerHTML = win("✦ " + t("tabs.today").toLowerCase().replace(/ /g, "_") + ".exe", `<p>${t("emptyPlan")}</p><div class="nav">
-        <button class="cute" onclick="G.UI.show('subjects')">📚 ${t("goSubjects")}</button><button class="cute alt" onclick="G.UI.show('data')">🎓 ${t("goImport")}</button>
+        <a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/docs/TUTORIAL.md" target="_blank" rel="noopener">${t("tutorialBtn")}</a>
+      <button class="cute" onclick="G.UI.show('subjects')">📚 ${t("goSubjects")}</button><button class="cute alt" onclick="G.UI.show('data')">🎓 ${t("goImport")}</button>
 </div>`);
       return;
     }
@@ -396,7 +397,8 @@ window.G = window.G || {};
   }
 
   /* ================= DICAS / TIPS ================= */
-  function pTips() { $("#panel").innerHTML = win("🕯️ " + (G.lang === "en" ? "focus_tips.doc" : "dicas_de_foco.doc"), `<ul class="tip">${t("tipList").map(x => `<li>${x}</li>`).join("")}</ul>`); }
+  function pTips() { $("#panel").innerHTML = win("🕯️ " + (G.lang === "en" ? "focus_tips.doc" : "dicas_de_foco.doc"), `<ul class="tip">${t("tipList").map(x => `<li>${x}</li>`).join("")}</ul>`) +
+    win("📖 " + (G.lang === "en" ? "how_to_use.doc" : "como_usar.doc"), `<p>${t("tutorialText")}</p><div class="nav"><a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/docs/TUTORIAL.md" target="_blank" rel="noopener">${t("tutorialBtn")}</a></div>`); }
 
   /* ================= BOAS-VINDAS / ONBOARDING ================= */
   function onboarding() {
