@@ -24,3 +24,8 @@ create policy "grimoire: ler o proprio"     on public.grimoires for select using
 create policy "grimoire: criar o proprio"   on public.grimoires for insert with check (auth.uid() = user_id);
 create policy "grimoire: alterar o proprio" on public.grimoires for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "grimoire: apagar o proprio"  on public.grimoires for delete using (auth.uid() = user_id);
+
+-- Permissões da API: só quem está logado (authenticated) acessa a tabela; o RLS acima limita à própria linha.
+-- API grants: only signed-in users reach the table; RLS above limits them to their own row.
+revoke all on public.grimoires from anon;
+grant select, insert, update, delete on public.grimoires to authenticated;

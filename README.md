@@ -32,7 +32,7 @@ O Grimório é **local-first**: funciona sem internet e sem conta, e você não 
 
 ## 🚀 Como usar
 
-- **Online:** <https://sabrinadandrade.github.io/grimorio/>
+- **Online:** <https://sabrinadandrade.github.io/Grimorio/>
 - **No seu computador:** baixe o projeto (botão verde *Code → Download ZIP*), descompacte e abra o `index.html`. Não precisa instalar nada.
 
 ## 🎓 Instituições suportadas
@@ -91,5 +91,5 @@ Your pets become teachers, every task is a spell, and the focus timer is a virtu
 - **Portuguese and English**, works **offline** and can be installed as a PWA.
 - **No data loss**: data is mirrored to IndexedDB, auto-backed-up to a local file, and optionally synced to the cloud with **Supabase** (magic-link login plus Row Level Security). See [docs/SUPABASE.md](docs/SUPABASE.md).
 
-To use it, open <https://sabrinadandrade.github.io/grimorio/> or download the project and open `index.html`.
+To use it, open <https://sabrinadandrade.github.io/Grimorio/> or download the project and open `index.html`.
 To contribute (connectors, pets, themes, translations), see [CONTRIBUTING.md](CONTRIBUTING.md). License: MIT.
