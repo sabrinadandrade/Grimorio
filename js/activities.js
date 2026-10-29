@@ -50,6 +50,41 @@ window.G = window.G || {};
     return "";
   };
 
+  /* subtarefas (checklist por dia) / subtasks (per-day checklist) */
+  G.subDone = (a, iso, sid) => !!st().actDone[a.id + "|" + iso + "|" + sid];
+  G.setSubDone = (a, iso, sid, v) => { const k = a.id + "|" + iso + "|" + sid; if (v) st().actDone[k] = true; else delete st().actDone[k]; };
+  G.subProgress = (a, iso) => { const s = a.subtasks || []; return [s.filter(x => G.subDone(a, iso, x.id)).length, s.length]; };
+
+  /* sequência de dias e conquistas / streak and achievements */
+  G.doneDays = function () {
+    const days = new Set();
+    Object.keys(st().plan || {}).forEach(d => { if ((st().plan[d] || []).some(x => x.done)) days.add(d); });
+    Object.keys(st().actDone || {}).forEach(k => { const p = k.split("|"); if (p.length === 2) days.add(p[1]); });
+    return days;
+  };
+  G.streak = function () {
+    const days = G.doneDays(); let d = G.todayIso();
+    if (!days.has(d)) d = G.addDays(d, -1); // hoje ainda pode ser feito / today still counts later
+    let n = 0; while (days.has(d)) { n++; d = G.addDays(d, -1); }
+    return n;
+  };
+  G.ACH = [
+    ["first", "✨", s => G.doneDays().size >= 1],
+    ["full", "🌕", s => Object.keys(s.plan || {}).some(d => s.plan[d].length && s.plan[d].every(x => x.done)) || [...G.doneDays()].some(d => { const a = G.actsOn(d); return a.length >= 2 && a.every(x => G.actDone(x, d)); })],
+    ["s3", "🔥", () => G.streak() >= 3], ["s7", "🌟", () => G.streak() >= 7], ["s30", "👑", () => G.streak() >= 30],
+    ["candles10", "🕯️", s => (s.pomos || 0) >= 10], ["cards25", "🔮", s => ((s.stats || {}).cardsKnown || 0) >= 25],
+    ["acts5", "🗓️", s => (s.activities || []).length >= 5],
+    ["subs", "✅", s => (s.activities || []).some(a => (a.subtasks || []).length && [...G.doneDays()].some(d => { const [x, y] = G.subProgress(a, d); return y && x === y; }))],
+    ["lvl5", "⚗️", s => Math.floor((s.xp || 0) / 100) + 1 >= 5], ["petlover", "🐾", s => (s.pets || []).length >= 3],
+    ["cloud", "☁️", () => !!(G.cloud && G.cloud.user)]
+  ];
+  G.checkAchievements = function () {
+    const s = st(); s.achieved = s.achieved || {}; const fresh = [];
+    G.ACH.forEach(([k, , test]) => { try { if (!s.achieved[k] && test(s)) { s.achieved[k] = Date.now(); fresh.push(k); } } catch (e) { } });
+    if (fresh.length) { G.save(); if (G.UI && G.UI.achievementPopup) fresh.forEach((k, i) => setTimeout(() => G.UI.achievementPopup(k), 900 + i * 2600)); }
+    return fresh;
+  };
+
   /* próximas ocorrências com lembrete / upcoming reminder occurrences */
   G.upcomingReminders = function (fromMs, toMs) {
     G.actsInit();

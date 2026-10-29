@@ -196,6 +196,26 @@ details.sub .in { padding:10px 14px 14px }
 .ioshint { position:fixed; left:10px; right:10px; bottom:10px; z-index:150; animation:pop .3s; font-size:.95rem }
 .ioshint .ishare { display:inline-block; border:2px solid var(--ink); border-radius:6px; padding:0 5px; background:var(--cardAlt) }
 #tama .scr.compact #tcat svg { width:calc(40px * var(--fs)); height:calc(40px * var(--fs)) }
+/* subtarefas / subtasks */
+.subs { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:6px }
+.sub { display:flex; align-items:center; gap:6px; min-height:40px; border:2px solid var(--ink); border-radius:12px; background:var(--card); padding:4px 10px 4px 6px; font-weight:800; font-size:.88rem; touch-action:manipulation }
+.sub .box { width:24px; height:24px; border:2.5px solid var(--ink); border-radius:7px; display:grid; place-items:center; background:var(--card); font-size:.85rem }
+.sub.on { background:var(--accent) } .sub.on .box { background:var(--primary) } .sub.on { text-decoration:line-through }
+/* semana / week */
+.weekgrid { display:grid; grid-template-columns:repeat(7,1fr); gap:8px }
+.wday { border:3px solid var(--ink); border-radius:14px; background:var(--cardAlt); padding:6px; display:flex; flex-direction:column; gap:5px; min-height:160px; box-shadow:3px 3px 0 var(--ink) }
+.wday.now { background:var(--primary) } .wday.past { opacity:.65 }
+.wh { display:flex; justify-content:space-between; align-items:center; border:0; background:none; padding:2px; font-family:"VT323",monospace; font-size:1.2rem; min-height:36px }
+.wi { text-align:left; border:2px solid var(--ink); border-left:7px solid var(--accent2); border-radius:9px; background:var(--card); padding:5px 7px; font-size:.8rem; font-weight:800; min-height:36px; touch-action:manipulation }
+.wi.done { text-decoration:line-through; opacity:.6 } .wi.exam { border-left-color:#ff6b6b; background:#fff0f0 } .wi.spells { border-left-color:var(--accent2) }
+.wadd { margin-top:auto; border:2px dashed var(--ink); border-radius:9px; background:transparent; min-height:36px; font-weight:900; font-size:1.1rem }
+@media (max-width:900px) { .weekgrid { grid-template-columns:1fr } .wday { min-height:0 } }
+/* conquistas / achievements */
+.streakbig { font-size:1.4rem; text-align:center; margin:4px 0 14px } .streakbig b { font-size:2.4rem; font-family:"Mochiy Pop One",cursive; color:var(--primary2) }
+.trophs { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px }
+.troph { display:flex; gap:10px; align-items:center; border:3px solid var(--ink); border-radius:16px; padding:8px 12px; background:var(--card); opacity:.55; filter:grayscale(.6) }
+.troph.got { opacity:1; filter:none; background:var(--cardAlt); box-shadow:3px 3px 0 var(--ink) }
+.troph .lock { font-size:2rem; width:56px; text-align:center }
 /* menos animações / less motion */
 body.calm .marq span, body.calm .bob { animation:none } body.calm .inner { transition:none } body.calm .trail { display:none }
 @media (max-width:600px) {

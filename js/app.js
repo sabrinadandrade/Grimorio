@@ -41,6 +41,7 @@ window.G = window.G || {};
       setTimeout(() => { if (b.isConnected) b.firstElementChild.outerHTML = G.petSVG(p, 70); }, 1500);
     });
     renderXP(); renderCountdowns();
+    if (G.checkAchievements && G.state.onboarded) G.checkAchievements();
   }
   function renderXP() {
     const lv = Math.floor(G.state.xp / 100) + 1, rest = G.state.xp % 100, L = t("levels");
@@ -48,6 +49,7 @@ window.G = window.G || {};
     $("#xpbox").innerHTML = `<div><b>${t("level")} ${lv} · ${L[Math.min(lv - 1, L.length - 1)]}</b> · ${G.state.xp} ${t("xp")} · 🕯️ ${G.state.pomos} ${t("candles")}</div>
       <div class="xpbar"><div class="xpfill" style="width:${rest}%"></div></div><div class="small" style="color:var(--onBg)">${t("toNext", { n: 100 - rest })}</div>
       <div style="margin-top:4px">${t("moonOfTerm")}: ${moonOf(f)} ${Math.round(f * 100)}% ${t("ofSpells")}</div>
+      <div style="margin-top:4px">🔥 <b>${(() => { const n = G.streak ? G.streak() : 0; return n === 0 ? t("streak0") : n === 1 ? t("streak1") : t("streak", { n }); })()}</b> · <a href="#" style="color:var(--primary)" onclick="G.UI.show('trophies');return false">🏆 ${Object.keys(G.state.achieved || {}).length}/${(G.ACH || []).length}</a></div>
       <div style="margin-top:4px"><button class="cute ghost" style="padding:2px 10px;font-size:.78rem" onclick="G.UI.show('data')">${G.cloud && G.cloud.user ? t("badgeCloud") : G.safety && G.safety.fileStatus === "on" ? t("badgeFile") : t("badgeLocal")}</button></div>`;
   }
   function renderCountdowns() {
@@ -64,7 +66,7 @@ window.G = window.G || {};
   }
 
   /* ================= ABAS / TABS ================= */
-  const TABS = ["today", "acts", "cal", "tarot", "notes", "subjects", "pets", "look", "data", "tips"];
+  const TABS = ["today", "acts", "week", "cal", "tarot", "notes", "subjects", "pets", "trophies", "look", "data", "tips"];
   function renderTabs() {
     const pets = G.state.pets;
     $("#tabs").innerHTML = TABS.map((k, i) => {
@@ -79,7 +81,7 @@ window.G = window.G || {};
   UI.menu = open => { $("#tabs").classList.toggle("open", open); $("#menuBtn").classList.toggle("open", open); $("#menuBtn").setAttribute("aria-expanded", open ? "true" : "false"); };
   UI.show = k => { tab = k; renderTabs(); renderPanel(); const top = Math.min($("#tabs").offsetTop, $("#menuBtn").offsetTop || 1e9); window.scrollTo({ top: Math.max(0, top - 10), behavior: G.state.a11y && G.state.a11y.lessMotion ? "auto" : "smooth" }); };
   function renderPanel() {
-    const P = { today: pToday, acts: pActs, cal: pCal, tarot: pTarot, notes: pNotes, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
+    const P = { today: pToday, acts: pActs, week: pWeek, trophies: pTrophies, cal: pCal, tarot: pTarot, notes: pNotes, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
     $("#panel").innerHTML = ""; $("#panel").className = "panel on"; P[tab]();
   }
   UI.refresh = () => { if (G.state.onboarded) document.querySelectorAll(".modal").forEach(m => m.remove()); renderHeader(); renderTabs(); renderPanel(); G.tamaRedraw && G.tamaRedraw(); };
@@ -130,7 +132,8 @@ window.G = window.G || {};
       <button class="check" title="✔" onclick="G.UI.actToggle('${a.id}','${iso}',this)">${d && p ? G.petSVG(p, 50, "happy") : pawSVG()}</button>
       <div class="t"><strong>${ar.emoji} ${esc(a.title)}</strong>
         <div class="meta"><span class="prio" style="background:${pr.color}">${pr.emoji} ${esc(G.prioName(a.priority))}</span>${meta ? `<span class="small">${meta}</span>` : ""}</div>
-        ${a.notes ? `<span>${esc(a.notes)}</span>` : ""}</div>
+        ${a.notes ? `<span>${esc(a.notes)}</span>` : ""}
+        ${(a.subtasks || []).length ? `<div class="subs">${a.subtasks.map(s => { const sd = G.subDone(a, iso, s.id); return `<button class="sub ${sd ? "on" : ""}" onclick="G.UI.subToggle('${a.id}','${iso}','${s.id}',this)"><span class="box">${sd ? "✔" : ""}</span>${esc(s.text)}</button>`; }).join("")}<span class="small">${G.subProgress(a, iso).join("/")}</span></div>` : ""}</div>
       <button class="cute ghost iconbtn" title="${t("editAct")}" onclick="G.UI.editAct('${a.id}')">✎</button></div>`;
   }
   function taskHTML(x) {
@@ -145,11 +148,22 @@ window.G = window.G || {};
   const pawSVG = () => `<svg width="30" height="30" viewBox="0 0 40 40"><g fill="var(--accent2)" stroke="var(--ink)" stroke-width="2"><ellipse cx="20" cy="26" rx="9" ry="7.5"/><circle cx="9" cy="16" r="4"/><circle cx="16" cy="9" r="4"/><circle cx="24" cy="9" r="4"/><circle cx="31" cy="16" r="4"/></g></svg>`;
   const findTask = id => { for (const d in G.state.plan) { const x = G.state.plan[d].find(y => y.id === id); if (x) return [d, x]; } return []; };
   UI.go = d => { viewDay = G.addDays(viewDay || G.todayIso(), d); pToday(); };
+  UI.subToggle = (id, iso, sid, el) => {
+    const a = G.state.activities.find(x => x.id === id); if (!a) return;
+    const v = !G.subDone(a, iso, sid); G.setSubDone(a, iso, sid, v);
+    const [x, y] = G.subProgress(a, iso);
+    if (v && x === y && !G.actDone(a, iso)) { G.save(); return UI.actToggle(id, iso, el); }
+    if (!v && G.actDone(a, iso)) G.setActDone(a, iso, false);
+    G.save(); if (v) G.burst(el, 12);
+    if (tab === "today") pToday(); else if (tab === "week") pWeek(); renderHeader();
+  };
   UI.actToggle = (id, iso, el) => {
     const a = G.state.activities.find(x => x.id === id); if (!a) return;
     const v = !G.actDone(a, iso); G.setActDone(a, iso, v); G.save();
     if (v) { G.addXP(15); G.burst(el); G.toast(t("actDone")); }
-    if (tab === "today") pToday(); else if (tab === "acts") pActs(); renderHeader();
+    if (v && (a.subtasks || []).length) (a.subtasks || []).forEach(s => G.setSubDone(a, iso, s.id, true));
+    if (v) G.save();
+    if (tab === "today") pToday(); else if (tab === "acts") pActs(); else if (tab === "week") pWeek(); renderHeader();
     if (v) setTimeout(() => { const c = document.querySelector(`[onclick*="${id}','${iso}"]`); c && G.bubble(c, G.phrase()); }, 120);
   };
   UI.goto = d => { viewDay = d; if (tab !== "today") UI.show("today"); else pToday(); };
@@ -218,6 +232,7 @@ window.G = window.G || {};
         <label class="f">${t("time")}<input type="time" id="aTime" value="${esc(a.time || "")}"></label></div>
       <div class="row2"><label class="f">🔔 ${t("remind")}<select id="aRem">${G.REMIND_OPTS.map(v => `<option value="${v}" ${+a.remind === v ? "selected" : ""}>${remLbl(v)}</option>`).join("")}</select></label>
         <label class="f">🐾 ${t("petRemind")}<select id="aPet"><option value="">${t("randomPet")}</option>${G.state.pets.map(p => `<option value="${p.id}" ${a.petId === p.id ? "selected" : ""}>${esc(p.name)}</option>`).join("")}</select></label></div>
+      <label class="f">✅ ${t("subtasks")}<textarea id="aSubs" style="min-height:70px" placeholder="${t("subPlaceholder")}">${esc((a.subtasks || []).map(s => s.text).join("\n"))}</textarea></label>
       <label class="f">${t("actNotes")}<textarea id="aNotes" style="min-height:60px">${esc(a.notes || "")}</textarea></label>
       <div class="nav" style="margin-top:12px"><button class="cute big-cta" id="aSave">${t("saveAct")}</button><button class="cute ghost" id="aCancel">${t("cancel")}</button>${id ? `<button class="cute danger" id="aDel">${t("del")}</button>` : ""}</div>`);
     document.body.appendChild(m);
@@ -232,6 +247,8 @@ window.G = window.G || {};
     q("#aSave").onclick = () => {
       a.title = q("#aTitle").value.trim(); if (!a.title) { G.toast(t("needTitle")); q("#aTitle").focus(); return; }
       a.date = q("#aDate").value || G.todayIso(); a.time = q("#aTime").value; a.remind = +q("#aRem").value; a.petId = q("#aPet").value; a.notes = q("#aNotes").value.trim();
+      const oldSubs = a.subtasks || [];
+      a.subtasks = q("#aSubs").value.split("\n").map(s => s.trim()).filter(Boolean).slice(0, 30).map(text => { const o = oldSubs.find(x => x.text === text); return { id: o ? o.id : G.uid(), text }; });
       if (a.repeat === "weekly" && !a.days.length) a.repeat = "none";
       if (!id) { a.id = G.uid(); a.createdAt = Date.now(); G.state.activities.push(a); }
       else { const i = G.state.activities.findIndex(x => x.id === id); G.state.activities[i] = a; Object.keys(G.state.remFired).forEach(k => { if (k.startsWith(id + "|")) delete G.state.remFired[k]; }); }
@@ -257,6 +274,43 @@ window.G = window.G || {};
       if (r === "snooze") G.reminders.snooze(o, 10);
       el.remove();
     });
+  };
+
+  /* ================= SEMANA / WEEK ================= */
+  let weekStart = null;
+  const mondayOf = iso => { const d = G.dow(iso); return G.addDays(iso, d === 0 ? -6 : 1 - d); };
+  function pWeek() {
+    const td = G.todayIso(); if (!weekStart) weekStart = mondayOf(td);
+    const days = [...Array(7)].map((_, i) => G.addDays(weekStart, i));
+    const cols = days.map(d => {
+      const acts = G.actsOn(d), spells = (G.state.plan[d] || []), exams = G.state.exams.filter(e => e.date === d);
+      const done = acts.filter(a => G.actDone(a, d)).length + spells.filter(x => x.done).length, tot = acts.length + spells.length;
+      return `<div class="wday ${d === td ? "now" : ""} ${d < td ? "past" : ""}"><button class="wh" onclick="G.UI.goto('${d}')"><b>${fmt(d)}</b><span>${tot ? moonOf(done / tot) : "·"}</span></button>
+        ${exams.map(e => { const s = G.subj(e.subjectId); return `<div class="wi exam">📝 ${esc(e.time)} ${esc(s ? s.short || s.name : "")}</div>`; }).join("")}
+        ${acts.map(a => `<button class="wi ${G.actDone(a, d) ? "done" : ""}" style="border-left-color:${(G.AREAS[a.area] || G.AREAS.daily).color}" onclick="G.UI.actToggle('${a.id}','${d}',this)">${(G.PRIORITIES[a.priority] || G.PRIORITIES.mid).emoji} ${a.time ? esc(a.time) + " " : ""}${esc(a.title)}</button>`).join("")}
+        ${spells.length ? `<button class="wi spells" onclick="G.UI.goto('${d}')">📚 ${t("spellsN", { n: spells.length })} · ${spells.filter(x => x.done).length}/${spells.length}</button>` : ""}
+        ${!acts.length && !spells.length && !exams.length ? `<div class="small" style="padding:4px 2px">${t("nothing")}</div>` : ""}
+        <button class="wadd" onclick="G.UI.newAct('${d}')">+</button></div>`;
+    }).join("");
+    $("#panel").innerHTML = win("📆 " + (G.lang === "en" ? "week.exe" : "semana.exe"), `<div class="nav"><button class="cute" onclick="G.UI.week(-7)">${t("prevWeek")}</button><button class="cute" onclick="G.UI.week(0)">${t("thisWeek")}</button><button class="cute" onclick="G.UI.week(7)">${t("nextWeek")}</button></div>
+      <h3>${t("weekOf", { d: fmt(weekStart) })}</h3><div class="weekgrid">${cols}</div>`);
+  }
+  UI.week = n => { weekStart = n === 0 ? mondayOf(G.todayIso()) : G.addDays(weekStart || mondayOf(G.todayIso()), n); pWeek(); };
+
+  /* ================= CONQUISTAS / ACHIEVEMENTS ================= */
+  function pTrophies() {
+    const A = G.state.achieved || {}, names = t("ach");
+    const n = G.streak(), pets = G.state.pets;
+    const items = G.ACH.map(([k, em], i) => { const got = A[k], p = pets[i % Math.max(1, pets.length)]; return `<div class="troph ${got ? "got" : ""}">${got && p ? G.petSVG(p, 56, "happy", "crown") : `<span class="lock">🔒</span>`}<div><b>${em} ${esc(names[k][0])}</b><div class="small">${esc(names[k][1])}</div>${got ? `<div class="small">✔ ${new Date(got).toLocaleDateString(G.lang === "en" ? "en-US" : "pt-BR")}</div>` : `<div class="small">${t("locked")}</div>`}</div></div>`; }).join("");
+    $("#panel").innerHTML = win("🏆 " + (G.lang === "en" ? "achievements.exe" : "conquistas.exe"), `<div class="streakbig">🔥 <b>${n}</b> <span>${n === 1 ? t("streak1").replace(/^1 /, "") : t("streak", { n: "" }).trim()}</span></div><div class="trophs">${items}</div>`);
+  }
+  UI.achievementPopup = k => {
+    const nm = t("ach")[k]; if (!nm) return; const em = (G.ACH.find(x => x[0] === k) || [])[1] || "🏆";
+    const pet = G.rnd(G.state.pets);
+    const el = document.createElement("div"); el.className = "rempop";
+    el.innerHTML = `<div class="rempet bob">${pet ? G.petSVG(pet, 110, "happy", "crown") : ""}</div><div class="win" style="margin:0;flex:1"><div class="bar">🏆 ${t("unlocked")}<span class="dots"><i></i><i></i><i></i></span></div><div class="wbody"><div style="font-size:1.2rem;font-weight:900">${em} ${esc(nm[0])}</div><p style="margin:6px 0">${esc(nm[1])}</p><div class="nav"><button class="cute">✨ OK</button></div></div></div>`;
+    document.body.appendChild(el); G.burst(el, 120);
+    el.querySelector("button").onclick = () => el.remove(); setTimeout(() => el.isConnected && el.remove(), 9000);
   };
 
   /* ================= CALENDÁRIO / CALENDAR ================= */
@@ -308,7 +362,7 @@ window.G = window.G || {};
     }, 220);
     $("#fcount").textContent = `${pool.length} ${t("cards")} · ${pool.filter(x => x.miss > 0).length} ${t("toReinforce")}`;
   };
-  UI.knew = el => { if (!curCard) return; curCard.miss = Math.max(0, (curCard.miss || 0) - 1); G.addXP(5); G.burst(el, 30); UI.nextCard(); };
+  UI.knew = el => { if (!curCard) return; G.state.stats = G.state.stats || {}; G.state.stats.cardsKnown = (G.state.stats.cardsKnown || 0) + 1; curCard.miss = Math.max(0, (curCard.miss || 0) - 1); G.addXP(5); G.burst(el, 30); UI.nextCard(); };
   UI.forgot = () => { if (!curCard) return; curCard.miss = (curCard.miss || 0) + 1; G.save(); G.toast(t("forgotToast")); UI.nextCard(); };
   UI.addCard = () => { if (G.addCard($("#cSub").value, $("#cQ").value, $("#cA").value)) { G.save(); tarotFilter = null; pTarot(); G.toast(t("saved")); } };
   UI.addBulk = () => { const sid = $("#cSub").value; let n = 0; $("#cBulk").value.split("\n").forEach(l => { const [q, a] = l.split(";;"); if (G.addCard(sid, (q || "").trim(), (a || "").trim())) n++; }); G.save(); tarotFilter = null; pTarot(); G.toast("+" + n + " 🃏"); };

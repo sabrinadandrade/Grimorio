@@ -246,6 +246,15 @@ Na aba **Atividades** você vê **todas**, filtra por área (os botões colorido
 
 ![Lista de atividades](img/26-atividades.png)
 
+### ✅ Subtarefas (checklist)
+No campo **Subtarefas**, escreva uma por linha (ex.: *Banheiro · Cozinha · Quarto*). Na aba **Hoje**, cada uma vira um quadradinho para marcar. Quando você marca **todas**, a atividade fica feita sozinha. ✨
+
+### 📆 Semana
+A aba **Semana** mostra os 7 dias (de segunda a domingo), com atividades, provas e feitiços de estudo. Toque numa atividade para marcar como feita, no **+** para criar uma nova naquele dia, ou no nome do dia para abrir o dia completo. Use **◀ semana / semana ▶** para navegar.
+
+### 🔥 Sequência e 🏆 Conquistas
+Cada dia em que você faz **pelo menos uma coisa** conta na sua **sequência** (aparece no topo: "🔥 3 dias seguidos"). Na aba **Conquistas**, seus pets ganham coroa quando você desbloqueia algo: primeiro feitiço, lua cheia, 7 dias seguidos, 10 velas de foco, 25 cartas do tarot e outras.
+
 ---
 
 ## 7.2 Lembretes com seu pet e notificações
