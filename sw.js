@@ -1,6 +1,6 @@
 /* Service worker: deixa o Grimório funcionar offline quando publicado (GitHub Pages).
  * Offline support when hosted. Bump VERSION when files change. */
-const VERSION = "grimorio-v18";
+const VERSION = "grimorio-v19";
 const FILES = ["./", "index.html", "css/style.css", "js/i18n.js", "js/safety.js", "js/vault.js",  "js/themes.js", "js/pets.js", "js/store.js", "js/planner.js", "js/activities.js",
   "js/connectors/registry.js", "js/connectors/generic.js", "js/connectors/estacio.js", "js/importers.js", "js/fx.js", "js/tama.js",
   "js/app.js", "assets/icon.svg", "assets/icon-192.png", "assets/icon-512.png", "manifest.webmanifest"];

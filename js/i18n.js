@@ -106,6 +106,7 @@ G.I18N = {
     
     
     
+    minimize:"Minimizar", expand:"Abrir", examsShort:"Provas", inDays:"{n} dias", tamaMin:"Minimizar o bichinho", tamaOpen:"Abrir o bichinho",
     moveTitle:"Passar para outro aparelho", localOnly:"🔒 <b>Seus dados ficam só neste aparelho.</b> O Grimório não tem servidor nem banco de dados: nada sai daqui sem você mandar.", move1:"Aqui, toque em <b>🔐 Exportar backup criptografado</b> e crie uma senha.", move2:"Leve o arquivo <b>.grimorio</b> para o outro aparelho (AirDrop, cabo, pendrive…). Mesmo que passe por algum app, ele está trancado.", move3:"No outro aparelho, abra o Grimório → <b>📂 Importar arquivo</b> → escolha o arquivo e digite a senha.",
     vaultTitle:"Backup trancado com senha", vaultPass:"Senha (mínimo 8 caracteres)", vaultPass2:"Repita a senha", vaultOk:"🔐 Confirmar", vaultShort:"A senha precisa ter pelo menos 8 caracteres.", vaultMismatch:"As duas senhas não são iguais.", vaultWrong:"Senha errada. Tente de novo 💜",
     vaultWarn:"⚠️ Anote essa senha num lugar seguro. Se você esquecer, ninguém consegue abrir esse arquivo (nem a gente).",
@@ -221,6 +222,7 @@ G.I18N = {
     
     
     
+    minimize:"Minimize", expand:"Open", examsShort:"Exams", inDays:"{n} days", tamaMin:"Minimize the pet", tamaOpen:"Open the pet",
     moveTitle:"Move to another device", localOnly:"🔒 <b>Your data stays only on this device.</b> The Grimoire has no server or database: nothing leaves unless you send it.", move1:"Here, tap <b>🔐 Export encrypted backup</b> and create a passphrase.", move2:"Take the <b>.grimorio</b> file to the other device (AirDrop, cable, USB drive…). Even if it passes through an app, it stays locked.", move3:"On the other device, open the Grimoire → <b>📂 Import file</b> → pick the file and type the passphrase.",
     vaultTitle:"Passphrase-locked backup", vaultPass:"Passphrase (at least 8 characters)", vaultPass2:"Repeat the passphrase", vaultOk:"🔐 Confirm", vaultShort:"The passphrase needs at least 8 characters.", vaultMismatch:"The two passphrases don\u0027t match.", vaultWrong:"Wrong passphrase. Try again 💜",
     vaultWarn:"⚠️ Write this passphrase down somewhere safe. If you forget it, nobody can open that file (not even us).",

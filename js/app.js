@@ -4,13 +4,24 @@ window.G = window.G || {};
   const $ = s => document.querySelector(s);
   const t = (k, v) => G.t(k, v);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const win = (title, body, id) => `<div class="win"${id ? ` id="${id}"` : ""}><div class="bar">${title}<span class="dots"><i></i><i></i><i></i></span></div><div class="wbody">${body}</div></div>`;
+  /* janela com botão de minimizar (lembra o estado) / window with a remembered minimize button */
+  const minKey = (title, id) => id || String(title).replace(/<[^>]*>/g, "").replace(/[^\p{L}\p{N}._]+/gu, "_").replace(/^_+|_+$/g, "").slice(0, 40);
+  const isMin = k => !!(((G.state.ui || {}).min || {})[k]);
+  const win = (title, body, id) => { const k = minKey(title, id); return `<div class="win${isMin(k) ? " min" : ""}"${id ? ` id="${id}"` : ""} data-mk="${esc(k)}"><div class="bar">${title}<span class="dots"><button class="minbtn" type="button" aria-label="${t("minimize")}" title="${t("minimize")}" aria-expanded="${!isMin(k)}"><svg viewBox="0 0 12 12" aria-hidden="true"><path class="h" d="M2 6h8"/><path class="v" d="M6 2v8"/></svg></button><i></i><i></i></span></div><div class="wbody">${body}</div></div>`; };
   const DOW = { pt: ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"], en: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] };
   const fmt = s => { const d = new Date(s + "T12:00"); return DOW[G.lang][d.getDay()] + " " + (G.lang === "en" ? G.pad2(d.getMonth() + 1) + "/" + G.pad2(d.getDate()) : G.pad2(d.getDate()) + "/" + G.pad2(d.getMonth() + 1)); };
   const MOON = ["🌑", "🌒", "🌓", "🌔", "🌕"];
   const moonOf = f => MOON[Math.max(0, Math.min(4, Math.round(f * 4)))];
   let tab = "today", viewDay = null, tarotFilter = null, curCard = null, lastParsed = null, saveTimer = null;
   const UI = G.UI = {};
+  UI.boxMin = k => { UI.toggleMin(k); renderXP(); renderCountdowns(); };
+  UI.toggleMin = (k, el) => {
+    G.state.ui = G.state.ui || {}; G.state.ui.min = G.state.ui.min || {};
+    const on = !G.state.ui.min[k]; if (on) G.state.ui.min[k] = 1; else delete G.state.ui.min[k];
+    G.save({ keepTime: true });
+    if (el) { el.classList.toggle("min", on); const b = el.querySelector(".minbtn"); b && b.setAttribute("aria-expanded", String(!on)); }
+    return on;
+  };
 
   G.ownerTitle = () => {
     const n = G.state.owner.name.trim(); if (!n) return t("grimoire");
@@ -46,7 +57,10 @@ window.G = window.G || {};
   function renderXP() {
     const lv = Math.floor(G.state.xp / 100) + 1, rest = G.state.xp % 100, L = t("levels");
     const all = allTasks(), f = all.length ? all.filter(x => x.done).length / all.length : 0;
-    $("#xpbox").innerHTML = `<div><b>${t("level")} ${lv} · ${L[Math.min(lv - 1, L.length - 1)]}</b> · ${G.state.xp} ${t("xp")} · 🕯️ ${G.state.pomos} ${t("candles")}</div>
+    const xpMin = isMin("xpbox"); $("#xpbox").classList.toggle("min", xpMin);
+    const xpBtn = `<button class="minbtn boxmin" type="button" onclick="G.UI.boxMin('xpbox')" aria-label="${xpMin ? t("expand") : t("minimize")}" title="${xpMin ? t("expand") : t("minimize")}"><svg viewBox="0 0 12 12" aria-hidden="true"><path class="h" d="M2 6h8"/><path class="v" d="M6 2v8"/></svg></button>`;
+    if (xpMin) { $("#xpbox").innerHTML = xpBtn + `<div><b>${t("level")} ${lv}</b> · ${G.state.xp} ${t("xp")} · 🔥 ${G.streak ? G.streak() : 0} · 🏆 ${Object.keys(G.state.achieved || {}).length}</div>`; return; }
+    $("#xpbox").innerHTML = xpBtn + `<div><b>${t("level")} ${lv} · ${L[Math.min(lv - 1, L.length - 1)]}</b> · ${G.state.xp} ${t("xp")} · 🕯️ ${G.state.pomos} ${t("candles")}</div>
       <div class="xpbar"><div class="xpfill" style="width:${rest}%"></div></div><div class="small" style="color:var(--onBg)">${t("toNext", { n: 100 - rest })}</div>
       <div style="margin-top:4px">${t("moonOfTerm")}: ${moonOf(f)} ${Math.round(f * 100)}% ${t("ofSpells")}</div>
       <div style="margin-top:4px">🔥 <b>${(() => { const n = G.streak ? G.streak() : 0; return n === 0 ? t("streak0") : n === 1 ? t("streak1") : t("streak", { n }); })()}</b> · <a href="#" style="color:var(--primary)" onclick="G.UI.show('trophies');return false">🏆 ${Object.keys(G.state.achieved || {}).length}/${(G.ACH || []).length}</a></div>
@@ -56,7 +70,10 @@ window.G = window.G || {};
     const today = G.todayIso();
     const dates = [...new Set(G.state.exams.filter(e => e.date >= today).map(e => e.date))].sort().slice(0, 3);
     const grads = ["linear-gradient(135deg,var(--primary),var(--accent2))", "linear-gradient(135deg,var(--accent2),var(--accent))", "linear-gradient(135deg,var(--accent),var(--primary))"];
-    $("#countdowns").innerHTML = dates.map((d, i) => {
+    if (dates.length && isMin("countdowns")) {
+      $("#countdowns").innerHTML = `<button class="cdmini" type="button" onclick="G.UI.boxMin('countdowns')" aria-label="${t("expand")}">📝 <b>${t("examsShort")}:</b> ${dates.map(d => { const n = Math.round((new Date(d + "T12:00") - new Date(today + "T12:00")) / 864e5); return n > 1 ? t("inDays", { n }) : n === 1 ? t("tomorrow") : t("todayExam"); }).join(" · ")} <span>▸</span></button>`; return;
+    }
+    $("#countdowns").innerHTML = (dates.length ? `<button class="minbtn boxmin cdmin" type="button" onclick="G.UI.boxMin('countdowns')" aria-label="${t("minimize")}" title="${t("minimize")}"><svg viewBox="0 0 12 12" aria-hidden="true"><path class="h" d="M2 6h8"/><path class="v" d="M6 2v8"/></svg></button>` : "") + dates.map((d, i) => {
       const diff = Math.round((new Date(d + "T12:00") - new Date(today + "T12:00")) / 864e5);
       const items = G.state.exams.filter(e => e.date === d).sort((a, b) => a.time.localeCompare(b.time));
       const txt = diff > 1 ? t("daysToExam") : diff === 1 ? t("tomorrow") : t("todayExam");
@@ -240,7 +257,7 @@ window.G = window.G || {};
         <label class="f">🐾 ${t("petRemind")}<select id="aPet"><option value="">${t("randomPet")}</option>${G.state.pets.map(p => `<option value="${p.id}" ${a.petId === p.id ? "selected" : ""}>${esc(p.name)}</option>`).join("")}</select></label></div>
       <label class="f">✅ ${t("subtasks")}<textarea id="aSubs" style="min-height:70px" placeholder="${t("subPlaceholder")}">${esc((a.subtasks || []).map(s => s.text).join("\n"))}</textarea></label>
       <label class="f">${t("actNotes")}<textarea id="aNotes" style="min-height:60px">${esc(a.notes || "")}</textarea></label>
-      <div class="nav" style="margin-top:12px"><button class="cute big-cta" id="aSave">${t("saveAct")}</button><button class="cute ghost" id="aCancel">${t("cancel")}</button>${id ? `<button class="cute danger" id="aDel">${t("del")}</button>` : ""}</div>`);
+      <div class="nav actions"><button class="cute big-cta" id="aSave">${t("saveAct")}</button><button class="cute ghost" id="aCancel">${t("cancel")}</button>${id ? `<button class="cute danger" id="aDel">${t("del")}</button>` : ""}</div>`);
     document.body.appendChild(m);
     const q = s => m.querySelector(s);
     const pick = (sel, attr, set) => m.querySelectorAll(sel).forEach(b => b.onclick = () => { m.querySelectorAll(sel).forEach(x => x.classList.remove("on")); b.classList.add("on"); set(b.dataset[attr]); });
@@ -586,7 +603,7 @@ window.G = window.G || {};
       <div class="row2"><label class="f">${t("yourName")}<input type="text" id="obName"></label>
       ${pronSelect("obPron")}
       <label class="f">${t("language")}<select id="obLang">${Object.keys(G.I18N).map(l => `<option value="${l}" ${l === G.lang ? "selected" : ""}>${G.I18N[l].langName}</option>`).join("")}</select></label></div>
-      <div class="nav" style="justify-content:center;margin-top:10px"><button class="cute" id="obGo">${t("start")}</button><button class="cute ghost" id="obSkip">${t("skip")}</button></div>`);
+      <div class="nav actions" style="justify-content:center"><button class="cute" id="obGo">${t("start")}</button><button class="cute ghost" id="obSkip">${t("skip")}</button></div>`);
     document.body.appendChild(m);
     const done = () => { G.state.onboarded = true; G.save(); m.remove(); UI.refresh(); marquee(); };
     m.querySelector("#obLang").onchange = e => { G.state.lang = G.lang = e.target.value; G.save(); m.remove(); onboarding(); };
@@ -621,9 +638,25 @@ window.G = window.G || {};
     G.applyA11y(); G.fxInit(); marquee(); G.tamaRender(); UI.refresh();
     document.addEventListener("click", e => { if ($("#tabs").classList.contains("open") && !e.target.closest("#tabs,#menuBtn")) UI.menu(false); });
     document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#tabs").classList.contains("open")) UI.menu(false); });
-    // arrastar para a esquerda fecha a gaveta / swipe left closes the drawer
-    let sx = null; $("#tabs").addEventListener("touchstart", e => { sx = e.touches[0].clientX; }, { passive: true });
-    $("#tabs").addEventListener("touchend", e => { if (sx != null && sx - e.changedTouches[0].clientX > 60) UI.menu(false); sx = null; }, { passive: true });
+    // minimizar janelas (clique no botão, ou na barra quando já está minimizada)
+    document.addEventListener("click", e => {
+      const b = e.target.closest(".win > .bar .minbtn") || (e.target.closest(".win.min > .bar") && !e.target.closest(".modal") ? e.target.closest(".win.min > .bar") : null);
+      if (!b) return; const w = b.closest(".win"); if (!w || !w.dataset.mk || w.closest(".modal")) return;
+      e.preventDefault(); UI.toggleMin(w.dataset.mk, w);
+    });
+    // gaveta: arrastar da borda esquerda abre, arrastar para a esquerda fecha / drawer swipe gestures
+    const mobile = () => matchMedia("(max-width:900px)").matches;
+    let sw = null;
+    document.addEventListener("touchstart", e => {
+      if (!mobile() || e.touches.length !== 1) return;
+      const x = e.touches[0].clientX, y = e.touches[0].clientY, open = $("#tabs").classList.contains("open");
+      sw = (open || x <= 28) ? { x, y, open } : null;
+    }, { passive: true });
+    document.addEventListener("touchend", e => {
+      if (!sw) return; const dx = e.changedTouches[0].clientX - sw.x, dy = e.changedTouches[0].clientY - sw.y; const s = sw; sw = null;
+      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      if (!s.open && dx > 0) UI.menu(true); else if (s.open && dx < 0) UI.menu(false);
+    }, { passive: true });
     // proteção: recupera do IndexedDB se o localStorage foi limpo / recover from IndexedDB if needed
     if (await G.safety.recover()) { G.applyTheme(G.state.theme); G.tamaRender(); UI.refresh(); G.toast(t("recovered")); }
     else G.safety.mirror();

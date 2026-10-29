@@ -25,12 +25,21 @@ window.G = window.G || {};
     const pct = (v, t) => (v / t * 100) + "%";
     const craters = sh.craters ? `<g fill="var(--primary2)" opacity=".55"><circle cx="150" cy="70" r="12"/><circle cx="166" cy="120" r="7"/><circle cx="40" cy="170" r="9"/><circle cx="150" cy="178" r="6"/></g>` : "";
     const band = G.state.tamaShape === "hat" ? `<path d="M40 196 Q100 182 166 196 L170 212 Q100 198 34 212 Z" fill="var(--accent2)" stroke="var(--ink)" stroke-width="3"/>` : "";
+    el.classList.toggle("mini", !!G.state.tamaMin);
+    if (G.state.tamaMin) { // minimizado: só uma bolinha com o pet (e o tempo, se estiver contando)
+      el.style.aspectRatio = ""; el.style.width = "";
+      el.innerHTML = `<button class="tmini" id="tmini" aria-label="${G.t("tamaOpen")}" title="${G.t("tamaOpen")}"><span id="tcat"></span><span class="tmt" id="tm"></span></button>`;
+      $("#tmini").onclick = () => G.tamaMinToggle();
+      if (!left) left = modes()[mode][0] * 60;
+      draw(); return;
+    }
     el.style.aspectRatio = W + "/" + H;
     el.innerHTML = `<svg class="shell" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><defs><radialGradient id="tg" cx="35%" cy="28%" r="80%"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".45" stop-color="var(--primary)" stop-opacity="1"/><stop offset="1" stop-color="var(--primary2)"/></radialGradient></defs>
       <path d="${sh.path}" fill="url(#tg)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round" fill-rule="nonzero"/>${craters}${band}</svg>
       ${sh.deco ? `<span class="chain">${sh.deco}</span>` : ""}
       <button class="tsz tminus" id="tminus" title="${G.t("tamaSmaller")}" aria-label="${G.t("tamaSmaller")}">−</button>
       <button class="tsz tplus" id="tplus" title="${G.t("tamaBigger")}" aria-label="${G.t("tamaBigger")}">+</button>
+      <button class="tsz tmin" id="tmin" title="${G.t("tamaMin")}" aria-label="${G.t("tamaMin")}">▾</button>
       <div class="scr ${sh.compact ? "compact" : ""}" style="left:${pct(sh.scr[0], W)};top:${pct(sh.scr[1], H)};width:${pct(sh.scr[2], W)};height:${pct(sh.scr[3], H)}">
         <div id="tcat"></div><div class="md" id="tmode"></div><div class="tm" id="tm"></div><div class="lbl" id="tlbl"></div></div>
       <div class="row" style="top:${pct(sh.btn, H)}"><button id="tplay">▶</button><button id="treset">↺</button><button id="tlen"></button></div>`;
@@ -39,13 +48,23 @@ window.G = window.G || {};
     $("#tlen").onclick = () => { mode = (mode + 1) % 3; if (!tick) { phase = "focus"; left = modes()[mode][0] * 60; } draw(); };
     $("#tminus").onclick = () => G.tamaScale(-1);
     $("#tplus").onclick = () => G.tamaScale(1);
+    $("#tmin").onclick = () => G.tamaMinToggle();
     applyScale();
     $("#tcat").onclick = () => { draw("happy"); G.bubble($("#tcat"), G.phrase()); setTimeout(() => draw(), 1500); };
     if (!left) left = modes()[mode][0] * 60;
     draw();
   };
+  G.tamaMinToggle = () => { G.state.tamaMin = !G.state.tamaMin; G.save({ keepTime: true }); G.tamaRender(); };
   function draw(mood) {
     if (!$("#tm")) return;
+    if (G.state.tamaMin) {
+      const pet = G.pet(petId) || G.state.pets[0];
+      $("#tcat").innerHTML = pet ? G.petSVG(pet, 44, phase === "pause" ? "sleep" : tick ? "ok" : "happy") : "";
+      $("#tm").textContent = tick ? G.pad2(Math.floor(left / 60)) + ":" + G.pad2(left % 60) : "";
+      $("#tmini").classList.toggle("on", !!tick);
+      document.title = (tick ? `${$("#tm").textContent} ${phase === "focus" ? "🕯️" : "😴"} · ` : "") + G.pageTitle();
+      return;
+    }
     $("#tm").textContent = G.pad2(Math.floor(left / 60)) + ":" + G.pad2(left % 60);
     $("#tmode").textContent = phase === "focus" ? (tick ? G.t("focusing") : G.t("focusLabel")) : G.t("napping");
     $("#tplay").textContent = tick ? "❚❚" : "▶"; $("#tlen").textContent = modes()[mode][0];

@@ -203,8 +203,14 @@ details.sub .in { padding:10px 14px 14px }
 .pk { display:flex; align-items:center; gap:8px; min-height:48px; border:3px solid var(--ink); border-radius:14px; background:var(--card); padding:6px 10px; font-weight:800; font-size:.92rem; text-align:left; box-shadow:2px 2px 0 var(--ink); touch-action:manipulation }
 .pk span { flex:1 } .pk.day { justify-content:center; font-size:1rem }
 .pk.on { background:var(--c); box-shadow:inset 0 0 0 3px var(--ink), 2px 2px 0 var(--ink) }
-.modal { overflow-y:auto; align-items:start }
-.modal .win { max-width:640px; margin:20px auto }
+/* janelas (modais) com Salvar/Cancelar sempre visíveis / modals with always-visible action buttons */
+.modal { overflow:hidden; place-items:center; padding:max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) }
+.modal .win { max-width:640px; width:100%; margin:0; display:flex; flex-direction:column; max-height:calc(100vh - 24px); max-height:calc(100dvh - 24px) }
+.modal .win > .bar { flex:0 0 auto }
+.modal .win > .wbody { flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding-bottom:0 }
+.modal .actions { position:sticky; bottom:0; z-index:5; margin:14px -18px 0; padding:12px 18px calc(12px + env(safe-area-inset-bottom)); background:var(--card); border-top:3px dashed var(--accent2); box-shadow:0 -8px 12px -8px #0003 }
+@media (max-width:640px) { .modal .actions { margin:14px -12px 0; padding:10px 12px calc(10px + env(safe-area-inset-bottom)) } .modal .actions .cute { flex:1 1 auto } }
+.modal .minbtn { display:none }
 .toggle { display:flex; gap:10px; align-items:center; margin-top:12px; font-weight:800 } .toggle input { width:24px; height:24px }
 /* lembrete com pet / pet reminder */
 .rempop { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); z-index:240; width:min(560px,calc(100vw - 20px)); display:flex; gap:10px; align-items:flex-end; animation:pop .35s }
@@ -243,3 +249,30 @@ body.calm .marq span, body.calm .bob { animation:none } body.calm .inner { trans
 .addrow { grid-template-columns:2fr 1fr auto; align-items:end }
 @media (prefers-reduced-motion: reduce) { .marq span, .bob { animation:none } .inner { transition:none } }
 .vaultbox{margin-top:10px;padding:10px;border:2px dashed var(--accent2);border-radius:14px}
+
+/* ===== minimizar cards / minimize cards ===== */
+.minbtn { position:relative; width:30px; height:30px; margin:-4px 0; padding:0; border:2.5px solid var(--ink); border-radius:50%; background:var(--card); display:grid; place-items:center; cursor:pointer; touch-action:manipulation; flex:0 0 auto }
+.minbtn::before { content:""; position:absolute; inset:-8px } /* área de toque maior / bigger tap area */
+.minbtn svg { width:14px; height:14px; display:block; overflow:visible }
+.minbtn path { stroke:var(--ink); stroke-width:2.8; stroke-linecap:round; fill:none }
+.minbtn .v { transform-origin:6px 6px; transform:scaleY(0); transition:transform .2s }
+.min .minbtn .v { transform:none }
+.minbtn:hover { background:var(--accent) } .minbtn:active { transform:translate(1px,1px) }
+.win.min > .wbody { display:none }
+.win.min { margin-bottom:12px; box-shadow:4px 4px 0 var(--ink) }
+.win.min > .bar { border-bottom:0; cursor:pointer }
+.xpbox { position:relative } .xpbox .boxmin { position:absolute; top:8px; right:8px; background:var(--primary) }
+.xpbox > div:nth-child(2) { padding-right:34px }
+.xpbox.min { padding:10px 48px 10px 14px; min-width:0 }
+.countdowns { position:relative } .countdowns .cdmin { position:absolute; top:-14px; left:-8px; z-index:3; background:var(--accent) }
+.cdmini { grid-column:1/-1; display:flex; align-items:center; gap:10px; width:100%; min-height:48px; padding:8px 16px; border:3px solid var(--ink); border-radius:18px; background:linear-gradient(135deg,var(--primary),var(--accent2)); font-weight:900; font-size:1rem; text-align:left; box-shadow:4px 4px 0 var(--ink); cursor:pointer; color:var(--ink) }
+.cdmini span { margin-left:auto; font-size:1.2rem }
+/* bichinho minimizado / minimized pet */
+#tama .tmin { top:36px; left:-10px; font-size:1.1rem }
+#tama.mini { width:auto !important; aspect-ratio:auto !important; filter:drop-shadow(4px 4px 0 var(--ink)) }
+.tmini { display:flex; align-items:center; justify-content:center; gap:4px; min-width:68px; height:68px; padding:0 6px; border:3px solid var(--ink); border-radius:999px; background:var(--primary); cursor:pointer; touch-action:manipulation; animation:pop .3s }
+.tmini svg { width:48px; height:48px }
+.tmini .tmt { font-family:"VT323",monospace; font-size:1.6rem; line-height:1; color:var(--ink) }
+.tmini.on { padding:0 16px 0 8px; background:var(--accent) }
+.tmini:active { transform:translate(2px,2px) }
+body.calm .tmini { animation:none }

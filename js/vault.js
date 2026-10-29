@@ -50,7 +50,7 @@ window.G = window.G || {};
         <label class="f">${t("vaultPass")}<input type="password" id="vp1" autocomplete="${mode === "new" ? "new-password" : "current-password"}" minlength="8"></label>
         ${mode === "new" ? `<label class="f">${t("vaultPass2")}<input type="password" id="vp2" autocomplete="new-password"></label><p class="small">${t("vaultWarn")}</p>` : ""}
         <p class="small" id="vpErr" style="color:var(--danger,#e5484d)"></p>
-        <div class="nav"><button class="cute big-cta" id="vpOk">${t("vaultOk")}</button><button class="cute ghost" id="vpNo">${t("cancel")}</button></div></div></div>`;
+        <div class="nav actions"><button class="cute big-cta" id="vpOk">${t("vaultOk")}</button><button class="cute ghost" id="vpNo">${t("cancel")}</button></div></div></div>`;
       document.body.appendChild(m);
       const p1 = m.querySelector("#vp1"), p2 = m.querySelector("#vp2"), err = m.querySelector("#vpErr");
       setTimeout(() => p1.focus(), 50);

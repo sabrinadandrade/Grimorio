@@ -81,7 +81,11 @@ Na primeira vez aparece esta janela:
 
 ![Janela de boas-vindas](img/01-boas-vindas.png)
 
-> 📱 **No celular**, o menu fica no botão **☰** no canto de cima, como nos apps (Instagram, iFood…): toque nele e o menu lateral desliza com todas as opções. Para fechar, toque numa opção, no **✕**, fora do menu ou arraste para a esquerda. No computador, as abas ficam fixas no topo.
+> 📱 **No celular**, o menu fica no botão **☰** no canto de cima, como nos apps (Instagram, iFood…): toque nele e o menu lateral desliza com todas as opções. Também dá para **arrastar o dedo da borda esquerda da tela para a direita** para abrir. Para fechar, toque numa opção, no **✕**, fora do menu ou arraste para a esquerda. No computador, as abas ficam fixas no topo.
+>
+> ➖ **Minimizar:** todo card tem um botãozinho **−** no canto (nas janelas, é a primeira bolinha da barra). Toque para recolher e no **+** para abrir de novo; o Grimório lembra como você deixou. O bichinho virtual tem o botão **▾**: ele vira uma bolinha com o seu pet (mostrando o tempo, se o timer estiver rodando). Toque na bolinha para abrir.
+>
+> 💾 Nas janelas de cadastro, os botões **Salvar** e **Cancelar** ficam sempre visíveis embaixo, sem precisar rolar a tela.
 >
 > ![Menu no celular](img/27-menu-celular.png)
 
