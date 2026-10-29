@@ -29,7 +29,7 @@ Sem a nuvem, o Grimório continua funcionando normalmente, guardando os dados no
    - **Site URL**: o endereço do seu Grimório, ex.: `https://sabrinadandrade.github.io/Grimorio/`
    - **Redirect URLs**: clique em **Add URL** e adicione o endereço com `**` no final, ex.: `https://sabrinadandrade.github.io/Grimorio/**`. Se for testar no seu computador, adicione também `http://localhost:8000/**`.
    - ⚠️ O endereço do GitHub Pages diferencia maiúsculas: use o nome do repositório exatamente como ele está (`Grimorio` ≠ `grimorio`).
-3. **Importante:** em **Authentication → Emails → Templates**, abra os modelos **Magic Link** e **Confirm signup** e coloque o código `{{ .Token }}` no texto. O Grimório pede esse código de 6 dígitos, que funciona até no app instalado no iPhone. Modelo pronto em português:
+3. **Para mostrar o código no e-mail** (necessário pro app instalado no iPhone): hoje o Supabase só deixa editar os modelos depois de ligar um **SMTP próprio** (veja abaixo). Com o SMTP ligado, vá em **Authentication → Emails → Templates**, abra os modelos **Magic Link** e **Confirm signup** e coloque o código `{{ .Token }}` no texto. O Grimório pede esse código de 6 dígitos, que funciona até no app instalado no iPhone. Modelo pronto em português:
 
 ```html
 <h2>☾ Grimório ☽</h2>
