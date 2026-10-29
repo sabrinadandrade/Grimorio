@@ -75,7 +75,7 @@ Na primeira vez aparece esta janela:
 
 ![Janela de boas-vindas](img/01-boas-vindas.png)
 
-> 📱 **No celular**, o menu de abas fica num botão grande **☰** no topo: toque nele e as opções abrem em cascata, uma embaixo da outra, bem fáceis de ler e tocar.
+> 📱 **No celular**, o menu fica no botão **☰** no canto de cima, como nos apps (Instagram, iFood…): toque nele e o menu lateral desliza com todas as opções. Para fechar, toque numa opção, no **✕**, fora do menu ou arraste para a esquerda. No computador, as abas ficam fixas no topo.
 >
 > ![Menu no celular](img/27-menu-celular.png)
 

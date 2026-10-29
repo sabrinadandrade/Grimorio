@@ -161,15 +161,31 @@ details.sub .in { padding:10px 14px 14px }
   .task { flex-wrap:wrap; gap:8px } .task .t { flex:1 1 calc(100% - 90px) } .task > .cute { margin-left:auto }
   .check { width:48px; height:48px } .wbody { padding:12px } .wrap { padding:0 12px 130px }
 }
-/* ===== menu em cascata (celular e tablet) / cascade menu ===== */
-.menubtn { display:none }
+/* ===== menu: abas no topo (PC) · gaveta lateral (celular e tablet) / top tabs (desktop) · side drawer (mobile) ===== */
+.menubtn, .scrim, .dhead { display:none }
 @media (max-width:900px) {
-  .menubtn { display:flex; align-items:center; gap:10px; width:100%; min-height:56px; margin:8px 0 12px; padding:6px 16px; border:3px solid var(--ink); border-radius:18px; background:var(--ink); color:var(--primary); font-weight:900; font-size:1.05rem; box-shadow:4px 4px 0 var(--primary); text-align:left }
-  .menubtn .mb-ic { font-size:1.4rem } .menubtn .mb-t { flex:1 } .menubtn .mb-a { transition:transform .25s } .menubtn.open .mb-a { transform:rotate(180deg) }
-  .tabs { display:none; flex-direction:column; gap:8px; margin:-4px 0 16px; position:relative; z-index:70 }
-  .tabs.open { display:flex }
-  .tabs.open .tab { width:100%; min-height:54px; font-size:1.05rem; padding:6px 16px 6px 8px; animation:cascade .32s both; animation-delay:calc(var(--i) * 45ms) }
-  .tabs.open .tab svg { width:40px; height:40px }
+  .menubtn { display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:80; width:calc(100% + 24px); margin:0 -12px 10px; min-height:60px; padding:calc(8px + env(safe-area-inset-top)) 16px 8px;
+    border:0; border-bottom:3px solid var(--ink); background:var(--ink); color:var(--primary); font-weight:900; font-size:1.1rem; text-align:left; box-shadow:0 4px 0 var(--primary) }
+  .menubtn .mb-ic { display:flex; flex-direction:column; justify-content:center; gap:5px; width:44px; height:44px; padding:0 9px; border-radius:12px; background:var(--primary) }
+  .menubtn .mb-ic i { display:block; height:3px; border-radius:3px; background:var(--ink); transition:transform .25s, opacity .2s }
+  .menubtn.open .mb-ic i:nth-child(1) { transform:translateY(8px) rotate(45deg) } .menubtn.open .mb-ic i:nth-child(2) { opacity:0 } .menubtn.open .mb-ic i:nth-child(3) { transform:translateY(-8px) rotate(-45deg) }
+  .menubtn .mb-t { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .scrim { display:block; position:fixed; inset:0; background:#0009; opacity:0; pointer-events:none; transition:opacity .25s; z-index:290 }
+  .scrim.on { opacity:1; pointer-events:auto }
+  .tabs { position:fixed; top:0; left:0; bottom:0; z-index:300; width:min(84vw,330px); margin:0; padding:0 12px calc(20px + env(safe-area-inset-bottom));
+    display:flex; flex-direction:column; flex-wrap:nowrap; gap:8px; overflow-y:auto; overscroll-behavior:contain;
+    background:var(--bg); border-right:3px solid var(--ink); box-shadow:6px 0 0 var(--primary); transform:translateX(-110%); transition:transform .28s cubic-bezier(.2,.8,.2,1); visibility:hidden }
+  .tabs.open { transform:none; visibility:visible }
+  .dhead { display:flex; flex-direction:column; align-items:flex-start; gap:2px; position:sticky; top:0; z-index:2; margin:0 -12px 6px; padding:calc(14px + env(safe-area-inset-top)) 16px 14px;
+    background:var(--ink); color:var(--primary); border-bottom:3px solid var(--ink) }
+  .dhead b { font-size:1.2rem } .dhead span { color:var(--onBg); font-size:.9rem }
+  .dhead .dpets { display:flex; margin-bottom:4px } .dhead .dpets svg { margin-right:-8px }
+  .dhead .dclose { position:absolute; right:10px; top:calc(10px + env(safe-area-inset-top)); width:44px; height:44px; border-radius:50%; border:2px solid var(--primary); background:transparent; color:var(--primary); font-size:1.2rem; font-weight:900; cursor:pointer }
+  .tabs .tab { width:100%; flex:0 0 auto; min-height:54px; font-size:1.05rem; padding:6px 16px 6px 8px; border-radius:16px }
+  .tabs .tab svg { width:40px; height:40px }
+  .tabs.open .tab { animation:cascade .32s both; animation-delay:calc(var(--i) * 35ms) }
+  body.drawer-open { overflow:hidden }
+  body.calm .tabs, body.calm .scrim { transition:none } body.calm .tabs.open .tab { animation:none }
 }
 @keyframes cascade { from { opacity:0; transform:translateY(-14px) scale(.96) } to { opacity:1; transform:none } }
 /* ===== toques confortáveis / comfortable touch targets ===== */

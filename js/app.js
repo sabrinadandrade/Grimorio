@@ -69,17 +69,23 @@ window.G = window.G || {};
   const TABS = ["today", "acts", "week", "cal", "tarot", "notes", "subjects", "pets", "trophies", "look", "data", "tips"];
   function renderTabs() {
     const pets = G.state.pets;
-    $("#tabs").innerHTML = TABS.map((k, i) => {
+    const owner = (G.state.owner && G.state.owner.name) || "";
+    $("#tabs").innerHTML = `<div class="dhead"><div class="dpets">${pets.slice(0, 3).map(p => G.petSVG(p, 46, "happy")).join("")}</div><b>${esc(document.getElementById("title").textContent || "Grimório")}</b>${owner ? `<span>✦ ${esc(owner)} ✦</span>` : ""}<button class="dclose" aria-label="fechar" onclick="G.UI.menu(false)">✕</button></div>` + TABS.map((k, i) => {
       const p = pets[i % Math.max(1, pets.length)];
       return `<button class="tab ${k === tab ? "on" : ""}" data-tab="${k}">${p ? G.petSVG(p, 32, k === tab ? "happy" : "ok") : ""}${t("tabs." + k)}</button>`;
     }).join("");
     document.querySelectorAll(".tab").forEach((b, i) => { b.style.setProperty("--i", i); b.onclick = () => { UI.menu(false); UI.show(b.dataset.tab); }; });
     const p0 = pets[TABS.indexOf(tab) % Math.max(1, pets.length)];
-    $("#menuBtn").innerHTML = `<span class="mb-ic">☰</span>${p0 ? G.petSVG(p0, 30, "happy") : ""}<span class="mb-t">${t("tabs." + tab)}</span><span class="mb-a">▾</span>`;
+    $("#menuBtn").innerHTML = `<span class="mb-ic" aria-hidden="true"><i></i><i></i><i></i></span><span class="mb-t">${t("tabs." + tab)}</span>${p0 ? G.petSVG(p0, 34, "happy") : ""}`;
+    $("#menuBtn").setAttribute("aria-label", "menu");
     $("#menuBtn").onclick = () => UI.menu(!$("#tabs").classList.contains("open"));
   }
-  UI.menu = open => { $("#tabs").classList.toggle("open", open); $("#menuBtn").classList.toggle("open", open); $("#menuBtn").setAttribute("aria-expanded", open ? "true" : "false"); };
-  UI.show = k => { tab = k; renderTabs(); renderPanel(); const top = Math.min($("#tabs").offsetTop, $("#menuBtn").offsetTop || 1e9); window.scrollTo({ top: Math.max(0, top - 10), behavior: G.state.a11y && G.state.a11y.lessMotion ? "auto" : "smooth" }); };
+  UI.menu = open => {
+    $("#tabs").classList.toggle("open", open); $("#menuBtn").classList.toggle("open", open); $("#scrim").classList.toggle("on", open);
+    document.body.classList.toggle("drawer-open", open); $("#menuBtn").setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) setTimeout(() => { const on = $("#tabs .tab.on"); on && on.focus({ preventScroll: true }); }, 50);
+  };
+  UI.show = k => { tab = k; renderTabs(); renderPanel(); const top = matchMedia("(max-width:900px)").matches ? $("#panel").offsetTop - 74 : $("#tabs").offsetTop; window.scrollTo({ top: Math.max(0, top - 10), behavior: G.state.a11y && G.state.a11y.lessMotion ? "auto" : "smooth" }); };
   function renderPanel() {
     const P = { today: pToday, acts: pActs, week: pWeek, trophies: pTrophies, cal: pCal, tarot: pTarot, notes: pNotes, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
     $("#panel").innerHTML = ""; $("#panel").className = "panel on"; P[tab]();
@@ -648,6 +654,10 @@ window.G = window.G || {};
     G.state.tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || G.state.tz;
     G.applyA11y(); G.fxInit(); marquee(); G.tamaRender(); UI.refresh();
     document.addEventListener("click", e => { if ($("#tabs").classList.contains("open") && !e.target.closest("#tabs,#menuBtn")) UI.menu(false); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#tabs").classList.contains("open")) UI.menu(false); });
+    // arrastar para a esquerda fecha a gaveta / swipe left closes the drawer
+    let sx = null; $("#tabs").addEventListener("touchstart", e => { sx = e.touches[0].clientX; }, { passive: true });
+    $("#tabs").addEventListener("touchend", e => { if (sx != null && sx - e.changedTouches[0].clientX > 60) UI.menu(false); sx = null; }, { passive: true });
     // proteção: recupera do IndexedDB se o localStorage foi limpo / recover from IndexedDB if needed
     if (await G.safety.recover()) { G.applyTheme(G.state.theme); G.tamaRender(); UI.refresh(); G.toast(t("recovered")); }
     else G.safety.mirror();
