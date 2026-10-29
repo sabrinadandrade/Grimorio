@@ -7,9 +7,10 @@ Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho
 
 ![Grimório](docs/screenshot.png)
 
-> ⚡ **Quer o resumo?** Veja o **[Guia rápido](docs/GUIA-RAPIDO.md)**: pontos importantes e como usar no iPhone e no Android, numa página só.
->
-> 📖 **Nunca usou? Comece pelo [Tutorial passo a passo para iniciantes](docs/TUTORIAL.md)**: com prints de cada tela, do primeiro acesso até usar no celular.
+## 🚀 Como usar
+
+- **Site:** <https://sabrinadandrade.github.io/Grimorio/> · **App Android:** [Grimorio.apk](https://github.com/sabrinadandrade/Grimorio/releases/latest)
+- 📖 **Todo o passo a passo (computador, iPhone e Android) está no [Tutorial](docs/TUTORIAL.md)**, com prints de cada tela.
 
 ## ✨ O que ele faz
 
@@ -18,7 +19,7 @@ Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho
 - **Atividades da vida toda** 🆕: estudos, rotina diária, casa, pets, cuidados maternais/paternais, trabalho, compromissos e saúde, com **prioridade** (🔥 alta, ⭐ média, 🌙 baixa), **repetição** (todo dia ou dias da semana) e **lembrete**.
 - **Subtarefas, visão da semana, sequência de dias 🔥 e conquistas 🏆** 🆕
 - **Lembretes com seu pet** 🆕: na hora, seu pet aparece na tela te lembrando. No app Android, chega notificação mesmo com o app fechado.
-- **Feito para todo mundo:** nome ou apelido com **pronome** (ela/dela, ele/dele, elu/delu), **menu em cascata** no celular, bichinho com **tamanho ajustável (−/+)**, botões grandes, **tamanho do texto** e modo **menos animações**.
+- **Feito para todo mundo:** nome ou apelido com **pronome** (ela/dela, ele/dele, elu/delu), **menu lateral** no celular, bichinho com **tamanho ajustável (−/+)**, botões grandes, **tamanho do texto** e modo **menos animações**.
 - **Bichinho virtual (timer de foco)**: estilo tamagotchi, em 5 formatos (ovo, coração, chapéu de bruxa, estrela e lua). Seu pet dorme na pausa 😴.
 - **Tarot de estudos (flashcards)**: as cartas que você erra voltam mais vezes.
 - **Pets personalizáveis**: gato, cachorro, ratinho, hamster, coelho, galinha, pato, passarinho, cobra, tartaruga, sapo, peixe, morcego e raposa. Você escolhe cores, padrão ou raça (tigrado, siamês, frajola, pintado…), cor dos olhos e acessório (chapéu de bruxa, laço, coroa…).
@@ -26,25 +27,9 @@ Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho
 - **Conectar com a sua instituição**: copie e cole o texto do portal (sem senha!). Também importa `.csv`, calendário `.ics` (Google Agenda, Outlook, Moodle) e backup `.json`.
 - **Português e inglês**, funciona **offline** e pode ser **instalado** como app (PWA).
 
-## 🔒 Seus dados: privacidade e proteção contra perda
+## 🔒 Privacidade
 
-O Grimório é **local-first**: funciona sem internet e sem conta, e você não perde nada à toa.
-
-| Camada | O que faz |
-|---|---|
-| 📦 Navegador | Salva no `localStorage` **e** numa cópia em **IndexedDB**. Se uma for apagada, o app recupera da outra. Também pede **armazenamento persistente** ao navegador. |
-| 🛟 Cópias automáticas | Antes de importar ou restaurar, guarda uma cópia de segurança que dá pra restaurar com um clique. |
-| 💾 Backup automático em arquivo | No Chrome e no Edge, escolha um arquivo no seu computador e o Grimório salva nele a cada mudança. |
-| 🔒 100% local | Sem servidor e sem banco de dados: tudo fica só no aparelho de cada pessoa. Nenhum dado é enviado para a internet. |
-| 🔐 Backup criptografado | Exporte um arquivo `.grimorio` trancado com senha (PBKDF2-SHA256 600 mil rodadas + AES-GCM 256, direto no navegador) para guardar ou passar para outro aparelho. |
-| 📤 Exportar / importar | Backup `.json` manual a qualquer momento. Se faltar backup, um lembrete aparece depois de 7 dias. |
-
-## 🚀 Como usar
-
-- **Online:** <https://sabrinadandrade.github.io/Grimorio/>
-- **📱 Android:** baixe o **[Grimorio.apk](https://github.com/sabrinadandrade/Grimorio/releases/latest)** e toque nele para instalar ([passo a passo](docs/TUTORIAL.md#android-app)).
-- **🍎 iPhone:** abra o site no Safari → **Compartilhar** → **Adicionar à Tela de Início** ([passo a passo](docs/TUTORIAL.md#2-como-abrir)).
-- **No seu computador:** baixe o projeto (botão verde *Code → Download ZIP*), descompacte e abra o `index.html`. Não precisa instalar nada.
+**100% local:** sem servidor, sem banco de dados e sem login. Tudo fica só no aparelho de cada pessoa (localStorage + cópia em IndexedDB, com recuperação automática). Backups podem ser exportados como `.json` ou como arquivo `.grimorio` trancado com senha (PBKDF2-SHA256 600 mil rodadas + AES-GCM 256, direto no navegador).
 
 ## 🎓 Instituições suportadas
 
@@ -100,5 +85,5 @@ Your pets become teachers, every task is a spell, and the focus timer is a virtu
 - **Portuguese and English**, works **offline** and can be installed as a PWA.
 - **100% local, no server**: data never leaves the device. It is mirrored to IndexedDB, can be auto-backed-up to a local file, and exported as a passphrase-encrypted `.grimorio` file (PBKDF2 + AES-GCM) to move between devices.
 
-A beginner tutorial (in Portuguese, with screenshots) is in [docs/TUTORIAL.md](docs/TUTORIAL.md). To use it, open <https://sabrinadandrade.github.io/Grimorio/> or download the project and open `index.html`.
+Use it at <https://sabrinadandrade.github.io/Grimorio/> (Android app: [Grimorio.apk](https://github.com/sabrinadandrade/Grimorio/releases/latest)). The step-by-step guide (in Portuguese, with screenshots) is in [docs/TUTORIAL.md](docs/TUTORIAL.md).
 To contribute (connectors, pets, themes, translations), see [CONTRIBUTING.md](CONTRIBUTING.md). License: MIT.

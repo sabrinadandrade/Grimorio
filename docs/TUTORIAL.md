@@ -2,9 +2,13 @@
 
 Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Não precisa saber nada de computador: é só seguir na ordem.
 
-> ⚡ Prefere uma página só? Veja o **[Guia rápido](GUIA-RAPIDO.md)** (pontos importantes + iPhone e Android).
-
 > **Resumo em 1 minuto:** abra o site → coloque seu nome → cadastre (ou importe) suas matérias e provas → clique em **✨ Gerar plano** → todo dia abra **Hoje** e faça uma coisa de cada vez, com o timer. Para a vida fora dos estudos, cadastre **Atividades** (casa, pets, trabalho…) com prioridade e lembrete, e seu pet te avisa! Pronto!
+
+### ⭐ O que você precisa saber antes de tudo
+- 🔒 **Seus dados ficam só no seu aparelho.** O Grimório não tem servidor, banco de dados nem login: nada é enviado para a internet.
+- 📱 **Cada aparelho tem o seu grimório** e eles não se atualizam sozinhos. Para levar seus dados de um para outro, use o **backup trancado com senha** ([passo 15](#15-passar-para-outro-aparelho)).
+- 💾 **Faça backup de vez em quando.** Se você limpar os dados do navegador ou desinstalar o app, os dados vão junto ([passo 14](#14-seus-dados-onde-ficam-e-backup)).
+- 🔔 **Lembretes com o app fechado** só no **app Android**. No iPhone e no computador, o pet avisa quando o Grimório está aberto.
 
 ### Sumário
 1. [O que é o Grimório](#1-o-que-é-o-grimório)
@@ -67,7 +71,7 @@ Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Nã
 
 > 🔄 **Atualizar:** baixe o **Grimorio.apk** de novo pelo mesmo link e instale por cima. Seus dados continuam lá. Por garantia, faça um backup antes.
 
-> **Prefere não instalar nada?** Abra o site no **Chrome** → **três pontinhos ⋮** → **Adicionar à tela inicial**. Funciona igualzinho.
+> **Prefere não instalar nada?** Abra o site no **Chrome** → **três pontinhos ⋮** → **Adicionar à tela inicial**. Funciona igualzinho, só que os avisos com o app fechado são exclusivos do app (APK).
 
 ---
 
