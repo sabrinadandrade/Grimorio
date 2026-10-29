@@ -14,7 +14,8 @@ window.G = window.G || {};
   G.defaultState = () => ({
     v: 1,
     lang: (navigator.language || "pt").toLowerCase().startsWith("pt") ? "pt" : "en",
-    owner: { name: "", art: "da" },
+    owner: { name: "", art: "da", pronoun: "" },
+    activities: [], actDone: {}, remFired: {}, tamaScale: 0, a11y: { text: 100, lessMotion: false },
     theme: { preset: "halloween", custom: {} },
     tamaShape: "egg",
     institution: "generic",
@@ -45,6 +46,7 @@ window.G = window.G || {};
     try { localStorage.setItem(KEY, JSON.stringify(G.state)); } catch (e) { }
     if (G.safety) { G.safety.mirror(); G.safety.scheduleFile(); }
     if (G.cloud && !(opts && opts.noCloud)) G.cloud.schedulePush();
+    if (G.reminders) G.reminders.scheduleNative();
   };
   G.reset = async function () {
     if (G.safety) await G.safety.snapshot("reset");

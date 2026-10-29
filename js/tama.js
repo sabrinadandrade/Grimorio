@@ -29,14 +29,17 @@ window.G = window.G || {};
     el.innerHTML = `<svg class="shell" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><defs><radialGradient id="tg" cx="35%" cy="28%" r="80%"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".45" stop-color="var(--primary)" stop-opacity="1"/><stop offset="1" stop-color="var(--primary2)"/></radialGradient></defs>
       <path d="${sh.path}" fill="url(#tg)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round" fill-rule="nonzero"/>${craters}${band}</svg>
       ${sh.deco ? `<span class="chain">${sh.deco}</span>` : ""}
-      <button class="hide" id="thide" title="–">–</button>
+      <button class="tsz tminus" id="tminus" title="${G.t("tamaSmaller")}" aria-label="${G.t("tamaSmaller")}">−</button>
+      <button class="tsz tplus" id="tplus" title="${G.t("tamaBigger")}" aria-label="${G.t("tamaBigger")}">+</button>
       <div class="scr ${sh.compact ? "compact" : ""}" style="left:${pct(sh.scr[0], W)};top:${pct(sh.scr[1], H)};width:${pct(sh.scr[2], W)};height:${pct(sh.scr[3], H)}">
         <div id="tcat"></div><div class="md" id="tmode"></div><div class="tm" id="tm"></div><div class="lbl" id="tlbl"></div></div>
       <div class="row" style="top:${pct(sh.btn, H)}"><button id="tplay">▶</button><button id="treset">↺</button><button id="tlen"></button></div>`;
     $("#tplay").onclick = () => { if (tick) { clearInterval(tick); tick = null; } else tick = setInterval(step, 1000); draw(); };
     $("#treset").onclick = () => { clearInterval(tick); tick = null; phase = "focus"; left = modes()[mode][0] * 60; draw(); };
     $("#tlen").onclick = () => { mode = (mode + 1) % 3; if (!tick) { phase = "focus"; left = modes()[mode][0] * 60; } draw(); };
-    $("#thide").onclick = () => { el.classList.toggle("mini"); };
+    $("#tminus").onclick = () => G.tamaScale(-1);
+    $("#tplus").onclick = () => G.tamaScale(1);
+    applyScale();
     $("#tcat").onclick = () => { draw("happy"); G.bubble($("#tcat"), G.phrase()); setTimeout(() => draw(), 1500); };
     if (!left) left = modes()[mode][0] * 60;
     draw();
@@ -68,4 +71,18 @@ window.G = window.G || {};
     tick = setInterval(step, 1000); draw(); G.toast(G.t("candleLit"));
   };
   G.tamaRedraw = () => draw();
+  /* tamanho livre do bichinho / user-defined size */
+  const defScale = () => innerWidth < 600 ? 0.75 : 1;
+  function applyScale() {
+    const el = $("#tama"); if (!el) return;
+    const s = G.state.tamaScale || defScale();
+    el.style.width = Math.round(200 * s) + "px";
+    el.style.setProperty("--bt", Math.max(40, Math.round(46 * Math.min(s, 1.3))) + "px");
+    el.style.setProperty("--fs", s);
+  }
+  G.tamaScale = d => {
+    const s = G.state.tamaScale || defScale();
+    G.state.tamaScale = Math.round(Math.max(0.6, Math.min(1.8, s + d * 0.15)) * 100) / 100;
+    G.save(); applyScale();
+  };
 })();

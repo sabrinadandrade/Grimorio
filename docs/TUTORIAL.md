@@ -2,7 +2,7 @@
 
 Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Não precisa saber nada de computador: é só seguir na ordem.
 
-> **Resumo em 1 minuto:** abra o site → coloque seu nome → cadastre (ou importe) suas matérias e provas → clique em **✨ Gerar plano** → todo dia abra **Feitiços de hoje** e faça um feitiço de cada vez, com o timer. Pronto!
+> **Resumo em 1 minuto:** abra o site → coloque seu nome → cadastre (ou importe) suas matérias e provas → clique em **✨ Gerar plano** → todo dia abra **Hoje** e faça uma coisa de cada vez, com o timer. Para a vida fora dos estudos, cadastre **Atividades** (casa, pets, trabalho…) com prioridade e lembrete, e seu pet te avisa! Pronto!
 
 ### Sumário
 1. [O que é o Grimório](#1-o-que-é-o-grimório)
@@ -11,7 +11,9 @@ Oi! 💜 Este guia explica **tudo** sobre o Grimório, sem termos difíceis. Nã
 4. [Colocar suas matérias e provas](#4-colocar-suas-matérias-e-provas)
 5. [Importar da sua faculdade, escola ou curso](#5-importar-da-sua-faculdade-escola-ou-curso)
 6. [Gerar o plano de estudos](#6-gerar-o-plano-de-estudos)
-7. [Usar no dia a dia: Feitiços de hoje](#7-usar-no-dia-a-dia-feitiços-de-hoje)
+7. [Usar no dia a dia: aba Hoje](#7-usar-no-dia-a-dia-aba-hoje)
+7.1 [Atividades da vida toda: prioridade, repetição e lembrete](#71-atividades-da-vida-toda) 🆕
+7.2 [Lembretes com seu pet e notificações](#72-lembretes-com-seu-pet-e-notificações) 🆕
 8. [O bichinho virtual (timer de foco)](#8-o-bichinho-virtual-timer-de-foco)
 9. [Calendário lunar](#9-calendário-lunar)
 10. [Tarot de estudos (flashcards)](#10-tarot-de-estudos-flashcards)
@@ -73,8 +75,12 @@ Na primeira vez aparece esta janela:
 
 ![Janela de boas-vindas](img/01-boas-vindas.png)
 
-- **Seu nome:** o título vira "Grimório **da** Ana", por exemplo.
-- **Artigo:** escolha **da**, **do** ou **de**, como você preferir.
+> 📱 **No celular**, o menu de abas fica num botão grande **☰** no topo: toque nele e as opções abrem em cascata, uma embaixo da outra, bem fáceis de ler e tocar.
+>
+> ![Menu no celular](img/27-menu-celular.png)
+
+- **Nome ou apelido:** o título vira "Grimório **da** Ana", por exemplo.
+- **Pronome:** **ela/dela**, **ele/dele** ou **elu/delu**. O Grimório usa o seu pronome no título ("Grimório **da**/**do**/**de** …") e nas mensagens (bem-vinda, bem-vindo, bem-vinde).
 - **Idioma:** português ou inglês.
 - Clique em **Começar ✨**.
 
@@ -96,7 +102,7 @@ No começo o grimório está vazio. Os botões levam você para o próximo passo
 | 🎸 Curso livre / hobby | Aula 1 · Aula 2 · Praticar | Apresentação |
 | 📚 Concurso / ENEM | Português · Matemática · Redação | Dia da prova |
 
-E para coisas soltas do dia, use o **feitiço extra** na aba **Feitiços de hoje** ([passo 7](#7-usar-no-dia-a-dia-feitiços-de-hoje)).
+Para a rotina e os compromissos, use as **Atividades** ([passo 7.1](#71-atividades-da-vida-toda)): elas têm **prioridade**, podem **repetir na semana** e ter **lembrete**. As "matérias" acima são ótimas quando há **vários temas até uma data** (prova, mudança, viagem…).
 
 ---
 
@@ -191,11 +197,15 @@ O Grimório espalha os temas de cada matéria nos dias **antes** da prova e deix
 
 ---
 
-## 7. Usar no dia a dia: Feitiços de hoje
+## 7. Usar no dia a dia: aba Hoje
 
-Abra a aba **Feitiços de hoje**. Lá estão as tarefas do dia:
+Abra a aba **Hoje**. Em cima aparecem as **🗓️ Atividades de hoje** (ordenadas da prioridade mais alta para a mais baixa) e embaixo os **📚 Feitiços de estudo**:
 
-![Feitiços de hoje](img/07-feiticos-de-hoje.png)
+![Atividades de hoje](img/23-hoje-atividades.png)
+
+Os feitiços de estudo ficam assim:
+
+![Feitiços de estudo](img/07-feiticos-de-hoje.png)
 
 Cada feitiço tem:
 
@@ -214,6 +224,52 @@ Completou todos do dia? **LUA CHEIA 🌕** e mais **+30 XP**!
 
 ---
 
+## 7.1 Atividades da vida toda
+
+Na aba **Atividades** (ou no botão **+ Nova atividade** da aba Hoje), você cadastra qualquer coisa da sua vida:
+
+![Nova atividade](img/24-nova-atividade.png)
+
+1. **O que você precisa fazer?** Ex.: "Dar remédio pro gato", "Reunião", "Lavar a louça".
+2. **Área:** 📚 Estudos · ☀️ Atividades diárias · 🏠 Cuidados com a casa · 🐾 Cuidados com os pets · 🍼 Cuidados maternais/paternais · 💼 Trabalho · 📅 Compromissos pessoais · 💚 Saúde e bem-estar.
+3. **Prioridade:** 🔥 **Alta** (aparece primeiro), ⭐ **Média** ou 🌙 **Baixa**.
+4. **Repetir:**
+   - **Não repete:** acontece só na data escolhida;
+   - **Todo dia:** ex.: "Beber água";
+   - **Dias da semana:** toque nos dias (D S T Q Q S S). Ex.: "Academia" na segunda, quarta e sexta.
+5. **Data** (ou "Começar em", quando repete) e **Hora**.
+6. **🔔 Lembrete:** sem lembrete, na hora, 5/15/30 min antes, 1 ou 2 horas antes, ou 1 dia antes. *(Precisa ter hora.)*
+7. **🐾 Pet que vai te lembrar:** escolha um pet ou "Qualquer um".
+8. Clique em **💾 Salvar atividade**.
+
+Na aba **Atividades** você vê **todas**, filtra por área (os botões coloridos) e edita com o **✎**. Para marcar como feita, toque na **🐾 patinha** (+15 XP).
+
+![Lista de atividades](img/26-atividades.png)
+
+---
+
+## 7.2 Lembretes com seu pet e notificações
+
+Na hora do lembrete, **seu pet aparece na tela** com um somzinho:
+
+![Lembrete com pet](img/25-lembrete-pet.png)
+
+- **✔ Feito:** marca a atividade como feita;
+- **⏰ Adiar 10 min:** o pet volta daqui a 10 minutos;
+- **OK:** fecha o aviso.
+
+**Notificações no celular/computador**: na aba **Atividades**, janela **lembretes.exe**, toque em **🔔 Ativar notificações** e aceite. Como funciona em cada lugar:
+
+| Onde | Como você é avisado |
+|---|---|
+| 🤖 **App Android (APK)** | Notificação de verdade no celular, **mesmo com o app fechado**. |
+| 💻 **Computador** (Chrome, Edge, Opera…) | O pet aparece e o navegador mostra uma notificação, **com o Grimório aberto** (pode estar em outra aba). |
+| 🍎 **iPhone** | O pet aparece quando o Grimório está aberto. Abra o app algumas vezes por dia 💜 |
+
+> 💡 Se você abrir o Grimório **depois** do horário (até 2 horas), o pet ainda te avisa do que passou.
+
+---
+
 ## 8. O bichinho virtual (timer de foco)
 
 Fica no canto da tela:
@@ -223,7 +279,7 @@ Fica no canto da tela:
 - **▶ / ❚❚:** começa ou pausa.
 - **↺:** reinicia.
 - **25** (botão roxo): troca o tempo (25 → 15 → 45 minutos). **Se 25 minutos parecer muito, use 15!**
-- **–** (canto): minimiza o bichinho.
+- **−** e **+** (cantos de cima): **diminuem ou aumentam** o bichinho. Deixe do tamanho que for mais confortável pra você; os botões crescem junto (bom para dedos grandes!).
 - Clique no pet dentro da tela para ganhar um incentivo 💕
 
 Quando o tempo acaba, toca um somzinho, o pet **dorme** (hora da pausa 😴) e você ganha **+10 XP** e **uma vela 🕯️**.
@@ -295,15 +351,17 @@ Cada matéria pode ter um pet professor (veja o [passo 4.1](#41-criar-uma-matér
 
 Na aba **Aparência**:
 
-- **Seu nome e artigo**, para o título "Grimório da/do/de …", e o **idioma**.
+- **Nome ou apelido**, **pronome** (ela/dela, ele/dele, elu/delu) e **idioma**.
 - **Tema pronto:** Halloween, Kawaii amarelo, Pastel goth, Floresta encantada, Oceano, Morango, Noite estrelada.
 - **Cores personalizadas:** clique num quadradinho de cor para mudar. **↺ reset** volta ao tema.
 
   ![Cores](img/17-cores.png)
 
-- **Formato do bichinho virtual:** ovo, coração, chapéu de bruxa, estrela ou lua.
+- **Formato e tamanho do bichinho virtual:** ovo, coração, chapéu de bruxa, estrela ou lua, e os botões **−/+** para o tamanho.
 
   ![Formatos](img/18-formato.png)
+
+- **♿ Acessibilidade:** **A− / A+** muda o tamanho de todos os textos, e **Menos animações** desliga confetes, letreiro e brilhinhos (ótimo para quem se distrai ou sente enjoo com movimento).
 
 ---
 
@@ -376,6 +434,9 @@ Antes de importar um backup, apagar tudo ou baixar da nuvem, o Grimório guarda 
 **O plano ficou com tarefas demais num dia**
 → Isso acontece quando há muitos temas e poucos dias até a prova. Na aba **Matérias & provas**, junte temas parecidos numa linha só (ex.: `Derivadas e regra da cadeia`) e clique em **Gerar plano** de novo. Você também pode apagar feitiços com o **✕**.
 
+**O lembrete não apareceu**
+→ Confira se a atividade tem **hora** e **lembrete** escolhidos. No computador e no Android pelo navegador, ative as notificações (aba **Atividades → 🔔 Ativar notificações**) e deixe o Grimório aberto. Para avisos com o app fechado, use o **app Android**.
+
 **Pulei uns dias e o plano ficou para trás**
 → Sem culpa! 💛 É só clicar em **✨ Gerar / atualizar plano** de novo: ele redistribui o que falta a partir de hoje.
 
@@ -392,7 +453,7 @@ Antes de importar um backup, apagar tudo ou baixar da nuvem, o Grimório guarda 
 | Palavra | O que significa |
 |---|---|
 | **Navegador** | O programa que abre sites: Chrome, Edge, Opera, Safari, Firefox. |
-| **Aba** | Cada "botão-página" do Grimório (Feitiços de hoje, Tarot…). Também é cada página aberta no navegador. |
+| **Aba** | Cada "botão-página" do Grimório (Hoje, Atividades, Tarot…). Também é cada página aberta no navegador. |
 | **Backup** | Uma cópia de segurança dos seus dados. |
 | **Nuvem** | Guardar os dados na internet, para não perder e usar em vários aparelhos. |
 | **Sincronizar** | Deixar os dados iguais em todos os aparelhos. |

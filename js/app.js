@@ -16,6 +16,11 @@ window.G = window.G || {};
     const n = G.state.owner.name.trim(); if (!n) return t("grimoire");
     return G.lang === "en" ? `${t("grimoire")} of ${n}` : `${t("grimoire")} ${G.state.owner.art ? G.state.owner.art + " " : ""}${n}`;
   };
+  // pronome → palavras do app / pronoun-aware words
+  G.pw = (f, m, n) => { const p = G.state.owner.pronoun; return p === "ela" ? f : p === "ele" ? m : p === "elu" ? n : f + "(" + m.slice(-1) + ")"; };
+  const PRON = [["ela", "pronElaa", "da"], ["ele", "pronEle", "do"], ["elu", "pronElu", "de"]];
+  const pronSelect = (id, onch) => `<label class="f">${t("pronoun")}<select ${id ? `id="${id}"` : ""} ${onch ? `onchange="${onch}"` : ""}><option value="">—</option>${PRON.map(([v, k]) => `<option value="${v}" ${G.state.owner.pronoun === v ? "selected" : ""}>${t(k)}</option>`).join("")}</select></label>`;
+  UI.setPronoun = v => { G.state.owner.pronoun = v; const r = PRON.find(x => x[0] === v); if (r) G.state.owner.art = r[2]; G.save(); renderHeader(); marquee(); if (tab === "look") pLook(); };
   G.pageTitle = () => "☾ " + G.ownerTitle() + " ☽";
   G.addXP = n => { G.state.xp += n; G.save(); renderXP(); };
   const later = () => { clearTimeout(saveTimer); saveTimer = setTimeout(() => { G.save(); }, 250); };
@@ -59,18 +64,22 @@ window.G = window.G || {};
   }
 
   /* ================= ABAS / TABS ================= */
-  const TABS = ["today", "cal", "tarot", "notes", "subjects", "pets", "look", "data", "tips"];
+  const TABS = ["today", "acts", "cal", "tarot", "notes", "subjects", "pets", "look", "data", "tips"];
   function renderTabs() {
     const pets = G.state.pets;
     $("#tabs").innerHTML = TABS.map((k, i) => {
       const p = pets[i % Math.max(1, pets.length)];
       return `<button class="tab ${k === tab ? "on" : ""}" data-tab="${k}">${p ? G.petSVG(p, 32, k === tab ? "happy" : "ok") : ""}${t("tabs." + k)}</button>`;
     }).join("");
-    document.querySelectorAll(".tab").forEach(b => b.onclick = () => UI.show(b.dataset.tab));
+    document.querySelectorAll(".tab").forEach((b, i) => { b.style.setProperty("--i", i); b.onclick = () => { UI.menu(false); UI.show(b.dataset.tab); }; });
+    const p0 = pets[TABS.indexOf(tab) % Math.max(1, pets.length)];
+    $("#menuBtn").innerHTML = `<span class="mb-ic">☰</span>${p0 ? G.petSVG(p0, 30, "happy") : ""}<span class="mb-t">${t("tabs." + tab)}</span><span class="mb-a">▾</span>`;
+    $("#menuBtn").onclick = () => UI.menu(!$("#tabs").classList.contains("open"));
   }
-  UI.show = k => { tab = k; renderTabs(); renderPanel(); window.scrollTo({ top: $("#tabs").offsetTop - 10, behavior: "smooth" }); };
+  UI.menu = open => { $("#tabs").classList.toggle("open", open); $("#menuBtn").classList.toggle("open", open); $("#menuBtn").setAttribute("aria-expanded", open ? "true" : "false"); };
+  UI.show = k => { tab = k; renderTabs(); renderPanel(); const top = Math.min($("#tabs").offsetTop, $("#menuBtn").offsetTop || 1e9); window.scrollTo({ top: Math.max(0, top - 10), behavior: G.state.a11y && G.state.a11y.lessMotion ? "auto" : "smooth" }); };
   function renderPanel() {
-    const P = { today: pToday, cal: pCal, tarot: pTarot, notes: pNotes, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
+    const P = { today: pToday, acts: pActs, cal: pCal, tarot: pTarot, notes: pNotes, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
     $("#panel").innerHTML = ""; $("#panel").className = "panel on"; P[tab]();
   }
   UI.refresh = () => { if (G.state.onboarded) document.querySelectorAll(".modal").forEach(m => m.remove()); renderHeader(); renderTabs(); renderPanel(); G.tamaRedraw && G.tamaRedraw(); };
@@ -83,28 +92,46 @@ window.G = window.G || {};
   function pToday() {
     pickDefaultDay();
     const P = G.state.plan, keys = Object.keys(P).sort(), td = G.todayIso();
-    if (!G.state.subjects.length && !keys.length) {
-      $("#panel").innerHTML = win("✦ " + t("tabs.today").toLowerCase().replace(/ /g, "_") + ".exe", `<p>${t("emptyPlan")}</p><div class="nav">
+    G.actsInit();
+    if (!G.state.subjects.length && !keys.length && !G.state.activities.length) {
+      $("#panel").innerHTML = win("✦ " + (G.lang === "en" ? "today.exe" : "hoje.exe"), `<p>${t("emptyPlan")}</p><div class="nav">
         <a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/docs/TUTORIAL.md" target="_blank" rel="noopener">${t("tutorialBtn")}</a>
-      <button class="cute" onclick="G.UI.show('subjects')">📚 ${t("goSubjects")}</button><button class="cute alt" onclick="G.UI.show('data')">🎓 ${t("goImport")}</button>
-</div>`);
+        <button class="cute" onclick="G.UI.newAct()">${t("newAct")}</button>
+        <button class="cute" onclick="G.UI.show('subjects')">📚 ${t("goSubjects")}</button><button class="cute alt" onclick="G.UI.show('data')">🎓 ${t("goImport")}</button></div>`);
       return;
     }
     const tasks = P[viewDay] || [], n = tasks.filter(x => x.done).length;
+    const acts = G.actsOn(viewDay), an = acts.filter(a => G.actDone(a, viewDay)).length;
+    const total = tasks.length + acts.length, doneAll = n + an;
     const remind = G.safety && G.safety.needsReminder() ? `<div class="found" style="background:var(--accent);display:flex;gap:10px;align-items:center;flex-wrap:wrap">${t("reminder")}<button class="cute ghost" onclick="G.UI.show('data')">${t("reminderBtn")}</button></div>` : "";
     const isExam = tasks.some(x => x.kind === "exam");
-    const allDays = [...new Set(keys.concat([td]))].sort(), idx = allDays.indexOf(viewDay);
-    const body = remind + `<div class="nav"><button class="cute" ${idx <= 0 ? "disabled" : ""} onclick="G.UI.go(-1)">${t("before")}</button>
-      <button class="cute" onclick="G.UI.goto('${td}')">${t("today")}</button><button class="cute" ${idx >= allDays.length - 1 ? "disabled" : ""} onclick="G.UI.go(1)">${t("after")}</button></div>
-      <div class="daytitle"><span class="pill">${viewDay === td ? t("todayTag") : fmt(viewDay).toUpperCase()}</span><h2 style="margin:0">${esc(G.dayTitle(viewDay))}</h2><span style="font-size:1.6rem">${isExam ? "📝" : moonOf(tasks.length ? n / tasks.length : 0)}</span></div>
+    const title = tasks.length ? G.dayTitle(viewDay) : "";
+    const body = remind + `<div class="nav"><button class="cute" onclick="G.UI.go(-1)">${t("before")}</button>
+      <button class="cute" onclick="G.UI.goto('${td}')">${t("today")}</button><button class="cute" onclick="G.UI.go(1)">${t("after")}</button></div>
+      <div class="daytitle"><span class="pill">${viewDay === td ? t("todayTag") : fmt(viewDay).toUpperCase()}</span><h2 style="margin:0">${esc(title)}</h2><span style="font-size:1.6rem">${isExam ? "📝" : moonOf(total ? doneAll / total : 0)}</span></div>
+      <h3>${t("actsToday")}</h3>
+      ${acts.length ? acts.map(a => actHTML(a, viewDay)).join("") : `<p class="small">${t("noActsDay")}</p>`}
+      <div class="nav"><button class="cute" onclick="G.UI.newAct('${viewDay}')">${t("newAct")}</button></div>
+      ${(tasks.length || G.state.subjects.length) ? `<h3>${t("studyToday")}</h3>
       <p class="small">${isExam ? t("examHelp") : tasks.length ? t("spellHelp") : t("noPlan")}</p>
       ${tasks.map(x => taskHTML(x)).join("")}
-      <div class="row2" style="grid-template-columns:2fr 1fr auto;align-items:end">
+      <div class="row2 addrow">
         <label class="f">${t("taskTitle")}<input type="text" id="newTask" placeholder="✨"></label>
         <label class="f">${t("subject")}<select id="newTaskSub">${subjOptions("")}</select></label>
-        <button class="cute alt" onclick="G.UI.addTask()">${t("addTask")}</button></div>`;
-    $("#panel").innerHTML = win("✦ " + (G.lang === "en" ? "todays_spells.exe" : "feiticos_de_hoje.exe"), body);
-    $("#newTask").onkeydown = e => { if (e.key === "Enter") UI.addTask(); };
+        <button class="cute alt" onclick="G.UI.addTask()">${t("addTask")}</button></div>` : ""}`;
+    $("#panel").innerHTML = win("✦ " + (G.lang === "en" ? "today.exe" : "hoje.exe"), body);
+    if ($("#newTask")) $("#newTask").onkeydown = e => { if (e.key === "Enter") UI.addTask(); };
+  }
+  function actHTML(a, iso) {
+    const ar = G.AREAS[a.area] || G.AREAS.daily, pr = G.PRIORITIES[a.priority] || G.PRIORITIES.mid, d = G.actDone(a, iso);
+    const p = a.petId ? G.pet(a.petId) : G.state.pets[0];
+    const meta = [a.time ? "🕒 " + esc(a.time) : "", a.repeat && a.repeat !== "none" ? "🔁 " + esc(G.repeatLabel(a)) : "", a.remind >= 0 && a.time ? "🔔" : ""].filter(Boolean).join(" · ");
+    return `<div class="task act ${d ? "done" : ""}"><span class="stripe" style="background:${esc(ar.color)}"></span>
+      <button class="check" title="✔" onclick="G.UI.actToggle('${a.id}','${iso}',this)">${d && p ? G.petSVG(p, 50, "happy") : pawSVG()}</button>
+      <div class="t"><strong>${ar.emoji} ${esc(a.title)}</strong>
+        <div class="meta"><span class="prio" style="background:${pr.color}">${pr.emoji} ${esc(G.prioName(a.priority))}</span>${meta ? `<span class="small">${meta}</span>` : ""}</div>
+        ${a.notes ? `<span>${esc(a.notes)}</span>` : ""}</div>
+      <button class="cute ghost iconbtn" title="${t("editAct")}" onclick="G.UI.editAct('${a.id}')">✎</button></div>`;
   }
   function taskHTML(x) {
     const s = G.subj(x.subjectId), p = s ? G.pet(s.petId) : G.state.pets[0];
@@ -117,7 +144,14 @@ window.G = window.G || {};
   }
   const pawSVG = () => `<svg width="30" height="30" viewBox="0 0 40 40"><g fill="var(--accent2)" stroke="var(--ink)" stroke-width="2"><ellipse cx="20" cy="26" rx="9" ry="7.5"/><circle cx="9" cy="16" r="4"/><circle cx="16" cy="9" r="4"/><circle cx="24" cy="9" r="4"/><circle cx="31" cy="16" r="4"/></g></svg>`;
   const findTask = id => { for (const d in G.state.plan) { const x = G.state.plan[d].find(y => y.id === id); if (x) return [d, x]; } return []; };
-  UI.go = d => { const keys = [...new Set(Object.keys(G.state.plan).concat([G.todayIso()]))].sort(); const i = keys.indexOf(viewDay) + d; if (keys[i]) { viewDay = keys[i]; pToday(); } };
+  UI.go = d => { viewDay = G.addDays(viewDay || G.todayIso(), d); pToday(); };
+  UI.actToggle = (id, iso, el) => {
+    const a = G.state.activities.find(x => x.id === id); if (!a) return;
+    const v = !G.actDone(a, iso); G.setActDone(a, iso, v); G.save();
+    if (v) { G.addXP(15); G.burst(el); G.toast(t("actDone")); }
+    if (tab === "today") pToday(); else if (tab === "acts") pActs(); renderHeader();
+    if (v) setTimeout(() => { const c = document.querySelector(`[onclick*="${id}','${iso}"]`); c && G.bubble(c, G.phrase()); }, 120);
+  };
   UI.goto = d => { viewDay = d; if (tab !== "today") UI.show("today"); else pToday(); };
   UI.toggle = (id, el) => {
     const [d, x] = findTask(id); if (!x) return;
@@ -137,6 +171,93 @@ window.G = window.G || {};
     G.save(); pToday(); renderHeader();
   };
   const subjOptions = (sel, withAll) => (withAll ? `<option value="">${t("allSubjects")}</option>` : `<option value="">—</option>`) + G.state.subjects.map(s => `<option value="${s.id}" ${s.id === sel ? "selected" : ""}>${esc((s.emoji || "") + " " + (s.short || s.name))}</option>`).join("");
+
+  /* ================= ATIVIDADES / ACTIVITIES ================= */
+  let actFilter = "";
+  function pActs() {
+    G.actsInit();
+    const td = G.todayIso();
+    const chips = `<div class="chips"><button class="chip ${actFilter ? "off" : ""}" style="background:var(--card)" onclick="G.UI.actFilter('')">✨ ${t("allAreas")}</button>` +
+      G.AREA_ORDER.map(k => `<button class="chip ${actFilter && actFilter !== k ? "off" : ""}" style="background:${G.AREAS[k].color}" onclick="G.UI.actFilter('${k}')">${G.AREAS[k].emoji} ${esc(G.areaName(k))}</button>`).join("") + `</div>`;
+    const list = G.state.activities.filter(a => !actFilter || a.area === actFilter).sort((x, y) =>
+      (G.PRIORITIES[x.priority] || G.PRIORITIES.mid).rank - (G.PRIORITIES[y.priority] || G.PRIORITIES.mid).rank || (x.date || "").localeCompare(y.date || "") || (x.time || "").localeCompare(y.time || ""));
+    const rows = list.map(a => {
+      const ar = G.AREAS[a.area] || G.AREAS.daily, pr = G.PRIORITIES[a.priority] || G.PRIORITIES.mid;
+      const when = a.repeat === "daily" ? "🔁 " + t("everyDay") : a.repeat === "weekly" ? "🔁 " + G.repeatLabel(a) : (a.date ? "📅 " + fmt(a.date) : "");
+      return `<div class="task act"><span class="stripe" style="background:${esc(ar.color)}"></span>
+        <div class="t" style="margin-left:14px"><strong>${ar.emoji} ${esc(a.title)}</strong>
+        <div class="meta"><span class="prio" style="background:${pr.color}">${pr.emoji} ${esc(G.prioName(a.priority))}</span><span class="small">${esc(when)}${a.time ? " · 🕒 " + esc(a.time) : ""}${a.remind >= 0 && a.time ? " · 🔔" : ""}</span></div></div>
+        ${G.occursOn(a, td) ? `<button class="check small-check" title="✔" onclick="G.UI.actToggle('${a.id}','${td}',this)">${G.actDone(a, td) ? "✅" : pawSVG()}</button>` : ""}
+        <button class="cute ghost iconbtn" title="${t("editAct")}" onclick="G.UI.editAct('${a.id}')">✎</button></div>`;
+    }).join("");
+    const perm = G.reminders.permission();
+    const nInfo = perm === "native" ? t("notifInfoNative") : /iPhone|iPad|iPod/.test(navigator.userAgent) ? t("notifInfoIos") : t("notifInfoWeb");
+    const nBody = `<p class="small">${nInfo}</p>` + (perm === "default" ? `<button class="cute" onclick="G.UI.askNotif()">${t("notifAsk")}</button>` : perm === "granted" ? `<p>${t("notifOn")}</p>` : perm === "denied" ? `<p class="small">${t("notifDenied")}</p>` : perm === "native" ? `<button class="cute" onclick="G.UI.askNotif()">${t("notifAsk")}</button>` : `<p class="small">${t("notifUnsupported")}</p>`);
+    $("#panel").innerHTML = win("🗓️ " + (G.lang === "en" ? "activities.exe" : "atividades.exe"),
+      `<div class="nav"><button class="cute big-cta" onclick="G.UI.newAct()">${t("newAct")}</button></div>${chips}${rows || `<p>${t("noActs")}</p>`}`) +
+      win(t("notifTitle") + " · " + (G.lang === "en" ? "reminders.exe" : "lembretes.exe"), nBody);
+  }
+  UI.actFilter = k => { actFilter = k; pActs(); };
+  UI.askNotif = async () => { const r = await G.reminders.ask(); if (r === "granted") { G.toast(t("notifOn")); try { if (!G.isNative()) new Notification("☾ Grimório ☽", { body: t("notifOn"), icon: "assets/icon-192.png" }); } catch (e) { } } pActs(); };
+
+  /* formulário de atividade (janela) / activity form (modal) */
+  UI.newAct = date => UI.editAct(null, date);
+  UI.editAct = (id, date) => {
+    G.actsInit();
+    const a = id ? JSON.parse(JSON.stringify(G.state.activities.find(x => x.id === id))) : { id: "", title: "", area: actFilter || "daily", priority: "mid", date: date || viewDay || G.todayIso(), time: "", repeat: "none", days: [], remind: 15, petId: "", notes: "" };
+    const D = G.lang === "en" ? ["S", "M", "T", "W", "T", "F", "S"] : ["D", "S", "T", "Q", "Q", "S", "S"];
+    const remLbl = m => m < 0 ? t("remNone") : m === 0 ? t("remAtTime") : m >= 1440 ? t("remDayBefore") : m >= 60 ? t("remHourBefore", { h: m / 60 }) : t("remBefore", { m });
+    const m = document.createElement("div"); m.className = "modal"; m.id = "actModal";
+    m.innerHTML = win("✎ " + (id ? t("editAct") : t("newAct").replace("+ ", "")), `
+      <label class="f">${t("actTitle")}<input type="text" id="aTitle" value="${esc(a.title)}" maxlength="120" placeholder="${G.lang === "en" ? "e.g. Feed the cats" : "ex.: Dar comida pros gatos"}"></label>
+      <div class="f-lbl">${t("area")}</div><div class="pick areas">${G.AREA_ORDER.map(k => `<button class="pk ${a.area === k ? "on" : ""}" data-area="${k}" style="--c:${G.AREAS[k].color}">${G.AREAS[k].emoji}<span>${esc(G.areaName(k))}</span></button>`).join("")}</div>
+      <div class="f-lbl">${t("priority")}</div><div class="pick prios">${Object.keys(G.PRIORITIES).map(k => `<button class="pk ${a.priority === k ? "on" : ""}" data-prio="${k}" style="--c:${G.PRIORITIES[k].color}">${G.PRIORITIES[k].emoji}<span>${esc(G.prioName(k))}</span></button>`).join("")}</div>
+      <div class="f-lbl">${t("repeat")}</div><div class="pick reps">${[["none", t("repNone")], ["daily", t("repDaily")], ["weekly", t("repWeekly")]].map(([k, l]) => `<button class="pk ${a.repeat === k ? "on" : ""}" data-rep="${k}" style="--c:var(--accent2)"><span>${l}</span></button>`).join("")}</div>
+      <div class="pick days" id="aDays" style="${a.repeat === "weekly" ? "" : "display:none"}">${D.map((l, i) => `<button class="pk day ${(a.days || []).includes(i) ? "on" : ""}" data-day="${i}" style="--c:var(--accent)">${l}</button>`).join("")}</div>
+      <div class="row2"><label class="f" id="aDateL">${a.repeat === "none" ? t("date") : t("startDate")}<input type="date" id="aDate" value="${esc(a.date || "")}"></label>
+        <label class="f">${t("time")}<input type="time" id="aTime" value="${esc(a.time || "")}"></label></div>
+      <div class="row2"><label class="f">🔔 ${t("remind")}<select id="aRem">${G.REMIND_OPTS.map(v => `<option value="${v}" ${+a.remind === v ? "selected" : ""}>${remLbl(v)}</option>`).join("")}</select></label>
+        <label class="f">🐾 ${t("petRemind")}<select id="aPet"><option value="">${t("randomPet")}</option>${G.state.pets.map(p => `<option value="${p.id}" ${a.petId === p.id ? "selected" : ""}>${esc(p.name)}</option>`).join("")}</select></label></div>
+      <label class="f">${t("actNotes")}<textarea id="aNotes" style="min-height:60px">${esc(a.notes || "")}</textarea></label>
+      <div class="nav" style="margin-top:12px"><button class="cute big-cta" id="aSave">${t("saveAct")}</button><button class="cute ghost" id="aCancel">${t("cancel")}</button>${id ? `<button class="cute danger" id="aDel">${t("del")}</button>` : ""}</div>`);
+    document.body.appendChild(m);
+    const q = s => m.querySelector(s);
+    const pick = (sel, attr, set) => m.querySelectorAll(sel).forEach(b => b.onclick = () => { m.querySelectorAll(sel).forEach(x => x.classList.remove("on")); b.classList.add("on"); set(b.dataset[attr]); });
+    pick("[data-area]", "area", v => a.area = v);
+    pick("[data-prio]", "prio", v => a.priority = v);
+    pick("[data-rep]", "rep", v => { a.repeat = v; q("#aDays").style.display = v === "weekly" ? "" : "none"; q("#aDateL").firstChild.textContent = v === "none" ? t("date") : t("startDate"); if (v === "weekly" && !a.days.length) { a.days = [G.dow(q("#aDate").value || G.todayIso())]; m.querySelector(`[data-day="${a.days[0]}"]`).classList.add("on"); } });
+    m.querySelectorAll("[data-day]").forEach(b => b.onclick = () => { const d = +b.dataset.day; b.classList.toggle("on"); a.days = b.classList.contains("on") ? [...new Set(a.days.concat(d))] : a.days.filter(x => x !== d); });
+    q("#aCancel").onclick = () => m.remove();
+    if (q("#aDel")) q("#aDel").onclick = () => { if (!confirm(t("confirmDelete"))) return; G.state.activities = G.state.activities.filter(x => x.id !== id); G.save(); m.remove(); UI.refresh(); };
+    q("#aSave").onclick = () => {
+      a.title = q("#aTitle").value.trim(); if (!a.title) { G.toast(t("needTitle")); q("#aTitle").focus(); return; }
+      a.date = q("#aDate").value || G.todayIso(); a.time = q("#aTime").value; a.remind = +q("#aRem").value; a.petId = q("#aPet").value; a.notes = q("#aNotes").value.trim();
+      if (a.repeat === "weekly" && !a.days.length) a.repeat = "none";
+      if (!id) { a.id = G.uid(); a.createdAt = Date.now(); G.state.activities.push(a); }
+      else { const i = G.state.activities.findIndex(x => x.id === id); G.state.activities[i] = a; Object.keys(G.state.remFired).forEach(k => { if (k.startsWith(id + "|")) delete G.state.remFired[k]; }); }
+      G.save(); m.remove(); G.toast(t("actSaved")); G.burst(null, 40); UI.refresh();
+      if (a.remind >= 0 && a.time && G.reminders.permission() === "default") setTimeout(() => G.toast("🔔 " + t("notifAsk") + " → " + t("tabs.acts")), 2600);
+    };
+    setTimeout(() => q("#aTitle").focus(), 50);
+  };
+
+  /* lembrete com pet / pet reminder popup */
+  UI.reminderPopup = (o, title, body) => {
+    const pet = (o.a.petId && G.state.pets.find(p => p.id === o.a.petId)) || G.rnd(G.state.pets);
+    const el = document.createElement("div"); el.className = "rempop";
+    el.innerHTML = `<div class="rempet bob">${pet ? G.petSVG(pet, 120, "happy") : ""}<span class="nm">${esc(pet ? pet.name : "")}</span></div>
+      <div class="win" style="margin:0;flex:1"><div class="bar">🔔 ${G.lang === "en" ? "reminder.exe" : "lembrete.exe"}<span class="dots"><i></i><i></i><i></i></span></div><div class="wbody">
+      <div style="font-size:1.15rem;font-weight:900">${esc(title)}</div><p style="margin:6px 0">${esc(body)}</p>
+      <div class="nav"><button class="cute" data-r="done">${t("remDone")}</button><button class="cute alt" data-r="snooze">${t("remSnooze")}</button><button class="cute ghost" data-r="ok">${t("remOk")}</button></div></div></div>`;
+    document.body.appendChild(el);
+    try { const ac = new (window.AudioContext || window.webkitAudioContext)();[784, 988, 1175, 988].forEach((f, i) => { const os = ac.createOscillator(), g = ac.createGain(); os.type = "triangle"; os.frequency.value = f; os.connect(g); g.connect(ac.destination); const tt = ac.currentTime + i * .15; g.gain.setValueAtTime(.16, tt); g.gain.exponentialRampToValueAtTime(.001, tt + .25); os.start(tt); os.stop(tt + .25); }); } catch (e) { }
+    el.querySelectorAll("[data-r]").forEach(b => b.onclick = () => {
+      const r = b.dataset.r;
+      if (r === "done") { G.setActDone(o.a, o.iso, true); G.save(); G.addXP(15); G.burst(b, 60); G.toast(t("actDone")); if (tab === "today" || tab === "acts") renderPanel(); }
+      if (r === "snooze") G.reminders.snooze(o, 10);
+      el.remove();
+    });
+  };
 
   /* ================= CALENDÁRIO / CALENDAR ================= */
   function pCal() {
@@ -267,15 +388,21 @@ window.G = window.G || {};
     const sw = Object.keys(G.THEMES).map(k => { const c = G.THEMES[k]; return `<button class="sw ${k === th.preset ? "on" : ""}" onclick="G.UI.preset('${k}')"><span class="dots">${["bg", "primary", "accent", "accent2", "card"].map(x => `<i style="background:${c[x]}"></i>`).join("")}</span>${esc(t("presetNames")[k] || k)}</button>`; }).join("");
     const pick = ["bg", "dot", "primary", "primary2", "accent", "accent2", "card", "cardAlt", "ink", "onBg", "screen"].map(k => `<label class="f">${esc(t(k) === k ? k : t(k))}<input type="color" value="${cur[k]}" oninput="G.UI.color('${k}',this.value)"></label>`).join("");
     const shapes = Object.keys(G.TAMA_SHAPES).map(k => { const s = G.TAMA_SHAPES[k]; return `<button class="shape ${k === G.state.tamaShape ? "on" : ""}" onclick="G.UI.shape('${k}')"><svg width="44" height="50" viewBox="0 0 ${s.vb[0]} ${s.vb[1]}"><path d="${s.path}" fill="var(--primary)" stroke="var(--ink)" stroke-width="8"/></svg>${esc(t("shapeNames")[k])}</button>`; }).join("");
-    const arts = G.lang === "en" ? "" : `<label class="f">${t("article")}<select onchange="G.UI.owner('art',this.value)">${["da", "do", "de", ""].map(a => `<option ${a === G.state.owner.art ? "selected" : ""} value="${a}">${a || "—"}</option>`).join("")}</select></label>`;
+    const arts = pronSelect("", "G.UI.setPronoun(this.value)");
     $("#panel").innerHTML =
       win("👑 " + t("owner").toLowerCase().replace(/ /g, "_") + ".exe", `<div class="row2"><label class="f">${t("yourName")}<input type="text" value="${esc(G.state.owner.name)}" oninput="G.UI.owner('name',this.value)"></label>${arts}
         <label class="f">${t("language")}<select onchange="G.UI.lang(this.value)">${Object.keys(G.I18N).map(l => `<option value="${l}" ${l === G.lang ? "selected" : ""}>${G.I18N[l].langName}</option>`).join("")}</select></label></div>
         <p class="small">→ <b>${esc(G.pageTitle())}</b></p>`) +
       win("🎨 " + (G.lang === "en" ? "colors.exe" : "cores.exe"), `<h3>${t("preset")}</h3><div class="swatches">${sw}</div><h3>${t("custom")}</h3><div class="row2" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">${pick}</div>
         <div class="nav"><button class="cute ghost" onclick="G.UI.preset('${th.preset}')">↺ reset</button></div>`) +
-      win("🥚 " + (G.lang === "en" ? "virtual_pet.exe" : "bichinho_virtual.exe"), `<h3>${t("tamaShape")}</h3><div class="shapes">${shapes}</div>`);
+      win("🥚 " + (G.lang === "en" ? "virtual_pet.exe" : "bichinho_virtual.exe"), `<h3>${t("tamaShape")}</h3><div class="shapes">${shapes}</div>
+        <h3>${t("tamaBigger")} / ${t("tamaSmaller").toLowerCase()}</h3><div class="nav"><button class="cute iconbtn" onclick="G.tamaScale(-1)">−</button><button class="cute iconbtn" onclick="G.tamaScale(1)">+</button></div>`) +
+      win("♿ " + (G.lang === "en" ? "accessibility.exe" : "acessibilidade.exe"), `<h3>${t("textSize")}</h3><div class="nav"><button class="cute iconbtn" onclick="G.UI.textSize(-10)">A−</button><span style="align-self:center;font-weight:900">${(G.state.a11y || {}).text || 100}%</span><button class="cute iconbtn" onclick="G.UI.textSize(10)">A+</button></div>
+        <label class="toggle"><input type="checkbox" ${(G.state.a11y || {}).lessMotion ? "checked" : ""} onchange="G.UI.lessMotion(this.checked)"> ${t("lessMotion")}</label>`);
   }
+  G.applyA11y = () => { const a = G.state.a11y || {}; document.documentElement.style.fontSize = (a.text || 100) + "%"; document.body.classList.toggle("calm", !!a.lessMotion); };
+  UI.textSize = d => { G.state.a11y = G.state.a11y || {}; G.state.a11y.text = Math.max(80, Math.min(150, (G.state.a11y.text || 100) + d)); G.applyA11y(); G.save(); pLook(); };
+  UI.lessMotion = v => { G.state.a11y = G.state.a11y || {}; G.state.a11y.lessMotion = v; G.applyA11y(); G.save(); };
   UI.preset = k => { G.state.theme = { preset: k, custom: {} }; G.applyTheme(G.state.theme); G.save(); pLook(); G.tamaRender(); };
   UI.color = (k, v) => { G.state.theme.custom[k] = v; G.applyTheme(G.state.theme); later(); };
   UI.shape = k => { G.state.tamaShape = k; G.save(); G.tamaRender(); pLook(); };
@@ -312,7 +439,7 @@ window.G = window.G || {};
         ${UI._email ? `<div class="row2" style="grid-template-columns:1fr auto;align-items:end"><label class="f">${t("cloudCode")}<input type="text" id="cCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></label>
         <button class="cute alt" onclick="G.UI.cloudCode()">${t("cloudEnter")}</button></div><p class="small">${t("cloudCodeHelp")}</p>` : ""}`;
     } else {
-      body = `<p>☁️ ${t("cloudSignedAs", { e: esc(C.user.email || "") })}</p><p class="small">${t("cloudLast", { d: when(C.lastSync) })}</p>
+      body = `<p>☁️ ${t("cloudSignedAs", { c: G.pw(t("connectedF"), t("connectedM"), t("connectedN")), e: esc(C.user.email || "") })}</p><p class="small">${t("cloudLast", { d: when(C.lastSync) })}</p>
         <div class="nav"><button class="cute" onclick="G.cloud.sync()">${t("cloudSyncNow")}</button><button class="cute ghost" onclick="G.cloud.signOut()">${t("cloudSignOut")}</button></div>`;
     }
     if (C.status === "offline") body += `<p class="small">${t("cloudOffline")}</p>`;
@@ -407,20 +534,20 @@ window.G = window.G || {};
     m.innerHTML = win("✨ " + (G.lang === "en" ? "welcome.exe" : "bem_vinda.exe"), `<div style="text-align:center">${G.state.pets.map(p => G.petSVG(p, 90, "happy")).join("")}</div>
       <h2 style="text-align:center">${t("welcome")}</h2><p>${t("welcomeText")}</p>
       <div class="row2"><label class="f">${t("yourName")}<input type="text" id="obName"></label>
-      ${G.lang === "en" ? "" : `<label class="f">${t("article")}<select id="obArt"><option>da</option><option>do</option><option>de</option></select></label>`}
+      ${pronSelect("obPron")}
       <label class="f">${t("language")}<select id="obLang">${Object.keys(G.I18N).map(l => `<option value="${l}" ${l === G.lang ? "selected" : ""}>${G.I18N[l].langName}</option>`).join("")}</select></label></div>
       <div class="nav" style="justify-content:center;margin-top:10px"><button class="cute" id="obGo">${t("start")}</button><button class="cute ghost" id="obSkip">${t("skip")}</button></div>`);
     document.body.appendChild(m);
     const done = () => { G.state.onboarded = true; G.save(); m.remove(); UI.refresh(); marquee(); };
     m.querySelector("#obLang").onchange = e => { G.state.lang = G.lang = e.target.value; G.save(); m.remove(); onboarding(); };
-    m.querySelector("#obGo").onclick = () => { G.state.owner.name = m.querySelector("#obName").value.trim(); const a = m.querySelector("#obArt"); if (a) G.state.owner.art = a.value; done(); G.burst(null, 150); };
+    m.querySelector("#obGo").onclick = () => { G.state.owner.name = m.querySelector("#obName").value.trim(); const pv = m.querySelector("#obPron").value; G.state.owner.pronoun = pv; const r = PRON.find(x => x[0] === pv); if (r) G.state.owner.art = r[2]; done(); G.burst(null, 150); };
     m.querySelector("#obSkip").onclick = done;
   }
   function marquee() {
     $("#footTxt").textContent = t("footer").replace(/ ✦ open source ✦$/, " ✦");
     $("#marq").innerHTML = G.lang === "en"
-      ? "🎃 ☾ ✦ welcome to your study grimoire ✦ every mission is a spell ✦ your pets believe in you ✦ a few minutes of focus, then a nap ✦ 🦇 ✦ ☽ ✦ 🐾 ✦ 👻 ✦ 🎃"
-      : "🎃 ☾ ✦ bem-vinda(o) ao seu grimório de estudos ✦ cada missão é um feitiço ✦ seus pets acreditam em você ✦ alguns minutinhos de foco, depois sonequinha ✦ 🦇 ✦ ☽ ✦ 🐾 ✦ 👻 ✦ 🎃";
+      ? "🎃 ☾ ✦ welcome to your grimoire ✦ every mission is a spell ✦ your pets believe in you ✦ a few minutes of focus, then a nap ✦ 🦇 ✦ ☽ ✦ 🐾 ✦ 👻 ✦ 🎃"
+      : "🎃 ☾ ✦ " + G.pw("bem-vinda", "bem-vindo", "bem-vinde") + " ao seu grimório ✦ cada missão é um feitiço ✦ seus pets acreditam em você ✦ alguns minutinhos de foco, depois sonequinha ✦ 🦇 ✦ ☽ ✦ 🐾 ✦ 👻 ✦ 🎃";
   }
 
   /* ================= AVISO DE INSTALAÇÃO NO IPHONE / iOS INSTALL HINT ================= */
@@ -441,12 +568,14 @@ window.G = window.G || {};
   /* ================= INÍCIO / START ================= */
   G.start = async function () {
     G.load(); G.applyTheme(G.state.theme); document.documentElement.lang = G.lang === "pt" ? "pt-BR" : G.lang;
-    G.fxInit(); marquee(); G.tamaRender(); UI.refresh();
+    G.applyA11y(); G.fxInit(); marquee(); G.tamaRender(); UI.refresh();
+    document.addEventListener("click", e => { if ($("#tabs").classList.contains("open") && !e.target.closest("#tabs,#menuBtn")) UI.menu(false); });
     // proteção: recupera do IndexedDB se o localStorage foi limpo / recover from IndexedDB if needed
     if (await G.safety.recover()) { G.applyTheme(G.state.theme); G.tamaRender(); UI.refresh(); G.toast(t("recovered")); }
     else G.safety.mirror();
     onboarding(); iosHint();
     await G.safety.requestPersist(); await G.safety.initFile(); renderXP();
+    G.reminders.start();
     G.cloud.init();
   };
 })();

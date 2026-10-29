@@ -39,6 +39,10 @@ jobs:
           npx cap add android
           npx capacitor-assets generate --android --iconBackgroundColor '#3a1d5c' --iconBackgroundColorDark '#3a1d5c' --splashBackgroundColor '#3a1d5c' --splashBackgroundColorDark '#3a1d5c'
           npx cap sync android
+          # permissões de notificação (Android 13+) e alarmes exatos para os lembretes
+          M=android/app/src/main/AndroidManifest.xml
+          for P in POST_NOTIFICATIONS SCHEDULE_EXACT_ALARM; do grep -q "permission.$P" $M || sed -i "s#</manifest>#    <uses-permission android:name=\"android.permission.$P\" />\n</manifest>#" $M; done
+          grep -n "uses-permission" $M
           sed -i "s/versionCode 1$/versionCode ${{ github.run_number }}/; s/versionName \"1.0\"/versionName \"1.${{ github.run_number }}\"/" android/app/build.gradle
           grep -E "versionCode|versionName" android/app/build.gradle
 

@@ -23,7 +23,7 @@ window.G = window.G || {};
     cv = document.getElementById("fx"); cx = cv.getContext("2d"); fit(); addEventListener("resize", fit);
     let lt = 0;
     addEventListener("mousemove", e => {
-      const now = Date.now(); if (now - lt < 70) return; lt = now;
+      const now = Date.now(); if (now - lt < 70 || document.body.classList.contains("calm")) return; lt = now;
       const s = document.createElement("span"); s.className = "trail"; s.textContent = G.rnd(["✦", "✧", "★", "·"]);
       s.style.color = G.rnd([getVar("primary"), getVar("accent"), getVar("accent2")]);
       s.style.left = e.clientX + 8 + "px"; s.style.top = e.clientY + 8 + "px";
@@ -32,7 +32,7 @@ window.G = window.G || {};
   };
   const getVar = k => getComputedStyle(document.documentElement).getPropertyValue("--" + k).trim() || "#ff8c2b";
   G.burst = function (el, n = 120) {
-    if (!cx) return;
+    if (!cx || document.body.classList.contains("calm")) return;
     let x = innerWidth / 2, y = innerHeight / 3;
     if (el) { const r = el.getBoundingClientRect(); x = r.left + r.width / 2; y = r.top + r.height / 2; }
     const col = [getVar("primary"), getVar("accent"), getVar("accent2"), getVar("ink"), "#ffd86b"];

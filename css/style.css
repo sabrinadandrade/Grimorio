@@ -130,23 +130,23 @@ details.sub .in { padding:10px 14px 14px }
 .modal { position:fixed; inset:0; background:#0009; display:grid; place-items:center; z-index:200; padding:16px }
 .modal .win { max-width:520px; width:100% }
 /* bichinho virtual / virtual pet */
-#tama { position:fixed; right:16px; bottom:14px; z-index:60; width:200px; transition:transform .3s; filter:drop-shadow(6px 6px 0 var(--ink)) }
-#tama.mini { transform:scale(.55); transform-origin:bottom right }
+#tama { position:fixed; right:16px; bottom:14px; z-index:60; width:200px; transition:width .25s; filter:drop-shadow(6px 6px 0 var(--ink)); --bt:46px; --fs:1 }
 #tama .shell { position:absolute; inset:0; width:100%; height:100%; overflow:visible }
 #tama .scr { position:absolute; background:var(--screen); border:3px solid var(--ink); border-radius:14px; padding:4px; font-family:"VT323",monospace; box-shadow:inset 3px 3px 0 #0002; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden }
 #tama .scr #tcat { line-height:0; cursor:inherit }
-#tama .tm { font-size:2.1rem; line-height:1 }
-#tama .md { font-size:1rem; line-height:1 }
-#tama .lbl { font-size:.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100% }
+#tama .tm { font-size:calc(2.1rem * var(--fs)); line-height:1 }
+#tama .md { font-size:calc(1rem * var(--fs)); line-height:1 }
+#tama .lbl { font-size:calc(.9rem * var(--fs)); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100% }
+#tama .scr #tcat svg { width:calc(58px * var(--fs)); height:calc(58px * var(--fs)) }
 #tama .scr.compact .tm { font-size:1.6rem } #tama .scr.compact .lbl { display:none } #tama .scr.compact .md { font-size:.85rem }
-#tama .row { position:absolute; left:0; right:0; display:flex; justify-content:center; gap:10px }
-#tama .row button { width:34px; height:34px; border-radius:50%; border:3px solid var(--ink); background:var(--accent); font-weight:900; box-shadow:2px 2px 0 var(--ink); font-size:.82rem; padding:0 }
+#tama .row { position:absolute; left:-10px; right:-10px; display:flex; justify-content:center; gap:8px; transform:translateY(-12%) }
+#tama .row button { width:var(--bt); height:var(--bt); border-radius:50%; border:3px solid var(--ink); background:var(--accent); font-weight:900; box-shadow:3px 3px 0 var(--ink); font-size:calc(var(--bt) * .38); padding:0; touch-action:manipulation }
 #tama .row button:nth-child(2) { background:var(--card) } #tama .row button:nth-child(3) { background:var(--accent2) }
 #tama .row button:active { transform:translate(2px,2px); box-shadow:none }
 #tama .chain { position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:1.3rem }
-#tama .hide { position:absolute; top:4px; right:4px; border:2px solid var(--ink); background:var(--card); border-radius:50%; width:22px; height:22px; font-size:.8rem; line-height:1; padding:0; z-index:2 }
-.ioshint { position:fixed; left:10px; right:10px; bottom:10px; z-index:150; animation:pop .3s; font-size:.95rem }
-.ioshint .ishare { display:inline-block; border:2px solid var(--ink); border-radius:6px; padding:0 5px; background:var(--cardAlt) }
+#tama .tsz { position:absolute; top:-6px; width:40px; height:40px; border:3px solid var(--ink); background:var(--card); border-radius:50%; font-size:1.4rem; font-weight:900; line-height:1; padding:0; z-index:2; box-shadow:2px 2px 0 var(--ink); touch-action:manipulation }
+#tama .tminus { left:-6px } #tama .tplus { right:-6px }
+#tama .tsz:active, #tama .row button:active { transform:translate(2px,2px); box-shadow:none }
 #fx { position:fixed; inset:0; pointer-events:none; z-index:99 }
 .toast { position:fixed; left:50%; top:18px; transform:translateX(-50%); background:var(--ink); color:var(--primary); border:3px solid var(--primary); padding:10px 20px; border-radius:16px; font-weight:900; z-index:230; animation:pop .3s; box-shadow:4px 4px 0 var(--ink) }
 .trail { position:fixed; pointer-events:none; z-index:140; font-size:12px; animation:fade .8s forwards }
@@ -156,11 +156,53 @@ details.sub .in { padding:10px 14px 14px }
 .foot { text-align:center; font-family:"VT323",monospace; font-size:1.2rem; color:var(--onBg); margin-top:20px }
 .foot a { color:var(--primary) }
 @media (max-width:600px) {
-  #tama { width:118px; right:8px; bottom:8px } #tama .tm { font-size:1.3rem } #tama .lbl, #tama .md { display:none } #tama .row button { width:24px; height:24px; font-size:.65rem; border-width:2px }
-  #tama .scr #tcat svg { width:30px; height:30px }
+  #tama { right:8px; bottom:8px } #tama .lbl { display:none }
   .gang svg { width:56px; height:56px } h1 { font-size:1.5rem }
-  .tabs { flex-wrap:nowrap; overflow-x:auto; padding-bottom:8px; scrollbar-width:none } .tab { flex-shrink:0; font-size:.85rem }
   .task { flex-wrap:wrap; gap:8px } .task .t { flex:1 1 calc(100% - 90px) } .task > .cute { margin-left:auto }
   .check { width:48px; height:48px } .wbody { padding:12px } .wrap { padding:0 12px 130px }
 }
+/* ===== menu em cascata (celular e tablet) / cascade menu ===== */
+.menubtn { display:none }
+@media (max-width:900px) {
+  .menubtn { display:flex; align-items:center; gap:10px; width:100%; min-height:56px; margin:8px 0 12px; padding:6px 16px; border:3px solid var(--ink); border-radius:18px; background:var(--ink); color:var(--primary); font-weight:900; font-size:1.05rem; box-shadow:4px 4px 0 var(--primary); text-align:left }
+  .menubtn .mb-ic { font-size:1.4rem } .menubtn .mb-t { flex:1 } .menubtn .mb-a { transition:transform .25s } .menubtn.open .mb-a { transform:rotate(180deg) }
+  .tabs { display:none; flex-direction:column; gap:8px; margin:-4px 0 16px; position:relative; z-index:70 }
+  .tabs.open { display:flex }
+  .tabs.open .tab { width:100%; min-height:54px; font-size:1.05rem; padding:6px 16px 6px 8px; animation:cascade .32s both; animation-delay:calc(var(--i) * 45ms) }
+  .tabs.open .tab svg { width:40px; height:40px }
+}
+@keyframes cascade { from { opacity:0; transform:translateY(-14px) scale(.96) } to { opacity:1; transform:none } }
+/* ===== toques confortáveis / comfortable touch targets ===== */
+.cute { min-height:44px } .tab { min-height:44px } .x { min-width:44px; min-height:44px } .chip { min-height:40px }
+.iconbtn { min-width:48px; font-size:1.2rem; padding:6px 12px }
+.big-cta { font-size:1.05rem; padding:10px 20px }
+/* ===== atividades / activities ===== */
+.task .meta { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:3px 0 }
+.prio { border:2px solid var(--ink); border-radius:999px; padding:1px 10px; font-size:.78rem; font-weight:900; color:var(--ink) }
+.small-check { width:48px; height:48px; font-size:1.3rem }
+.f-lbl { font-size:.85rem; color:var(--inkSoft); margin:12px 0 6px }
+.pick { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px }
+.pick.prios, .pick.reps { grid-template-columns:repeat(3,1fr) }
+.pick.days { grid-template-columns:repeat(7,1fr); margin-top:8px }
+.pk { display:flex; align-items:center; gap:8px; min-height:48px; border:3px solid var(--ink); border-radius:14px; background:var(--card); padding:6px 10px; font-weight:800; font-size:.92rem; text-align:left; box-shadow:2px 2px 0 var(--ink); touch-action:manipulation }
+.pk span { flex:1 } .pk.day { justify-content:center; font-size:1rem }
+.pk.on { background:var(--c); box-shadow:inset 0 0 0 3px var(--ink), 2px 2px 0 var(--ink) }
+.modal { overflow-y:auto; align-items:start }
+.modal .win { max-width:640px; margin:20px auto }
+.toggle { display:flex; gap:10px; align-items:center; margin-top:12px; font-weight:800 } .toggle input { width:24px; height:24px }
+/* lembrete com pet / pet reminder */
+.rempop { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); z-index:240; width:min(560px,calc(100vw - 20px)); display:flex; gap:10px; align-items:flex-end; animation:pop .35s }
+.rempet { flex-shrink:0; text-align:center; filter:drop-shadow(4px 4px 0 var(--ink)) }
+.ioshint { position:fixed; left:10px; right:10px; bottom:10px; z-index:150; animation:pop .3s; font-size:.95rem }
+.ioshint .ishare { display:inline-block; border:2px solid var(--ink); border-radius:6px; padding:0 5px; background:var(--cardAlt) }
+#tama .scr.compact #tcat svg { width:calc(40px * var(--fs)); height:calc(40px * var(--fs)) }
+/* menos animações / less motion */
+body.calm .marq span, body.calm .bob { animation:none } body.calm .inner { transition:none } body.calm .trail { display:none }
+@media (max-width:600px) {
+  .rempop { flex-direction:column; align-items:center } .rempet svg { width:90px; height:90px }
+  .pick { grid-template-columns:1fr 1fr } .pick.prios, .pick.reps { grid-template-columns:1fr 1fr 1fr } .pk { font-size:.85rem; padding:6px 8px }
+  .row2 { grid-template-columns:1fr !important } .addrow { grid-template-columns:1fr !important }
+  .chips { justify-content:flex-start }
+}
+.addrow { grid-template-columns:2fr 1fr auto; align-items:end }
 @media (prefers-reduced-motion: reduce) { .marq span, .bob { animation:none } .inner { transition:none } }
