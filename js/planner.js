@@ -79,6 +79,7 @@ G.buildPlan = function () {
 };
 
 G.dayTitle = function (day) {
+  if (G.state.dayTitles && G.state.dayTitles[day]) return G.state.dayTitles[day]; // título personalizado / custom title
   const tasks = G.state.plan[day] || [];
   if (tasks.some(x => x.kind === "exam")) return G.t("examDay");
   const subs = [...new Set(tasks.filter(x => x.kind === "study").map(x => x.subjectId))].map(G.subj).filter(Boolean);

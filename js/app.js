@@ -59,7 +59,7 @@ window.G = window.G || {};
   }
 
   /* ================= ABAS / TABS ================= */
-  const TABS = ["today", "cal", "tarot", "subjects", "pets", "look", "data", "tips"];
+  const TABS = ["today", "cal", "tarot", "notes", "subjects", "pets", "look", "data", "tips"];
   function renderTabs() {
     const pets = G.state.pets;
     $("#tabs").innerHTML = TABS.map((k, i) => {
@@ -70,7 +70,7 @@ window.G = window.G || {};
   }
   UI.show = k => { tab = k; renderTabs(); renderPanel(); window.scrollTo({ top: $("#tabs").offsetTop - 10, behavior: "smooth" }); };
   function renderPanel() {
-    const P = { today: pToday, cal: pCal, tarot: pTarot, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
+    const P = { today: pToday, cal: pCal, tarot: pTarot, notes: pNotes, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
     $("#panel").innerHTML = ""; $("#panel").className = "panel on"; P[tab]();
   }
   UI.refresh = () => { if (G.state.onboarded) document.querySelectorAll(".modal").forEach(m => m.remove()); renderHeader(); renderTabs(); renderPanel(); G.tamaRedraw && G.tamaRedraw(); };
@@ -381,6 +381,19 @@ window.G = window.G || {};
   };
 
   UI.reset = async () => { if (!confirm(t("resetConfirm"))) return; await G.reset(); G.applyTheme(G.state.theme); G.tamaRender(); viewDay = null; tarotFilter = null; UI.refresh(); onboarding(); };
+
+  /* ================= O QUE CAI / NOTES ================= */
+  function pNotes() {
+    const subs = G.state.subjects;
+    const body = subs.length ? `<p class="small">${t("notesHelp")}</p>` + subs.map(s => {
+      const ex = G.state.exams.filter(e => e.subjectId === s.id).map(e => `📝 ${fmt(e.date)} ${esc(e.time)} ${esc(e.place)}`).join(" · ");
+      return `<div class="mat" style="border-color:${esc(s.color)}"><h3>${G.petSVG(G.pet(s.petId), 40)} ${esc(s.emoji || "📚")} ${esc(s.name)}</h3>
+        ${ex ? `<div class="small">${ex}</div>` : ""}
+        ${s.topics.length ? `<ol>${s.topics.map(x => `<li><b>${esc(x.title)}</b>${x.detail ? ` <span class="small">— ${esc(x.detail)}</span>` : ""}</li>`).join("")}</ol>` : ""}
+        ${s.notes ? `<p>🎯 ${esc(s.notes).replace(/\n/g, "<br>")}</p>` : ""}</div>`;
+    }).join("") : `<p>${t("emptyPlan")}</p>`;
+    $("#panel").innerHTML = win("📜 " + (G.lang === "en" ? "whats_on_the_exam.txt" : "o_que_cai.txt"), body);
+  }
 
   /* ================= DICAS / TIPS ================= */
   function pTips() { $("#panel").innerHTML = win("🕯️ " + (G.lang === "en" ? "focus_tips.doc" : "dicas_de_foco.doc"), `<ul class="tip">${t("tipList").map(x => `<li>${x}</li>`).join("")}</ul>`); }
