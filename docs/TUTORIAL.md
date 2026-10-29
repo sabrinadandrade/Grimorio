@@ -272,8 +272,10 @@ Na hora do lembrete, **seu pet aparece na tela** com um somzinho:
 | Onde | Como você é avisado |
 |---|---|
 | 🤖 **App Android (APK)** | Notificação de verdade no celular, **mesmo com o app fechado**. |
-| 💻 **Computador** (Chrome, Edge, Opera…) | O pet aparece e o navegador mostra uma notificação, **com o Grimório aberto** (pode estar em outra aba). |
-| 🍎 **iPhone** | O pet aparece quando o Grimório está aberto. Abra o app algumas vezes por dia 💜 |
+| 💻 **Computador** (Chrome, Edge, Opera…) | O pet aparece e o navegador mostra uma notificação. Conectado à nuvem, toque em **📲 Ativar avisos com o app fechado** para receber até com a aba fechada. |
+| 🍎 **iPhone** (iOS 16.4 ou mais novo) | Com o Grimório **instalado na Tela de Início** e conectado à nuvem: toque em **📲 Ativar avisos com o app fechado** e aceite. Pronto, chega notificação **mesmo com o app fechado**. |
+
+> 📲 **Avisos com o app fechado** precisam de duas coisas: estar **conectado à nuvem** (aba *Importar / conectar → Nuvem*) e o servidor ter as notificações ligadas (quem usa o site oficial já tem; quem monta o próprio servidor, veja o [guia do Supabase](SUPABASE.md#5-avisos-com-o-app-fechado-opcional)). Ative uma vez **em cada aparelho**.
 
 > 💡 Se você abrir o Grimório **depois** do horário (até 2 horas), o pet ainda te avisa do que passou.
 
@@ -444,7 +446,7 @@ Antes de importar um backup, apagar tudo ou baixar da nuvem, o Grimório guarda 
 → Isso acontece quando há muitos temas e poucos dias até a prova. Na aba **Matérias & provas**, junte temas parecidos numa linha só (ex.: `Derivadas e regra da cadeia`) e clique em **Gerar plano** de novo. Você também pode apagar feitiços com o **✕**.
 
 **O lembrete não apareceu**
-→ Confira se a atividade tem **hora** e **lembrete** escolhidos. No computador e no Android pelo navegador, ative as notificações (aba **Atividades → 🔔 Ativar notificações**) e deixe o Grimório aberto. Para avisos com o app fechado, use o **app Android**.
+→ Confira se a atividade tem **hora** e **lembrete** escolhidos. No computador e no Android pelo navegador, ative as notificações (aba **Atividades → 🔔 Ativar notificações**) e deixe o Grimório aberto. Para avisos com o app fechado, conecte-se à nuvem e toque em **📲 Ativar avisos com o app fechado** (no iPhone, instale na Tela de Início antes), ou use o **app Android**.
 
 **Pulei uns dias e o plano ficou para trás**
 → Sem culpa! 💛 É só clicar em **✨ Gerar / atualizar plano** de novo: ele redistribui o que falta a partir de hoje.

@@ -9,5 +9,7 @@
 window.G = window.G || {};
 G.CONFIG = {
   supabaseUrl: "https://udjylehlkvxdyrjrmtmx.supabase.co",
-  supabaseAnonKey: "sb_publishable_kQptVwZWYgXrUXSuU7gj_A_-BRF1ja0"
+  supabaseAnonKey: "sb_publishable_kQptVwZWYgXrUXSuU7gj_A_-BRF1ja0",
+  // chave PÚBLICA de Web Push (a privada fica só no Supabase) / PUBLIC Web Push key
+  vapidPublicKey: "BCOCBuHyt0Kpy3IPggAHgJd8jDnoJdpy7HGsmjOk6MaItPmFDCzrFjgAcTLltQyAobdLP6wTs05fyqIqZ4rRCgE"
 };

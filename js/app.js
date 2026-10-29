@@ -207,10 +207,18 @@ window.G = window.G || {};
     const perm = G.reminders.permission();
     const nInfo = perm === "native" ? t("notifInfoNative") : /iPhone|iPad|iPod/.test(navigator.userAgent) ? t("notifInfoIos") : t("notifInfoWeb");
     const nBody = `<p class="small">${nInfo}</p>` + (perm === "default" ? `<button class="cute" onclick="G.UI.askNotif()">${t("notifAsk")}</button>` : perm === "granted" ? `<p>${t("notifOn")}</p>` : perm === "denied" ? `<p class="small">${t("notifDenied")}</p>` : perm === "native" ? `<button class="cute" onclick="G.UI.askNotif()">${t("notifAsk")}</button>` : `<p class="small">${t("notifUnsupported")}</p>`);
+    const ps = G.push.status;
+    const pBody = perm === "native" ? "" : `<h3>${t("pushTitle")}</h3>` + (ps === "on" ? `<p>${t("pushOn")}</p><button class="cute ghost" onclick="G.UI.pushOff()">${t("pushDisable")}</button>`
+      : ps === "install" ? `<p class="small">${t("pushInstall")}</p>` : ps === "unsupported" ? `<p class="small">${t("pushUnsupported")}</p>`
+      : !(G.cloud && G.cloud.user) ? `<p class="small">${t("pushNeedCloud")}</p><button class="cute alt" onclick="G.UI.show('data')">☁️ ${t("cloud")}</button>`
+      : `<button class="cute big-cta" onclick="G.UI.pushOn()">${t("pushEnable")}</button>`);
     $("#panel").innerHTML = win("🗓️ " + (G.lang === "en" ? "activities.exe" : "atividades.exe"),
       `<div class="nav"><button class="cute big-cta" onclick="G.UI.newAct()">${t("newAct")}</button></div>${chips}${rows || `<p>${t("noActs")}</p>`}`) +
-      win(t("notifTitle") + " · " + (G.lang === "en" ? "reminders.exe" : "lembretes.exe"), nBody);
+      win(t("notifTitle") + " · " + (G.lang === "en" ? "reminders.exe" : "lembretes.exe"), nBody + pBody);
+    G.push.refresh().then(s => { if (s !== ps && tab === "acts") pActs(); });
   }
+  UI.pushOn = async () => { try { await G.push.enable(); G.toast(t("pushOk")); G.burst(null, 80); } catch (e) { alert("⚠️ " + (e.message || e)); } pActs(); };
+  UI.pushOff = async () => { await G.push.disable(); pActs(); };
   UI.actFilter = k => { actFilter = k; pActs(); };
   UI.askNotif = async () => { const r = await G.reminders.ask(); if (r === "granted") { G.toast(t("notifOn")); try { if (!G.isNative()) new Notification("☾ Grimório ☽", { body: t("notifOn"), icon: "assets/icon-192.png" }); } catch (e) { } } pActs(); };
 
@@ -622,6 +630,7 @@ window.G = window.G || {};
   /* ================= INÍCIO / START ================= */
   G.start = async function () {
     G.load(); G.applyTheme(G.state.theme); document.documentElement.lang = G.lang === "pt" ? "pt-BR" : G.lang;
+    G.state.tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || G.state.tz;
     G.applyA11y(); G.fxInit(); marquee(); G.tamaRender(); UI.refresh();
     document.addEventListener("click", e => { if ($("#tabs").classList.contains("open") && !e.target.closest("#tabs,#menuBtn")) UI.menu(false); });
     // proteção: recupera do IndexedDB se o localStorage foi limpo / recover from IndexedDB if needed

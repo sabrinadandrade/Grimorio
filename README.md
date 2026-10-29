@@ -15,7 +15,7 @@ Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho
 - **Feitiços de hoje**: poucas tarefas por dia, com XP, níveis (de Aprendiz a Arquimaga 👑) e luas que vão enchendo 🌑→🌕.
 - **Atividades da vida toda** 🆕: estudos, rotina diária, casa, pets, cuidados maternais/paternais, trabalho, compromissos e saúde, com **prioridade** (🔥 alta, ⭐ média, 🌙 baixa), **repetição** (todo dia ou dias da semana) e **lembrete**.
 - **Subtarefas, visão da semana, sequência de dias 🔥 e conquistas 🏆** 🆕
-- **Lembretes com seu pet** 🆕: na hora, seu pet aparece na tela te lembrando. No app Android, chega notificação mesmo com o app fechado.
+- **Lembretes com seu pet** 🆕: na hora, seu pet aparece na tela te lembrando. Com a nuvem ligada, chega notificação **mesmo com o app fechado**: no iPhone (instalado na Tela de Início), no computador e no Android.
 - **Feito para todo mundo:** nome ou apelido com **pronome** (ela/dela, ele/dele, elu/delu), **menu em cascata** no celular, bichinho com **tamanho ajustável (−/+)**, botões grandes, **tamanho do texto** e modo **menos animações**.
 - **Bichinho virtual (timer de foco)**: estilo tamagotchi, em 5 formatos (ovo, coração, chapéu de bruxa, estrela e lua). Seu pet dorme na pausa 😴.
 - **Tarot de estudos (flashcards)**: as cartas que você erra voltam mais vezes.

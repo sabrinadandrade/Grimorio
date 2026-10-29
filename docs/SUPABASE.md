@@ -62,6 +62,22 @@ G.CONFIG = {
 
 Fica, e tudo bem: a chave **publishable** (ou **anon**) foi feita para ficar no navegador. Quem protege os dados são as **regras RLS** do passo 2. **Nunca** coloque a chave **secret** (`sb_secret_…`) ou a `service_role` no site.
 
+## 5. Avisos com o app fechado (opcional)
+
+Isso faz o iPhone, o computador e o Android pelo navegador receberem lembretes **mesmo com o Grimório fechado** (padrão *Web Push*).
+
+1. **Gere suas chaves de notificação** (um par público/privado). No computador, com o Node instalado:
+   ```
+   npx web-push generate-vapid-keys
+   ```
+2. Cole a **Public Key** em `js/config.js` → `vapidPublicKey`, e também no topo de `supabase/functions/send-reminders/index.ts` (`VAPID_PUBLIC_KEY`).
+3. **Crie a função:** no Supabase, **Edge Functions → Deploy a new function → Via Editor**. Apague o exemplo, cole todo o conteúdo de [`supabase/functions/send-reminders/index.ts`](../supabase/functions/send-reminders/index.ts), dê o nome **`send-reminders`** e clique em **Deploy function**. Deixe o *Verify JWT* **ligado**.
+4. **Guarde a chave privada:** **Edge Functions → Secrets → Add new secret**. Name: `VAPID_PRIVATE_KEY`, Value: a **Private Key** do passo 1. Salve. ⚠️ Essa chave **nunca** vai para o GitHub.
+5. **Ligue o relógio:** abra o [`supabase/push.sql`](../supabase/push.sql), troque `SEU-PROJETO` pelo id do seu projeto e `COLE_A_CHAVE_ANON` pela chave **anon (public)** (Project Settings → API Keys → aba *Legacy anon, service_role API keys*). Cole no **SQL Editor** e clique em **Run**. Se aparecer *Potential issue detected*, clique em **Run query**.
+6. Teste: no Grimório, aba **Atividades → lembretes.exe → 📲 Ativar avisos com o app fechado**. Crie uma atividade para daqui a 3 minutos com lembrete "na hora" e feche o app.
+
+> A função roda a cada minuto, olha só quem ativou os avisos e manda cada lembrete **uma única vez**.
+
 ## Como a sincronização funciona
 
 - O app é **local-first**: funciona offline e salva primeiro no aparelho.
