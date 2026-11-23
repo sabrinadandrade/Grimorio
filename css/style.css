@@ -355,3 +355,29 @@ input[type=text], input[type=date], input[type=time], input[type=number], input[
 .petgrid { grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr)) }
 .row2 { grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr)) }
 .row2 > *, .petcard { min-width:0 }
+
+/* Rotina de skincare / skincare routine */
+.skin-page { display:grid; grid-template-columns:1fr; gap:16px }
+.skin-page .wbody > h2 { margin:0 0 8px }
+.skin-step { width:100%; display:grid; grid-template-columns:34px minmax(0,1fr); gap:10px; align-items:center; text-align:left; border:2px solid var(--ink); border-radius:14px; padding:10px 12px; margin:7px 0; background:var(--cardAlt); box-shadow:2px 2px 0 var(--ink); cursor:pointer; touch-action:manipulation }
+.skin-step:hover { transform:translateY(-1px) }
+.skin-step:focus-visible { outline:3px solid var(--accent2); outline-offset:2px }
+.skin-step.done { background:color-mix(in srgb,var(--accent) 48%,var(--card)); opacity:.78 }
+.skin-check { width:28px; height:28px; border:2px solid var(--ink); border-radius:50%; background:var(--card); display:grid; place-items:center; font-weight:900 }
+.skin-step.done .skin-check { background:var(--accent); color:var(--ink) }
+.skin-product { min-width:0; display:flex; flex-direction:column; gap:2px }
+.skin-product small { color:var(--inkSoft); font-size:.84rem; line-height:1.35; font-weight:700 }
+.skin-alert { border:2px solid var(--ink); border-left:8px solid var(--primary); border-radius:12px; padding:12px; margin:12px 0; background:var(--cardAlt) }
+.skin-alert p { margin:5px 0 }
+.skin-safety { border:2px dashed var(--inkSoft); border-radius:12px; padding:10px 12px; background:var(--cardAlt) }
+.skin-confirm { display:flex; gap:9px; align-items:flex-start; margin:10px 0; line-height:1.4 }
+.skin-confirm input { width:20px; height:20px; flex:0 0 auto; accent-color:var(--primary2) }
+.skin-week { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:8px }
+.skin-day { display:flex; flex-direction:column; gap:5px; padding:10px; border:2px solid var(--ink); border-radius:12px; background:var(--cardAlt); min-height:72px }
+.skin-day.is-today { background:var(--accent); box-shadow:3px 3px 0 var(--ink) }
+.skin-day span { font-size:.85rem; line-height:1.3 }
+.skin-laser-form { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr)); gap:10px; align-items:end }
+.skin-laser-form .nav { grid-column:1/-1 }
+@media (prefers-reduced-motion:reduce) { .skin-step:hover { transform:none } }
+
+.skin-swatch{display:inline-block;width:.82em;height:.82em;border-radius:50%;background:var(--swatch);border:2px solid var(--ink);vertical-align:-.05em;margin-right:.3em}

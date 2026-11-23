@@ -27,6 +27,7 @@ window.G = window.G || {};
     cards: [],
     plan: {},
     settings: { blocksPerDay: 3, startDate: "", focus: 25, pause: 5 },
+    skincare: { phase4: false, phase4Ready: false, morningMoisturizer: "serum", done: {}, laser: { date: "", beard: true, txPauseDays: 5, recoveryDays: 7, recoveryConfirmed: false } },
     xp: 0, pomos: 0, onboarded: false,
     createdAt: Date.now(), updatedAt: 0, lastBackupAt: 0
   });

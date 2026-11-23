@@ -1,7 +1,7 @@
 {
-  "name": "Grimório: planner kawaii",
+  "name": "Grimório: rotina de skincare",
   "short_name": "Grimório",
-  "description": "Planner kawaii anos 90 para estudos e assuntos pessoais, com pets, timer de foco e flashcards.",
+  "description": "Rotina de skincare Creamy e autocuidado com checklist diário e protocolo para laser facial.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#3a1d5c",

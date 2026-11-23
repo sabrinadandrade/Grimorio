@@ -12,7 +12,7 @@ window.G = window.G || {};
   const fmt = s => { const d = new Date(s + "T12:00"); return DOW[G.lang][d.getDay()] + " " + (G.lang === "en" ? G.pad2(d.getMonth() + 1) + "/" + G.pad2(d.getDate()) : G.pad2(d.getDate()) + "/" + G.pad2(d.getMonth() + 1)); };
   const MOON = ["🌑", "🌒", "🌓", "🌔", "🌕"];
   const moonOf = f => MOON[Math.max(0, Math.min(4, Math.round(f * 4)))];
-  let tab = "today", viewDay = null, tarotFilter = null, curCard = null, lastParsed = null, saveTimer = null;
+  let tab = "skin", viewDay = null, tarotFilter = null, curCard = null, lastParsed = null, saveTimer = null;
   const UI = G.UI = {};
   UI.boxMin = k => { UI.toggleMin(k); renderXP(); renderCountdowns(); };
   UI.toggleMin = (k, el) => {
@@ -66,28 +66,14 @@ window.G = window.G || {};
       <div style="margin-top:4px">🔥 <b>${(() => { const n = G.streak ? G.streak() : 0; return n === 0 ? t("streak0") : n === 1 ? t("streak1") : t("streak", { n }); })()}</b> · <a href="#" style="color:var(--primary)" onclick="G.UI.show('trophies');return false">🏆 ${Object.keys(G.state.achieved || {}).length}/${(G.ACH || []).length}</a></div>
       <div style="margin-top:4px"><button class="cute ghost" style="padding:2px 10px;font-size:.78rem" onclick="G.UI.show('data')">${G.safety && G.safety.fileStatus === "on" ? t("badgeFile") : t("badgeLocal")}</button></div>`;
   }
-  function renderCountdowns() {
-    const today = G.todayIso();
-    const dates = [...new Set(G.state.exams.filter(e => e.date >= today).map(e => e.date))].sort().slice(0, 3);
-    const grads = ["linear-gradient(135deg,var(--primary),var(--accent2))", "linear-gradient(135deg,var(--accent2),var(--accent))", "linear-gradient(135deg,var(--accent),var(--primary))"];
-    if (dates.length && isMin("countdowns")) {
-      $("#countdowns").innerHTML = `<button class="cdmini" type="button" onclick="G.UI.boxMin('countdowns')" aria-label="${t("expand")}">📝 <b>${t("examsShort")}:</b> ${dates.map(d => { const n = Math.round((new Date(d + "T12:00") - new Date(today + "T12:00")) / 864e5); return n > 1 ? t("inDays", { n }) : n === 1 ? t("tomorrow") : t("todayExam"); }).join(" · ")} <span>▸</span></button>`; return;
-    }
-    $("#countdowns").innerHTML = (dates.length ? `<button class="minbtn boxmin cdmin" type="button" onclick="G.UI.boxMin('countdowns')" aria-label="${t("minimize")}" title="${t("minimize")}"><svg viewBox="0 0 12 12" aria-hidden="true"><path class="h" d="M2 6h8"/><path class="v" d="M6 2v8"/></svg></button>` : "") + dates.map((d, i) => {
-      const diff = Math.round((new Date(d + "T12:00") - new Date(today + "T12:00")) / 864e5);
-      const items = G.state.exams.filter(e => e.date === d).sort((a, b) => a.time.localeCompare(b.time));
-      const txt = diff > 1 ? t("daysToExam") : diff === 1 ? t("tomorrow") : t("todayExam");
-      return `<div class="cd" style="background:${grads[i]}"><span class="deco">${["🎃", "🦇", "🔮"][i]}</span><small>📝 ${t("examsAt", { date: fmt(d) })}</small><b class="n">${diff > 1 ? diff : diff === 1 ? "1" : "✦"}</b><b>${txt}</b>
-        <ul>${items.map(e => { const s = G.subj(e.subjectId); return s ? `<li>${esc(e.time)} — ${esc(s.emoji || "📚")} ${esc(s.name)}</li>` : ""; }).join("")}</ul></div>`;
-    }).join("");
-  }
+  function renderCountdowns() { $("#countdowns").innerHTML = ""; }
 
   /* ================= ABAS / TABS ================= */
   /* 6 grupos de abas; os grupos com várias páginas têm sub-abas / 6 tab groups with sub-tabs */
-  const GROUPS = { today: ["today"], week: ["week"], acts: ["acts"], study: ["subjects", "tarot", "notes", "cal"], me: ["pets", "look", "trophies"], more: ["data", "tips"] };
+  const GROUPS = { skin: ["skin"], acts: ["acts"], week: ["week"], me: ["pets", "look", "trophies"], more: ["data", "tips"] };
   const TABS = Object.keys(GROUPS);
-  const ICON = { today: "✦", week: "📆", acts: "🗓️", study: "📚", me: "🐾", more: "💾", subjects: "📚", tarot: "🔮", notes: "📝", cal: "🌙", pets: "🐾", look: "🎨", trophies: "🏆", data: "💾", tips: "🕯️" };
-  const groupOf = leaf => TABS.find(g => GROUPS[g].includes(leaf)) || "today";
+  const ICON = { skin: "🧴", week: "📆", acts: "🗓️", me: "🐾", more: "💾", pets: "🐾", look: "🎨", trophies: "🏆", data: "💾", tips: "✨" };
+  const groupOf = leaf => TABS.find(g => GROUPS[g].includes(leaf)) || "skin";
   const lastSub = () => ((G.state.ui = G.state.ui || {}).lastSub = G.state.ui.lastSub || {});
   function renderTabs() {
     const pets = G.state.pets, cur = groupOf(tab);
@@ -116,10 +102,12 @@ window.G = window.G || {};
   };
   UI.show = k => { if (GROUPS[k] && !GROUPS[k].includes(k)) k = lastSub()[k] && GROUPS[k].includes(lastSub()[k]) ? lastSub()[k] : GROUPS[k][0]; tab = k; lastSub()[groupOf(k)] = k; renderTabs(); renderPanel(); const top = matchMedia("(max-width:900px)").matches ? ($("#subtabs").style.display === "none" ? $("#panel") : $("#subtabs")).offsetTop - 74 : $("#tabs").offsetTop; window.scrollTo({ top: Math.max(0, top - 10), behavior: G.state.a11y && G.state.a11y.lessMotion ? "auto" : "smooth" }); };
   function renderPanel() {
-    const P = { today: pToday, acts: pActs, week: pWeek, trophies: pTrophies, cal: pCal, tarot: pTarot, notes: pNotes, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
+    const P = { skin: pSkin, acts: pActs, week: pWeek, trophies: pTrophies, cal: pCal, tarot: pTarot, notes: pNotes, subjects: pSubjects, pets: pPets, look: pLook, data: pData, tips: pTips };
     $("#panel").innerHTML = ""; $("#panel").className = "panel on"; P[tab]();
   }
   UI.refresh = () => { if (G.state.onboarded) document.querySelectorAll(".modal").forEach(m => m.remove()); renderHeader(); renderTabs(); renderPanel(); G.tamaRedraw && G.tamaRedraw(); };
+
+  function pSkin() { $("#panel").innerHTML = G.SkinCare.render(); }
 
   /* ================= HOJE / TODAY ================= */
   function pickDefaultDay() {
@@ -131,10 +119,9 @@ window.G = window.G || {};
     const P = G.state.plan, keys = Object.keys(P).sort(), td = G.todayIso();
     G.actsInit();
     if (!G.state.subjects.length && !keys.length && !G.state.activities.length) {
-      $("#panel").innerHTML = win("✦ " + (G.lang === "en" ? "today.exe" : "hoje.exe"), `<p>${t("emptyPlan")}</p><div class="nav">
-        <a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/docs/TUTORIAL.md" target="_blank" rel="noopener">${t("tutorialBtn")}</a>
-        <button class="cute" onclick="G.UI.newAct()">${t("newAct")}</button><button class="cute alt" onclick="G.UI.talk()">🎙️ ${t("talkBtn")}</button>
-        <button class="cute" onclick="G.UI.show('subjects')">📚 ${t("goSubjects")}</button><button class="cute alt" onclick="G.UI.show('data')">🎓 ${t("goImport")}</button></div>`);
+      $("#panel").innerHTML = win("🧴 skincare.exe", `<p>${t("emptyPlan")}</p><div class="nav">
+        <button class="cute" onclick="G.UI.show('skin')">🧴 ${t("tabs.skin")}</button>
+        <button class="cute" onclick="G.UI.newAct()">${t("newAct")}</button><button class="cute alt" onclick="G.UI.talk()">🎙️ ${t("talkBtn")}</button></div>`);
       return;
     }
     const tasks = P[viewDay] || [], n = tasks.filter(x => x.done).length;
@@ -616,19 +603,11 @@ window.G = window.G || {};
 
   /* ================= IMPORTAR / DATA ================= */
   function pData() {
-    const ci = G.state.institution;
-    const c = G.connectors.get(ci);
-    const conns = G.connectors.list.map(x => `<button class="cute ${x.id === ci ? "" : "ghost"}" onclick="G.UI.inst('${x.id}')">${x.emoji} ${esc(G.lang === "en" && x.nameEn ? x.nameEn : x.name)}</button>`).join("");
     $("#panel").innerHTML = transferWin() + safetyWin() +
-      win("🎓 " + (G.lang === "en" ? "connect_school.exe" : "conectar_faculdade.exe"), `<h3>${t("institution")}</h3><div class="conns">${conns}</div>
-        <div class="found"><b>${t("connectorHelp")}:</b><br>${c.help[G.lang] || c.help.pt}</div>
-        <textarea id="paste" style="min-height:150px" placeholder="${t("pasteHere")}"></textarea>
-        <div class="nav" style="margin-top:8px"><button class="cute" onclick="G.UI.analyze()">${t("analyze")}</button></div><div id="parsed"></div>
-        <p class="small">${t("privacy")}<br>${t("newConnector")}</p>`) +
-      win("💾 " + (G.lang === "en" ? "files.exe" : "arquivos.exe"), `<div class="nav">
+      win("?? " + (G.lang === "en" ? "files.exe" : "arquivos.exe"), `<div class="nav">
         <label class="cute alt" style="display:inline-block">${t("importFile")}<input type="file" accept=".json,.grimorio,.csv,.ics" style="display:none" onchange="G.UI.file(this)"></label>
         <button class="cute" onclick="G.exportJSON()">${t("exportJson")}</button><button class="cute ghost" onclick="G.download('grimorio-modelo.csv',G.csvTemplate(),'text/csv')">${t("csvTemplate")}</button>
-<button class="cute danger" onclick="G.UI.reset()">${t("resetAll")}</button></div>
+        <button class="cute danger" onclick="G.UI.reset()">${t("resetAll")}</button></div>
         <p class="small">${t("privacy")}</p>`);
     fillSnaps();
   }
@@ -673,9 +652,8 @@ window.G = window.G || {};
   async function fillSnaps() {
     const el = $("#snapList"); if (!el) return;
     const list = await G.safety.snapshots();
-    el.innerHTML = list.length ? list.map((s, i) => `<div style="display:flex;gap:8px;align-items:center;margin:4px 0">${when(s.at)} · ${esc(s.reason)} · ${s.state.subjects.length} 📚 <button class="cute ghost" style="padding:2px 10px" onclick="G.UI.restore(${i})">${t("restore")}</button></div>`).join("") : t("never");
-  }
-  UI.inst = id => { G.state.institution = id; G.save(); pData(); };
+    el.innerHTML = list.length ? list.map((s, i) => `<div style="display:flex;gap:8px;align-items:center;margin:4px 0">${when(s.at)} - ${esc(s.reason)} <button class="cute ghost" style="padding:2px 10px" onclick="G.UI.restore(${i})">${t("restore")}</button></div>`).join("") : t("never");
+  }  UI.inst = id => { G.state.institution = id; G.save(); pData(); };
   UI.analyze = () => {
     const r = G.connectors.get(G.state.institution).parse($("#paste").value || "");
     lastParsed = r;
@@ -719,10 +697,10 @@ window.G = window.G || {};
   }
 
   /* ================= DICAS / TIPS ================= */
-  G.VERSION = "2.2";
+  G.VERSION = "2.3";
   const newsWin = () => win("✨ " + (G.lang === "en" ? "whats_new.txt" : "novidades.txt") + " · v" + G.VERSION, `<ul class="tip">${t("newsList").map(x => `<li>${x}</li>`).join("")}</ul>
     <div class="nav"><a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/CHANGELOG.md" target="_blank" rel="noopener">📜 ${t("newsAll")}</a></div>`, "newsWin");
-  function pTips() { $("#panel").innerHTML = newsWin() + win("🕯️ " + (G.lang === "en" ? "focus_tips.doc" : "dicas_de_foco.doc"), `<ul class="tip">${t("tipList").map(x => `<li>${x}</li>`).join("")}</ul>`) +
+  function pTips() { $("#panel").innerHTML = newsWin() + win("🕯️ " + (G.lang === "en" ? "skincare_tips.doc" : "dicas_de_skincare.doc"), `<ul class="tip">${t("tipList").map(x => `<li>${x}</li>`).join("")}</ul>`) +
     win("📖 " + (G.lang === "en" ? "how_to_use.doc" : "como_usar.doc"), `<p>${t("tutorialText")}</p><div class="nav"><a class="cute" style="text-decoration:none;color:var(--ink)" href="https://github.com/sabrinadandrade/Grimorio/blob/main/docs/TUTORIAL.md" target="_blank" rel="noopener">${t("tutorialBtn")}</a></div>`); }
 
   /* ================= BOAS-VINDAS / ONBOARDING ================= */
@@ -742,12 +720,11 @@ window.G = window.G || {};
     m.querySelector("#obSkip").onclick = done;
   }
   function marquee() {
-    $("#footTxt").textContent = t("footer").replace(/ ✦ open source ✦$/, " ✦");
+    $("#footTxt").textContent = t("footer").replace(/ ? open source ?$/, " ?");
     $("#marq").innerHTML = G.lang === "en"
-      ? "🎃 ☾ ✦ welcome to your grimoire ✦ every mission is a spell ✦ your pets believe in you ✦ a few minutes of focus, then a nap ✦ 🦇 ✦ ☽ ✦ 🐾 ✦ 👻 ✦ 🎃"
-      : "🎃 ☾ ✦ " + G.pw("bem-vinda", "bem-vindo", "bem-vinde") + " ao seu grimório ✦ cada missão é um feitiço ✦ seus pets acreditam em você ✦ alguns minutinhos de foco, depois sonequinha ✦ 🦇 ✦ ☽ ✦ 🐾 ✦ 👻 ✦ 🎃";
+      ? "?? ? ? skincare, one gentle step at a time ? your pets are cheering for you ? care for your skin and yourself ? ?? ? ? ? ?? ? ?? ? ??"
+      : "?? ? ? " + G.pw("bem-vinda", "bem-vindo", "bem-vinde") + " ao seu Grimorio ? um cuidado de cada vez ? sua rotina de skincare e autocuidado ? seus pets torcem por voce ? ?? ? ? ? ?? ? ?? ? ??";
   }
-
   /* ================= AVISO DE INSTALAÇÃO NO IPHONE / iOS INSTALL HINT ================= */
   function iosHint() {
     const ua = navigator.userAgent || "";

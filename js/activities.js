@@ -7,7 +7,6 @@
 window.G = window.G || {};
 (function () {
   G.AREAS = {
-    study:    { emoji: "📚", color: "#c49bff", pt: "Estudos", en: "Studies" },
     daily:    { emoji: "☀️", color: "#ffc46b", pt: "Atividades diárias", en: "Daily tasks" },
     home:     { emoji: "🏠", color: "#ff9a4d", pt: "Cuidados com a casa", en: "Home care" },
     pets:     { emoji: "🐾", color: "#9be37a", pt: "Cuidados com os pets", en: "Pet care" },
@@ -16,7 +15,7 @@ window.G = window.G || {};
     personal: { emoji: "📅", color: "#7fe0b8", pt: "Compromissos pessoais", en: "Personal appointments" },
     health:   { emoji: "💚", color: "#a3e4ff", pt: "Saúde e bem-estar", en: "Health & wellbeing" }
   };
-  G.AREA_ORDER = ["study", "daily", "home", "pets", "kids", "work", "personal", "health"];
+  G.AREA_ORDER = ["daily", "home", "pets", "kids", "work", "personal", "health"];
   G.PRIORITIES = {
     high: { emoji: "🔥", pt: "Alta", en: "High", rank: 0, color: "#ff6b6b" },
     mid:  { emoji: "⭐", pt: "Média", en: "Medium", rank: 1, color: "#ffc46b" },

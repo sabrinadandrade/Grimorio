@@ -1,99 +1,38 @@
-# ☾ Grimório ☽ — planner kawaii de estudos e vida pessoal
+# Grimório — rotina de skincare
 
-> 🇧🇷 Português · [🇺🇸 English below](#-english)
+Um espaço simples e acolhedor para acompanhar sua rotina de skincare Creamy e cuidados pessoais. A aba **Skincare** abre primeiro e mostra os passos do dia, o cronograma semanal de ativos e o protocolo para laser.
 
-Um planner **fofo, mágico e anos 90** para **estudos e assuntos pessoais** (faculdade, escola, concurso, curso livre, metas, casa, saúde…), feito para quem tem dificuldade de foco.
-Seus pets viram professores, cada tarefa é um feitiço e o timer é um bichinho virtual. 🐾🔮
+## Acessar
 
-![Grimório](docs/screenshot.png)
+- Site: <https://sabrinadandrade.github.io/Grimorio/>
+- Tutorial: [docs/TUTORIAL.md](docs/TUTORIAL.md)
 
-## 🚀 Como usar
+## O que está incluído
 
-- **Site:** <https://sabrinadandrade.github.io/Grimorio/> · **App Android:** [Grimorio.apk](https://github.com/sabrinadandrade/Grimorio/releases/latest)
-- 📖 **Todo o passo a passo (computador, iPhone e Android) está no [Tutorial](docs/TUTORIAL.md)**, com prints de cada tela.
-- ✨ **Novidades:** veja as [notas de atualização](CHANGELOG.md).
+- Rotina diária da manhã baseada no cronograma atualizado em PDF.
+- Noites de recuperação, ácido mandélico e ácido glicólico distribuídas por semana.
+- Cadastro da data do laser, pausa dos ácidos e cuidados de recuperação.
+- Confirmação manual de que a pele está calma antes de retomar os ativos.
+- Checklist salvo neste navegador, além de backup e restauração dos dados.
+- Interface em português e inglês, funcionamento offline e instalação como app.
 
-## ✨ O que ele faz
+## Como usar
 
-- **Plano de estudos automático**: você cadastra matérias, temas e provas. O Grimório espalha os temas nos dias antes de cada prova e deixa a véspera para uma revisão leve.
-- **Feitiços de hoje**: poucas tarefas por dia, com XP, níveis (de Aprendiz a Arquimaga 👑) e luas que vão enchendo 🌑→🌕.
-- **Atividades da vida toda** 🆕: estudos, rotina diária, casa, pets, cuidados maternais/paternais, trabalho, compromissos e saúde, com **prioridade** (🔥 alta, ⭐ média, 🌙 baixa), **repetição** (todo dia ou dias da semana) e **lembrete**.
-- **🎙️ Falar com o Grimório** 🆕: peça por voz (microfone do teclado) ou escrevendo, como *"me lembra de dar remédio pro gato amanhã às 8"*, *"prova de cálculo dia 12/11"*, *"concluir lavar a louça"* ou *"o que eu tenho hoje?"*. Tudo é entendido no próprio aparelho, sem IA externa.
-- **📅 Calendário do celular** 🆕: exporte atividades e provas com alarmes para o calendário do iPhone ou do Android, que avisa mesmo com o app fechado.
-- **📊 Resumo da semana** 🆕: concluídas por dia e por área, velas de foco, sequência e em que horário você rende mais.
-- **↩ Desfazer** 🆕 depois de concluir ou apagar, e **abas organizadas em 6 grupos**.
-- **Subtarefas, visão da semana, sequência de dias 🔥 e conquistas 🏆**
-- **Lembretes com seu pet** 🆕: na hora, seu pet aparece na tela te lembrando. No app Android, chega notificação mesmo com o app fechado.
-- **Feito para todo mundo:** nome ou apelido com **pronome** (ela/dela, ele/dele, elu/delu), **menu lateral** no celular (abre arrastando da borda), **cards minimizáveis**, bichinho com **tamanho ajustável (−/+)** e minimizável, botões grandes, **tamanho do texto** e modo **menos animações**.
-- **Bichinho virtual (timer de foco)**: estilo tamagotchi, em 5 formatos (ovo, coração, chapéu de bruxa, estrela e lua). Seu pet dorme na pausa 😴.
-- **Tarot de estudos (flashcards)**: as cartas que você erra voltam mais vezes.
-- **Pets personalizáveis**: gato, cachorro, ratinho, hamster, coelho, galinha, pato, passarinho, cobra, tartaruga, sapo, peixe, morcego e raposa. Você escolhe cores, padrão ou raça (tigrado, siamês, frajola, pintado…), cor dos olhos e acessório (chapéu de bruxa, laço, coroa…).
-- **Temas de cores**: Halloween, Kawaii amarelo, Pastel goth, Floresta, Oceano, Morango, Noite estrelada. Você também pode montar suas próprias cores.
-- **Conectar com a sua instituição**: copie e cole o texto do portal (sem senha!). Também importa `.csv`, calendário `.ics` (Google Agenda, Outlook, Moodle) e backup `.json`.
-- **Português e inglês**, funciona **offline** e pode ser **instalado** como app (PWA).
+1. Abra a aba **Skincare**.
+2. Marque cada etapa à medida que fizer a rotina; a lista reinicia a cada dia.
+3. Consulte o calendário semanal para identificar noites de recuperação e de ativos.
+4. Se houver laser agendado, registre a data e siga as pausas exibidas pelo app e as instruções da profissional responsável.
 
-## 🔒 Privacidade
+O cronograma do app é uma organização do PDF fornecido. Ajustes clínicos e orientações específicas do procedimento devem ser confirmados com a profissional que realiza o laser.
 
-**100% local:** sem servidor, sem banco de dados e sem login. Tudo fica só no aparelho de cada pessoa (localStorage + cópia em IndexedDB, com recuperação automática). Backups podem ser exportados como `.json` ou como arquivo `.grimorio` trancado com senha (PBKDF2-SHA256 600 mil rodadas + AES-GCM 256, direto no navegador).
+## Privacidade e dados
 
-## 🎓 Instituições suportadas
+O app não tem login nem servidor de conta. As marcações e preferências ficam no armazenamento local deste navegador. Use **Dados e backup** para exportar ou restaurar um arquivo; para transferir para outro aparelho, use o backup protegido por senha.
 
-| Instituição | Como importar |
-|---|---|
-| ✨ Qualquer uma / uso pessoal | Cole linhas como `Cálculo I - 06/11 09:00 - Sala 12`, ou importe `.csv`/`.ics` |
-| 🎓 Estácio (Sala de Aula Virtual) | Copie a página **Início** (provas) e as páginas **Conteúdos** (temas) |
+## Instalar no iPhone
 
-Sua faculdade não está na lista? **Crie um conector!** É um arquivo JavaScript pequeno. Veja o [CONTRIBUTING.md](CONTRIBUTING.md).
+Abra o site no **Safari**, toque em **Compartilhar** e escolha **Adicionar à Tela de Início**. O ícone abrirá o Grimório diretamente na aba Skincare.
 
-## 🧱 Tecnologia
+## Tecnologia
 
-HTML + CSS + JavaScript puro. Sem framework e sem etapa de build. Para contribuir, basta um editor de texto e um navegador.
-
-```
-index.html
-css/style.css
-js/
-  i18n.js          traduções (pt, en)
-  themes.js        temas de cores
-  pets.js          gerador de pets em SVG
-  store.js         dados (localStorage)
-  safety.js        IndexedDB, backup automático, cópias de segurança
-  vault.js         backup criptografado com senha
-  voice.js         🎙️ comandos por voz/texto (interpretador local)
-  calendar.js      exportação .ics com alarmes
-  stats.js         resumo da semana
-  planner.js       gerador do plano de estudos
-  importers.js     json, csv, ics
-  connectors/      um arquivo por instituição
-  tama.js          bichinho virtual / timer
-  fx.js            efeitos (estrelinhas, balões)
-  app.js           interface
-```
-
-## 💜 Contribuindo
-
-Ideias, pets novos, temas, traduções e conectores são muito bem-vindos! Leia o [CONTRIBUTING.md](CONTRIBUTING.md).
-
-Licença [MIT](LICENSE).
-
----
-
-## 🇺🇸 English
-
-A **cute, magical, 90s-style** study planner for people who struggle to focus.
-Your pets become teachers, every task is a spell, and the focus timer is a virtual pet. 🐾🔮
-
-- **Automatic study plan**: spreads topics over the days before each exam and keeps the day before for light review.
-- **Today's spells**: a few tasks per day, plus XP, levels and moon phases 🌑→🌕.
-- **Virtual pet focus timer**: tamagotchi style, in egg, heart, witch hat, star and moon shapes.
-- **Study tarot (flashcards)**: cards you miss come back more often.
-- **Custom pets**: 14 species, with your choice of colors, patterns or breeds, eye color and accessories.
-- **Color themes**: 7 presets, plus fully custom colors.
-- **Connect your school**: paste text copied from the portal (no passwords), or import `.csv`, `.ics` or `.json`.
-- **Talk to it**: voice (keyboard dictation) or typed requests like *"remind me to call mom tomorrow at 5 pm"*, parsed on the device.
-- **Phone calendar export**: `.ics` with alarms, so the phone's calendar notifies even with the app closed.
-- **Portuguese and English**, works **offline** and can be installed as a PWA.
-- **100% local, no server**: data never leaves the device. It is mirrored to IndexedDB, can be auto-backed-up to a local file, and exported as a passphrase-encrypted `.grimorio` file (PBKDF2 + AES-GCM) to move between devices.
-
-Use it at <https://sabrinadandrade.github.io/Grimorio/> (Android app: [Grimorio.apk](https://github.com/sabrinadandrade/Grimorio/releases/latest)). The step-by-step guide (in Portuguese, with screenshots) is in [docs/TUTORIAL.md](docs/TUTORIAL.md).
-To contribute (connectors, pets, themes, translations), see [CONTRIBUTING.md](CONTRIBUTING.md). License: MIT.
+HTML, CSS e JavaScript, sem etapa de compilação. Para contribuir, consulte [CONTRIBUTING.md](CONTRIBUTING.md). Licença MIT.
